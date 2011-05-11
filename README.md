@@ -6,6 +6,10 @@ This package contains the NetLogo GIS extension.
 
 This extension is bundled with NetLogo. For instructions on using it, or for more information about NetLogo extensions, see the NetLogo User Manual.
 
+## Credits
+
+The GIS extension was written by Eric Russell.
+
 ## Building
 
 Use the NETLOGO environment variable to tell the Makefile which NetLogoLite.jar to compile against.  For example:
