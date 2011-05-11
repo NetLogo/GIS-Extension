@@ -7,7 +7,7 @@ ifeq ($(origin NETLOGO), undefined)
 endif
 
 JAVAC=$(JAVA_HOME)/bin/javac
-SRCS=$(wildcard src/*.java)
+SRCS=$(wildcard src/org/myworldgis/io/asciigrid/*.java src/org/myworldgis/io/shapefile/*.java src/org/myworldgis/netlogo/*.java src/org/myworldgis/netlogo/gui/*.java src/org/myworldgis/projection/*.java src/org/myworldgis/util/*.java src/org/myworldgis/wkt/*.java)
 
 JARS=jai_codec-1.1.3.jar jai_core-1.1.3.jar jscience-4.2.jar jts-1.9.jar commons-codec-1.3.jar commons-logging-1.1.jar commons-httpclient-3.0.1.jar
 JARSPATH=jai_codec-1.1.3.jar:jai_core-1.1.3.jar:jscience-4.2.jar:jts-1.9.jar:commons-codec-1.3.jar:commons-logging-1.1.jar:commons-httpclient-3.0.1.jar
