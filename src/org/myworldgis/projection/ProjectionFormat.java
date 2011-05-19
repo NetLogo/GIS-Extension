@@ -12,14 +12,14 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Iterator;
-import javax.measure.converter.UnitConverter;
-import javax.measure.quantity.Angle;
-import javax.measure.quantity.Length;
-import javax.measure.unit.NonSI;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
 import org.myworldgis.wkt.WKTElement;
 import org.myworldgis.wkt.WKTFormat;
+import org.ngs.ngunits.NonSI;
+import org.ngs.ngunits.SI;
+import org.ngs.ngunits.Unit;
+import org.ngs.ngunits.UnitConverter;
+import org.ngs.ngunits.quantity.Angle;
+import org.ngs.ngunits.quantity.Length;
 
 
 /**
@@ -180,7 +180,7 @@ public final strictfp class ProjectionFormat extends Format {
         Unit<Angle> units = SI.RADIAN;
         double conversion = unitsElement.nextNumber(true).doubleValue();
         if (conversion != 1.0) {
-            units = units.times(conversion);
+            units = units.multiply(conversion);
         }
         UnitConverter centerConverter = NonSI.DEGREE_ANGLE.getConverterTo(units);
         Coordinate center = new Coordinate(centerConverter.convert(primeMElement.nextNumber(true).doubleValue()), 0.0);
@@ -195,7 +195,7 @@ public final strictfp class ProjectionFormat extends Format {
         Unit<Angle> angularUnits = SI.RADIAN;
         double angularConversion = angularUnitsElement.nextNumber(true).doubleValue();
         if (angularConversion != 1.0) {
-            angularUnits = angularUnits.times(angularConversion);
+            angularUnits = angularUnits.multiply(angularConversion);
         }
         WKTElement datumElt = gcsElement.nextElement("DATUM", true);
         WKTElement spheriodElt = datumElt.nextElement("SPHEROID", true);
@@ -207,7 +207,7 @@ public final strictfp class ProjectionFormat extends Format {
         Unit<Length> linearUnits = SI.METRE;
         double linearConversion = projectedUnitsElement.nextNumber(true).doubleValue();
         if (linearConversion != 1.0) {
-            linearUnits = linearUnits.times(linearConversion);
+            linearUnits = linearUnits.multiply(linearConversion);
         }
         ProjectionParameters parameters = new ProjectionParameters(angularUnits, linearUnits);
         WKTElement paramElement = null;

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.Iterator;
-import javax.measure.converter.UnitConverter;
 import org.myworldgis.io.asciigrid.AsciiGridFileWriter;
 import org.myworldgis.io.shapefile.DBaseBuffer;
 import org.myworldgis.io.shapefile.DBaseFieldDescriptor;
@@ -21,6 +20,7 @@ import org.myworldgis.io.shapefile.ESRIShapefileWriter;
 import org.myworldgis.projection.Projection;
 import org.myworldgis.projection.ProjectionFormat;
 import org.myworldgis.util.StringUtils;
+import org.ngs.ngunits.converter.AbstractUnitConverter;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
@@ -62,12 +62,12 @@ public final strictfp class StoreDataset extends GISExtension.Command {
         ESRIShapefileWriter shp = new ESRIShapefileWriter(new RandomAccessFile(shpFile, "rw"),
                                                           dataset.getEnvelope(),
                                                           esriShapeType(dataset),
-                                                          UnitConverter.IDENTITY,
+                                                          AbstractUnitConverter.IDENTITY,
                                                           GISExtension.getState().factory());
         ESRIShapeIndexWriter shx = new ESRIShapeIndexWriter(new RandomAccessFile(shxFile, "rw"), 
                                                             dataset.getEnvelope(),
                                                             esriShapeType(dataset),
-                                                            UnitConverter.IDENTITY,
+                                                            AbstractUnitConverter.IDENTITY,
                                                             GISExtension.getState().factory());
         DBaseFileWriter dbf = new DBaseFileWriter(new RandomAccessFile(dbfFile, "rw"), 
                                                   dBaseFieldDescriptors(dataset)); 

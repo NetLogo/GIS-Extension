@@ -9,7 +9,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import java.io.IOException;
 import java.io.InputStream;
-import javax.measure.converter.UnitConverter;
+import org.ngs.ngunits.UnitConverter;
 
 
 /**

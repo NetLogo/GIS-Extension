@@ -4,10 +4,10 @@
 
 package org.myworldgis.projection;
 
-import javax.measure.quantity.Length;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
-import org.myworldgis.util.ExtendedUnits;
+import org.ngs.ngunits.NonSI;
+import org.ngs.ngunits.SI;
+import org.ngs.ngunits.Unit;
+import org.ngs.ngunits.quantity.Length;
 
 
 /**
@@ -50,13 +50,13 @@ public final strictfp class Ellipsoid {
     public final static Ellipsoid BESSEL_NAMIBIA = new Ellipsoid(true, "Bessel Namibia", 6377483.865, SI.METRE, 0.006674372); 
     
     /** */
-    public final static Ellipsoid CLARKE_1858 = new Ellipsoid(true, "Clarke 1858", 20926348.0, ExtendedUnits.FOOT_CLARKE, 0.006785146);
+    public final static Ellipsoid CLARKE_1858 = new Ellipsoid(true, "Clarke 1858", 20926348.0, NonSI.FOOT_CLARKE, 0.006785146);
     
     /** */
     public final static Ellipsoid CLARKE_1866 = new Ellipsoid(true, "Clarke 1866", 6378206.4, SI.METRE, 0.006768658); 
     
     /** */
-    public final static Ellipsoid CLARKE_1866_MICHIGAN = new Ellipsoid(true, "Clarke 1866 Michigan", 20926631.53, ExtendedUnits.FOOT_MODIFIED_AMERICAN, 0.006768658); 
+    public final static Ellipsoid CLARKE_1866_MICHIGAN = new Ellipsoid(true, "Clarke 1866 Michigan", 20926631.53, NonSI.FOOT_MODIFIED_AMERICAN, 0.006768658); 
     
     /** */
     public final static Ellipsoid CLARKE_1880 = new Ellipsoid(true, "Clarke 1880", 6378249.0, SI.METRE, 0.006803511); 
