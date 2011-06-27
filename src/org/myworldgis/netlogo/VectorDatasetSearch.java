@@ -11,7 +11,7 @@ import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.LogoListBuilder;
-import org.nlogo.api.Nobody;
+import org.nlogo.api.Nobody$;
 import org.nlogo.api.Syntax;
 
 
@@ -51,7 +51,7 @@ public abstract strictfp class VectorDatasetSearch {
                     return feature;
                 }
             }
-            return Nobody.NOBODY;
+            return Nobody$.MODULE$;
         }
     }
     

@@ -22,7 +22,7 @@ import org.nlogo.api.ExtensionObject;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.LogoList;
 import org.nlogo.api.LogoListBuilder;
-import org.nlogo.api.Nobody;
+import org.nlogo.api.Nobody$;
 import org.nlogo.api.Syntax;
 
 
@@ -55,7 +55,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
             if (feature.hasProperty(key)) {
                 Object result = feature.getProperty(key);
                 if (result == null) {
-                    return Nobody.NOBODY;
+                    return Nobody$.MODULE$;
                 } else {
                     return result;
                 }
