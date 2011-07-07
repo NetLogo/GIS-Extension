@@ -73,7 +73,7 @@ public final strictfp class GISExtensionState implements ExtensionObject {
         _projection = null;
         _datasetCount = 0;
         _transformation = null;
-        setNetLogoColor(org.nlogo.api.Color.BOXED_BLACK);
+        setNetLogoColor(org.nlogo.api.Color.BoxedBlack());
         _coverageSingleCellThreshold = 0.1;
         _coverageMultipleCellThreshold = 0.33;
     }
