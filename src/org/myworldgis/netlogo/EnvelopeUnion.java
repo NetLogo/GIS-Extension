@@ -29,8 +29,8 @@ public final strictfp class EnvelopeUnion extends GISExtension.Reporter {
 
     /** */
     public Syntax getSyntax() {
-        return Syntax.reporterSyntax(new int[] { Syntax.TYPE_REPEATABLE | Syntax.TYPE_LIST },
-                                     Syntax.TYPE_LIST,
+        return Syntax.reporterSyntax(new int[] { Syntax.RepeatableType() | Syntax.ListType() },
+                                     Syntax.ListType(),
                                      2);
     }
     

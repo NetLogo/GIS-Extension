@@ -30,7 +30,7 @@ public final strictfp class SetCoordinateSystem extends GISExtension.Command {
 
     /** */
     public Syntax getSyntax() {
-        return Syntax.commandSyntax(new int[] { Syntax.TYPE_LIST | Syntax.TYPE_STRING });
+        return Syntax.commandSyntax(new int[] { Syntax.ListType() | Syntax.StringType() });
     }
 
     /** */

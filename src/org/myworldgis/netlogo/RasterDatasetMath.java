@@ -38,9 +38,9 @@ public abstract strictfp class RasterDatasetMath {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD, 
-                                                     Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_NUMBER);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(), 
+                                                     Syntax.WildcardType() },
+                                         Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -95,11 +95,11 @@ public abstract strictfp class RasterDatasetMath {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_LIST,
-                                                     Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_NUMBER },
-                                         Syntax.TYPE_WILDCARD);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.ListType(),
+                                                     Syntax.NumberType(),
+                                                     Syntax.NumberType() },
+                                         Syntax.WildcardType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -120,10 +120,10 @@ public abstract strictfp class RasterDatasetMath {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_NUMBER },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.NumberType(),
+                                                     Syntax.NumberType() },
+                                         Syntax.ListType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -150,13 +150,13 @@ public abstract strictfp class RasterDatasetMath {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_LIST,
-                                                     Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_NUMBER },
-                                         Syntax.TYPE_WILDCARD);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.NumberType(),
+                                                     Syntax.NumberType(),
+                                                     Syntax.ListType(),
+                                                     Syntax.NumberType(),
+                                                     Syntax.NumberType() },
+                                         Syntax.WildcardType());
         }
         
         @SuppressWarnings("unchecked")

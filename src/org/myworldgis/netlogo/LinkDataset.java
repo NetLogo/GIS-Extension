@@ -39,8 +39,8 @@ public final strictfp class LinkDataset extends GISExtension.Reporter {
     
     /** */
     public Syntax getSyntax() {
-        return Syntax.reporterSyntax(new int[] { Syntax.TYPE_LINKSET },
-                                     Syntax.TYPE_WILDCARD);
+        return Syntax.reporterSyntax(new int[] { Syntax.LinksetType() },
+                                     Syntax.WildcardType());
     }
     
     /** */

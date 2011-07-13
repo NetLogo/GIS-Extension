@@ -34,8 +34,8 @@ public strictfp class ApplyRaster extends GISExtension.Command {
 
     /** */
     public Syntax getSyntax() {
-        return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD, 
-                                                Syntax.TYPE_REFERENCE });
+        return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), 
+                                                Syntax.ReferenceType() });
     }
 
     /** */

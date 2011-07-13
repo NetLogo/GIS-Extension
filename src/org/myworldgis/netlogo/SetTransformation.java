@@ -32,7 +32,7 @@ public abstract strictfp class SetTransformation {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_LIST, Syntax.TYPE_LIST });
+            return Syntax.commandSyntax(new int[] { Syntax.ListType(), Syntax.ListType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -52,7 +52,7 @@ public abstract strictfp class SetTransformation {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_LIST, Syntax.TYPE_LIST });
+            return Syntax.commandSyntax(new int[] { Syntax.ListType(), Syntax.ListType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -72,7 +72,7 @@ public abstract strictfp class SetTransformation {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_LIST });
+            return Syntax.commandSyntax(new int[] { Syntax.ListType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -93,7 +93,7 @@ public abstract strictfp class SetTransformation {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_LIST });
+            return Syntax.commandSyntax(new int[] { Syntax.ListType() });
         }
         
         public void performInternal (Argument args[], Context context) 

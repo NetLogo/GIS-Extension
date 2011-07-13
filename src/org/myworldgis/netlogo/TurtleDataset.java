@@ -34,8 +34,8 @@ public final strictfp class TurtleDataset extends GISExtension.Reporter {
 
     /** */
     public Syntax getSyntax() {
-        return Syntax.reporterSyntax(new int[] { Syntax.TYPE_TURTLESET },
-                                     Syntax.TYPE_WILDCARD);
+        return Syntax.reporterSyntax(new int[] { Syntax.TurtlesetType() },
+                                     Syntax.WildcardType());
     }
     
     /** */

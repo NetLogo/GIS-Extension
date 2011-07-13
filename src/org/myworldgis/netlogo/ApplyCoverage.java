@@ -39,9 +39,9 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD, 
-                                                    Syntax.TYPE_STRING, 
-                                                    Syntax.TYPE_REFERENCE });
+            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), 
+                                                    Syntax.StringType(), 
+                                                    Syntax.ReferenceType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -70,7 +70,7 @@ public abstract strictfp class ApplyCoverage {
             // This doesn't work because NetLogo keeps trying to evaluate
             // my references to patch variables in the Observer context 
             // rather than passing them along without evaluating them. 
-            // Removing the TYPE_REPEATABLE from the third argument will 
+            // Removing the RepeatableType() from the third argument will 
             // fix that problem, but then you can no longer pass the 
             // command a variable number of patch variable references, 
             // which kind of defeats the whole purpose. Since I don't know 
@@ -79,9 +79,9 @@ public abstract strictfp class ApplyCoverage {
             // if someone else were willing to take a look, I'd really 
             // appreciate it. - ER 12/13/07
             
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD, 
-                                                    Syntax.TYPE_LIST, 
-                                                    Syntax.TYPE_REFERENCE | Syntax.TYPE_REPEATABLE },
+            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), 
+                                                    Syntax.ListType(), 
+                                                    Syntax.ReferenceType() | Syntax.RepeatableType() },
                                         3);
         }
         
@@ -120,7 +120,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.TYPE_NUMBER);
+            return Syntax.reporterSyntax(new int[] { }, Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context) 
@@ -137,7 +137,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_NUMBER });
+            return Syntax.commandSyntax(new int[] { Syntax.NumberType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -154,7 +154,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.TYPE_NUMBER);
+            return Syntax.reporterSyntax(new int[] { }, Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context) 
@@ -171,7 +171,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_NUMBER });
+            return Syntax.commandSyntax(new int[] { Syntax.NumberType() });
         }
         
         public void performInternal (Argument args[], Context context) 

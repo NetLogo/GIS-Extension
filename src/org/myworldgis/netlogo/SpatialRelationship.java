@@ -40,8 +40,8 @@ public abstract strictfp class SpatialRelationship {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD, Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_BOOLEAN);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType() },
+                                         Syntax.BooleanType());
         }
         
         public Object reportInternal (Argument args[], Context context) 
@@ -87,10 +87,10 @@ public abstract strictfp class SpatialRelationship {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD, 
-                                                     Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING },
-                                         Syntax.TYPE_BOOLEAN);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(), 
+                                                     Syntax.WildcardType(),
+                                                     Syntax.StringType() },
+                                         Syntax.BooleanType());
         }
 
         public Object reportInternal (Argument args[], Context context) 
@@ -114,9 +114,9 @@ public abstract strictfp class SpatialRelationship {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD, 
-                                                     Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_STRING);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(), 
+                                                     Syntax.WildcardType() },
+                                         Syntax.StringType());
         }
 
         public Object reportInternal (Argument args[], Context context) 
@@ -135,10 +135,10 @@ public abstract strictfp class SpatialRelationship {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(Syntax.TYPE_PATCHSET, 
-                                         new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_PATCHSET,
-                                         Syntax.NORMAL_PRECEDENCE);
+            return Syntax.reporterSyntax(Syntax.PatchsetType(), 
+                                         new int[] { Syntax.WildcardType() },
+                                         Syntax.PatchsetType(),
+                                         Syntax.NormalPrecedence());
         }
 
         public Object reportInternal (Argument args[], Context context) 

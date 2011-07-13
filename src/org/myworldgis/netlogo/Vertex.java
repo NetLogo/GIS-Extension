@@ -30,8 +30,8 @@ public final strictfp class Vertex implements ExtensionObject {
         private final Coordinate _temp = new Coordinate();
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.ListType());
         }
         
         public String getAgentClassString() {

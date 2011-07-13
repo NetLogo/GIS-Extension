@@ -32,10 +32,10 @@ public abstract strictfp class VectorDatasetSearch {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING,
-                                                     Syntax.TYPE_STRING },
-                                         Syntax.TYPE_WILDCARD);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType(),
+                                                     Syntax.StringType() },
+                                         Syntax.WildcardType());
         }
         
         @SuppressWarnings("unchecked")
@@ -63,10 +63,10 @@ public abstract strictfp class VectorDatasetSearch {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING,
-                                                     Syntax.TYPE_STRING },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType(),
+                                                     Syntax.StringType() },
+                                         Syntax.ListType());
         }
         
         @SuppressWarnings("unchecked")
@@ -95,10 +95,10 @@ public abstract strictfp class VectorDatasetSearch {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING,
-                                                     Syntax.TYPE_STRING | Syntax.TYPE_NUMBER },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType(),
+                                                     Syntax.StringType() | Syntax.NumberType() },
+                                         Syntax.ListType());
         }
         
         @SuppressWarnings("unchecked")
@@ -127,10 +127,10 @@ public abstract strictfp class VectorDatasetSearch {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING,
-                                                     Syntax.TYPE_STRING | Syntax.TYPE_NUMBER },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType(),
+                                                     Syntax.StringType() | Syntax.NumberType() },
+                                         Syntax.ListType());
         }
         
         @SuppressWarnings("unchecked")
@@ -159,11 +159,11 @@ public abstract strictfp class VectorDatasetSearch {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING,
-                                                     Syntax.TYPE_STRING | Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_STRING | Syntax.TYPE_NUMBER },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType(),
+                                                     Syntax.StringType() | Syntax.NumberType(),
+                                                     Syntax.StringType() | Syntax.NumberType() },
+                                         Syntax.ListType());
         }
         
         @SuppressWarnings("unchecked")
@@ -193,9 +193,9 @@ public abstract strictfp class VectorDatasetSearch {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING },
-                                         Syntax.TYPE_NUMBER | Syntax.TYPE_STRING);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType() },
+                                         Syntax.NumberType() | Syntax.StringType());
         }
         
         @SuppressWarnings("unchecked")
@@ -227,9 +227,9 @@ public abstract strictfp class VectorDatasetSearch {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING },
-                                         Syntax.TYPE_NUMBER | Syntax.TYPE_STRING);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType() },
+                                         Syntax.NumberType() | Syntax.StringType());
         }
         
         @SuppressWarnings("unchecked")

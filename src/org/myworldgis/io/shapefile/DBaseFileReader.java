@@ -97,14 +97,14 @@ public final strictfp class DBaseFileReader implements DBaseConstants {
         switch (_fieldDescriptors[index].getType()) {
             case DBaseConstants.FIELD_TYPE_CHARACTER:
             case DBaseConstants.FIELD_TYPE_DATE:
-                return Syntax.TYPE_STRING;
+                return Syntax.StringType();
             case DBaseConstants.FIELD_TYPE_NUMBER:
             case DBaseConstants.FIELD_TYPE_FLOAT:
-                return Syntax.TYPE_NUMBER;
+                return Syntax.NumberType();
             case DBaseConstants.FIELD_TYPE_LOGICAL:
-                return Syntax.TYPE_BOOLEAN;
+                return Syntax.BooleanType();
             default:    
-                return Syntax.TYPE_NOBODY;
+                return Syntax.NobodyType();
         }
     }
     

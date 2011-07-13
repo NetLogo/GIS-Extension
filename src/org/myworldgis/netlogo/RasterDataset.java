@@ -61,10 +61,10 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_LIST },
-                                         Syntax.TYPE_WILDCARD);
+            return Syntax.reporterSyntax(new int[] { Syntax.NumberType(),
+                                                     Syntax.NumberType(),
+                                                     Syntax.ListType() },
+                                         Syntax.WildcardType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -88,8 +88,8 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_NUMBER);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -106,8 +106,8 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_NUMBER);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -124,10 +124,10 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_NUMBER,
-                                                     Syntax.TYPE_NUMBER },
-                                         Syntax.TYPE_NUMBER);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.NumberType(),
+                                                     Syntax.NumberType() },
+                                         Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -147,10 +147,10 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                    Syntax.TYPE_NUMBER,
-                                                    Syntax.TYPE_NUMBER,
-                                                    Syntax.TYPE_NUMBER });
+            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(),
+                                                    Syntax.NumberType(),
+                                                    Syntax.NumberType(),
+                                                    Syntax.NumberType() });
         }
         
         public void performInternal (Argument args[], Context context)
@@ -171,8 +171,8 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_NUMBER);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -197,8 +197,8 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_NUMBER);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -223,8 +223,8 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_STRING);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.StringType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -252,8 +252,8 @@ public class RasterDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD, 
-                                                    Syntax.TYPE_STRING });
+            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), 
+                                                    Syntax.StringType() });
         }
         
         public void performInternal (Argument args[], Context context)

@@ -43,9 +43,9 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                     Syntax.TYPE_STRING },
-                                         Syntax.TYPE_READABLE);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType() },
+                                         Syntax.ReadableType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -73,8 +73,8 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.ListType());
         }
         
         @SuppressWarnings("unchecked")
@@ -110,8 +110,8 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_WILDCARD);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.WildcardType());
         }
         
         @SuppressWarnings("unchecked")

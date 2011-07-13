@@ -41,8 +41,8 @@ public final strictfp class VectorDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.ListType());
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -67,8 +67,8 @@ public final strictfp class VectorDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.ListType());
         }
         
         @SuppressWarnings("unchecked")

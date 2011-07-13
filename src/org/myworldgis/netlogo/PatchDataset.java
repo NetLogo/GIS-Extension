@@ -35,8 +35,8 @@ public final strictfp class PatchDataset extends GISExtension.Reporter {
     }
     
     public Syntax getSyntax() {
-        return Syntax.reporterSyntax(new int[] { Syntax.TYPE_REFERENCE },
-                                     Syntax.TYPE_WILDCARD);
+        return Syntax.reporterSyntax(new int[] { Syntax.ReferenceType() },
+                                     Syntax.WildcardType());
     }
 
     public Object reportInternal (Argument args[], Context context)

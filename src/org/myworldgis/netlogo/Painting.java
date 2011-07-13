@@ -47,7 +47,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.TYPE_NUMBER | Syntax.TYPE_LIST );
+            return Syntax.reporterSyntax(new int[] { }, Syntax.NumberType() | Syntax.ListType() );
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -64,7 +64,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
         }
 
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_NUMBER | Syntax.TYPE_LIST });
+            return Syntax.commandSyntax(new int[] { Syntax.NumberType() | Syntax.ListType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -81,7 +81,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
         }
     
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD, Syntax.TYPE_NUMBER });
+            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -151,7 +151,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
 
         /** */
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD, Syntax.TYPE_NUMBER });
+            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
         }
 
         /** */

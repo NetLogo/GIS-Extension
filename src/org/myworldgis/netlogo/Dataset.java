@@ -26,8 +26,8 @@ public abstract strictfp class Dataset implements ExtensionObject {
     public static final strictfp class GetDatasetType extends GISExtension.Reporter {
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_STRING);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.StringType());
         }
         
         public Object reportInternal (Argument args[], Context context)

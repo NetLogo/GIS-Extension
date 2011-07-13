@@ -36,8 +36,8 @@ public abstract strictfp class GetEnvelope {
         
         /** */
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_WILDCARD },
-                                         Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.ListType());
         }
     
         /** */
@@ -74,7 +74,7 @@ public abstract strictfp class GetEnvelope {
         
         /** */
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { }, Syntax.ListType());
         }
     
         /** */

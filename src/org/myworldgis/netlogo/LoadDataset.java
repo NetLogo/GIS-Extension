@@ -90,7 +90,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             VectorDataset.PropertyType[] propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
             for (int i = 0; i < dbf.getFieldCount(); i += 1) {
                 propertyNames[i] = dbf.getFieldName(i);
-                if (dbf.getFieldDataType(i) == Syntax.TYPE_NUMBER) {
+                if (dbf.getFieldDataType(i) == Syntax.NumberType()) {
                     propertyTypes[i] = VectorDataset.PropertyType.NUMBER;
                 } else {
                     propertyTypes[i] = VectorDataset.PropertyType.STRING;
@@ -164,8 +164,8 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
 
     /** */
     public Syntax getSyntax() {
-        return Syntax.reporterSyntax(new int[] { Syntax.TYPE_STRING },
-                                     Syntax.TYPE_WILDCARD);
+        return Syntax.reporterSyntax(new int[] { Syntax.StringType() },
+                                     Syntax.WildcardType());
     }
     
     /** */

@@ -196,8 +196,8 @@ public final strictfp class StoreDataset extends GISExtension.Command {
 
     /** */
     public Syntax getSyntax() {
-        return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                Syntax.TYPE_STRING });
+        return Syntax.commandSyntax(new int[] { Syntax.WildcardType(),
+                                                Syntax.StringType() });
     }
     
     /** */

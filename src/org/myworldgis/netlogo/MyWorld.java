@@ -63,7 +63,7 @@ public abstract strictfp class MyWorld {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.TYPE_LIST);
+            return Syntax.reporterSyntax(new int[] { }, Syntax.ListType());
         }
         
         @SuppressWarnings("unchecked")
@@ -117,8 +117,8 @@ public abstract strictfp class MyWorld {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.TYPE_NUMBER + Syntax.TYPE_REPEATABLE }, 
-                                         Syntax.TYPE_WILDCARD, 
+            return Syntax.reporterSyntax(new int[] { Syntax.NumberType() + Syntax.RepeatableType() }, 
+                                         Syntax.WildcardType(), 
                                          1);
         }
         
@@ -164,8 +164,8 @@ public abstract strictfp class MyWorld {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.TYPE_WILDCARD,
-                                                    Syntax.TYPE_NUMBER + Syntax.TYPE_REPEATABLE },
+            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(),
+                                                    Syntax.NumberType() + Syntax.RepeatableType() },
                                         1);
         }
         
