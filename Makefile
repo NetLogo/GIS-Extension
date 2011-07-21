@@ -17,6 +17,13 @@ gis.jar: $(SRCS) manifest.txt Makefile $(JARS)
 	$(JAVAC) -g -deprecation -Xlint:all -Xlint:-serial -Xlint:-path -encoding us-ascii -source 1.5 -target 1.5 -classpath $(NETLOGO)/NetLogoLite.jar:$(JARSPATH) -d classes $(SRCS)
 	jar cmf manifest.txt gis.jar -C classes .
 
+gis.zip: gis.jar
+	rm -rf gis
+	mkdir gis
+	cp -rp gis.jar README.md Makefile src manifest.txt build.xml gis
+	zip -rv gis.zip gis
+	rm -rf gis
+
 jai_codec-1.1.3.jar:
 	curl -s 'http://ccl.northwestern.edu/devel/jai_codec-1.1.3.jar' -o jai_codec-1.1.3.jar
 jai_core-1.1.3.jar:
