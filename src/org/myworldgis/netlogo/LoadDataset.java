@@ -15,13 +15,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import javax.measure.converter.UnitConverter;
 import org.myworldgis.io.asciigrid.AsciiGridFileReader;
 import org.myworldgis.io.shapefile.DBaseFileReader;
 import org.myworldgis.io.shapefile.ESRIShapefileReader;
 import org.myworldgis.projection.Projection;
 import org.myworldgis.projection.ProjectionFormat;
 import org.myworldgis.util.StringUtils;
+import org.ngs.ngunits.converter.AbstractUnitConverter;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
@@ -62,7 +62,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                 throw new ExtensionException("shapefile " + shpFilePath + " not found");
             }
             shp = new ESRIShapefileReader(shpFile.getInputStream(), 
-                                          UnitConverter.IDENTITY,
+                                          AbstractUnitConverter.IDENTITY,
                                           GISExtension.getState().factory());
             String dbfFilePath = StringUtils.changeFileExtension(shpFilePath, "dbf");
             File dbfFile = GISExtension.getState().getFile(dbfFilePath);

@@ -6,11 +6,11 @@ package org.myworldgis.projection;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.util.GeometryTransformer;
-import javax.measure.converter.UnitConverter;
-import javax.measure.quantity.Length;
-import javax.measure.unit.NonSI;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
+import org.ngs.ngunits.NonSI;
+import org.ngs.ngunits.SI;
+import org.ngs.ngunits.Unit;
+import org.ngs.ngunits.UnitConverter;
+import org.ngs.ngunits.quantity.Length;
 
 
 /**

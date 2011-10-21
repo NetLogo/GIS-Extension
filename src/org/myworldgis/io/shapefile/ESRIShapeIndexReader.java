@@ -7,7 +7,7 @@ package org.myworldgis.io.shapefile;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import javax.measure.converter.UnitConverter;
+import org.ngs.ngunits.UnitConverter;
 
 
 /**

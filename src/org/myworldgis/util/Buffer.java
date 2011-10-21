@@ -383,12 +383,12 @@ public strictfp class Buffer {
     
     /** */
     public int read (InputStream in, int offset, int byteCount) throws IOException {
-        if (_bytes.length + offset < byteCount) {
+    	if (offset + byteCount > _bytes.length) {
             byte[] newBytes = new byte[byteCount + offset];
             System.arraycopy(_bytes, 0, newBytes, 0, _bytes.length);
             _bytes = newBytes;
         }
-        _size = in.read(_bytes, offset, byteCount);
+    	_size = in.read(_bytes, offset, byteCount);
         return _size;
     }
     

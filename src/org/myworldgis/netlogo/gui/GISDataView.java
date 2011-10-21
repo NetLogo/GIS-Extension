@@ -91,6 +91,7 @@ public final strictfp class GISDataView extends JComponent {
             }
         }
         
+        @SuppressWarnings("unused")
         public Point2D getPixelCenter () {
             return (Point2D)_pixelCenter.clone();
         }

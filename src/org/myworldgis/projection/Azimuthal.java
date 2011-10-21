@@ -6,9 +6,8 @@ package org.myworldgis.projection;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import java.text.ParseException;
-import javax.measure.quantity.Length;
-import javax.measure.unit.Unit;
-
+import org.ngs.ngunits.Unit;
+import org.ngs.ngunits.quantity.Length;
 
 /**
  * Base class of all azimuthal projections.
