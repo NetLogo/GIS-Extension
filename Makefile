@@ -20,7 +20,7 @@ gis.jar: $(SRCS) manifest.txt Makefile $(JARS)
 gis.zip: gis.jar
 	rm -rf gis
 	mkdir gis
-	cp -rp gis.jar README.md Makefile src manifest.txt build.xml gis
+	cp -rp *.jar README.md Makefile src manifest.txt build.xml gis
 	zip -rv gis.zip gis
 	rm -rf gis
 
