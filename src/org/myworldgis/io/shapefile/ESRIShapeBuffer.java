@@ -16,9 +16,9 @@ import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import java.io.IOException;
-import javax.measure.converter.UnitConverter;
 import org.myworldgis.util.Buffer;
 import org.myworldgis.util.JTSUtils;
+import org.ngs.ngunits.UnitConverter;
 
 
 /**

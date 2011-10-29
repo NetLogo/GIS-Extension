@@ -15,7 +15,6 @@ import org.myworldgis.projection.Projection;
 import org.nlogo.api.Context;
 import org.nlogo.api.Dump;
 import org.nlogo.api.ExtensionException;
-import org.nlogo.workspace.ExtensionManager;
 import org.nlogo.api.ExtensionObject;
 import org.nlogo.api.File;
 import org.nlogo.api.Link;
@@ -24,6 +23,7 @@ import org.nlogo.api.Patch;
 import org.nlogo.api.Turtle;
 import org.nlogo.nvm.ExtensionContext;
 import org.nlogo.nvm.Workspace;
+import org.nlogo.workspace.ExtensionManager;
 
 
 /**

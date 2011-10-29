@@ -10,11 +10,11 @@ import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
-import javax.measure.converter.UnitConverter;
-import javax.measure.quantity.Angle;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
 import org.myworldgis.util.GeometryUtils;
+import org.ngs.ngunits.SI;
+import org.ngs.ngunits.Unit;
+import org.ngs.ngunits.UnitConverter;
+import org.ngs.ngunits.quantity.Angle;
 
 
 /**
