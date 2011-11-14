@@ -191,7 +191,7 @@ public final strictfp class GISExtension extends DefaultClassManager {
 		return java.util.Arrays.asList( new String[] {
             "jai_codec-1.1.3.jar",
             "jai_core-1.1.3.jar",
-            "jscience-4.2.jar",
+            "ngunits-1.0.jar",
             "jts-1.9.jar",
             "commons-codec-1.3.jar",
             "commons-logging-1.1.jar",
