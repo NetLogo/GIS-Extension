@@ -20,7 +20,7 @@ If compilation succeeds, `gis.jar` will be created.
 
 ## Terms of Use
 
-GIS Extension © 2001-2011 Eric Russell and Daniel Edelson. 
+GIS Extension © 2001-2012 Eric Russell and Daniel Edelson.
 All rights reserved.
 
 The Java source code (files in the src directory whose names end in ".java") and binary object code (the file "gis.jar") of the GIS Extension are made available to you subject to the terms of the following license:
@@ -455,7 +455,7 @@ The source code of the JTS library is available at:
 
 --------------------------------------------------------------------------------
 
-The NGUnits library (the binary file ngunits-1.0.jar) is copyright (C) 2010-2011 
+The NGUnits library (the binary file ngunits-1.0.jar) is copyright (C) 2010-2012
 National Geographic Society and is made available under the following license:
     
     Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
