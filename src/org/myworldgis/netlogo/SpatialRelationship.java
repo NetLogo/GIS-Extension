@@ -152,7 +152,7 @@ public abstract strictfp class SpatialRelationship {
                     agents.add((org.nlogo.agent.Agent)agent);
                 }
             }
-            return new org.nlogo.agent.ArrayAgentSet( ((org.nlogo.agent.AgentSet)set).type(),
+            return new org.nlogo.agent.ArrayAgentSet( ((org.nlogo.agent.AgentSet)set).kind(),
                                                      agents.toArray(new org.nlogo.agent.Agent[agents.size()]),
                                                      (org.nlogo.agent.World)context.getAgent().world());
         }
