@@ -12,9 +12,7 @@ The GIS extension was written by Eric Russell.
 
 ## Building
 
-Use the NETLOGO environment variable to tell the Makefile which NetLogoLite.jar to compile against.  For example:
-
-    NETLOGO=/Applications/NetLogo\\\ 5.0 make
+Run `make`.
 
 If compilation succeeds, `gis.jar` will be created.
 

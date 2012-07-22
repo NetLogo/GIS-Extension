@@ -1,4 +1,4 @@
-*.jar
-*.jar.pack.gz
+/*.jar
+/*.jar.pack.gz
 /classes
 /gis.zip
