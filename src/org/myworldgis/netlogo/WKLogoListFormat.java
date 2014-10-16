@@ -54,7 +54,7 @@ public final strictfp class WKLogoListFormat {
     @SuppressWarnings("unchecked")
     public WKTElement parseWKT (LogoList wkList) throws ParseException {
         WKTElement result = new WKTElement((String)wkList.first());
-        for (Iterator iterator = wkList.listIterator(1); iterator.hasNext();) {
+        for (Iterator<Object> iterator = wkList.listIterator(1); iterator.hasNext();) {
             Object elt = iterator.next();
             if (elt instanceof LogoList) {
                 result.addContent(parseWKT((LogoList)elt));
@@ -75,7 +75,7 @@ public final strictfp class WKLogoListFormat {
     public LogoList format (WKTElement wkt) {
         LogoListBuilder result = new LogoListBuilder();
         result.add(wkt.getKeyword());
-        for (Iterator iterator = wkt.iterator(); iterator.hasNext();) {
+        for (Iterator<Object> iterator = wkt.iterator(); iterator.hasNext();) {
             Object elt = iterator.next();
             if (elt instanceof WKTElement) {
                 result.add(format((WKTElement)elt));

@@ -174,7 +174,7 @@ public abstract strictfp class RasterDatasetMath {
             float[] data = new float[matrixElements.size()];
             int row = kernelRows - 1;
             int col = 0;
-            for (Iterator iterator = matrixElements.iterator(); iterator.hasNext();) {
+            for (Iterator<Object> iterator = matrixElements.iterator(); iterator.hasNext();) {
                 // NOTE: reverse order of the rows, since image coordinate system 
                 // (where the convolution is computed) has the reversed y axis
                 data[row*kernelColumns + col] = ((Number)iterator.next()).floatValue();

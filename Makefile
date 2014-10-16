@@ -15,21 +15,14 @@ SRCS=$(wildcard src/org/myworldgis/io/asciigrid/*.java src/org/myworldgis/io/sha
 JARS=jai_codec-1.1.3.jar jai_core-1.1.3.jar ngunits-1.0.jar jts-1.9.jar commons-codec-1.3.jar commons-logging-1.1.jar commons-httpclient-3.0.1.jar
 JARSPATH=jai_codec-1.1.3.jar$(COLON)jai_core-1.1.3.jar$(COLON)ngunits-1.0.jar$(COLON)jts-1.9.jar$(COLON)commons-codec-1.3.jar:commons-logging-1.1.jar$(COLON)commons-httpclient-3.0.1.jar
 
-gis.jar gis.jar.pack.gz: $(SRCS) manifest.txt Makefile NetLogoLite.jar $(JARS) $(addsuffix .pack.gz, $(JARS))
+gis.jar gis.jar.pack.gz: $(SRCS) manifest.txt Makefile NetLogoHeadless.jar $(JARS) $(addsuffix .pack.gz, $(JARS))
 	mkdir -p classes
-	$(JAVAC) -g -deprecation -Xlint:all -Xlint:-serial -Xlint:-path -encoding us-ascii -source 1.5 -target 1.5 -classpath NetLogoLite.jar$(COLON)$(JARSPATH) -d classes $(SRCS)
+	$(JAVAC) -g -deprecation -Xlint:all -Xlint:-serial -Xlint:-path -encoding us-ascii -source 1.5 -target 1.5 -classpath NetLogoHeadless.jar$(COLON)$(JARSPATH) -d classes $(SRCS)
 	jar cmf manifest.txt gis.jar -C classes .
 	pack200 --modification-time=latest --effort=9 --strip-debug --no-keep-file-order --unknown-attribute=strip gis.jar.pack.gz gis.jar
 
-gis.zip: gis.jar
-	rm -rf gis
-	mkdir gis
-	cp -rp *.jar gis.jar.pack.gz README.md Makefile src manifest.txt build.xml gis
-	zip -rv gis.zip gis
-	rm -rf gis
-
-NetLogoLite.jar:
-	curl -f -s -S 'http://ccl.northwestern.edu/devel/NetLogoLite-971ed928.jar' -o NetLogoLite.jar
+NetLogoHeadless.jar:
+	curl -f -s -S 'http://ccl.northwestern.edu/devel/6.0-M1/NetLogoHeadless.jar' -o NetLogoHeadless.jar
 
 jai_codec-1.1.3.jar jai_codec-1.1.3.jar.pack.gz:
 	curl -f -s -S 'http://ccl.northwestern.edu/devel/jai_codec-1.1.3.jar' -o jai_codec-1.1.3.jar
@@ -52,3 +45,10 @@ commons-logging-1.1.jar commons-logging-1.1.jar.pack.gz:
 commons-httpclient-3.0.1.jar commons-httpclient-3.0.1.jar.pack.gz:
 	curl -f -s -S 'http://ccl.northwestern.edu/devel/commons-httpclient-3.0.1.jar' -o commons-httpclient-3.0.1.jar
 	curl -f -s -S 'http://ccl.northwestern.edu/devel/commons-httpclient-3.0.1.jar.pack.gz' -o commons-httpclient-3.0.1.jar.pack.gz
+
+gis.zip: gis.jar
+	rm -rf gis
+	mkdir gis
+	cp -rp *.jar gis.jar.pack.gz README.md Makefile src manifest.txt build.xml gis
+	zip -rv gis.zip gis
+	rm -rf gis
