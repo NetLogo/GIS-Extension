@@ -2,3 +2,5 @@
 /*.jar.pack.gz
 /classes
 /gis.zip
+target/
+/project/project
