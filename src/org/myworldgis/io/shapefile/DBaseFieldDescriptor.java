@@ -160,4 +160,8 @@ public final strictfp class DBaseFieldDescriptor implements DBaseConstants {
             return false;
         }
     }
+
+    public int hashCode() {
+        return (int) ((Math.pow(2, _type) * Math.pow(3, _name.hashCode()) * Math.pow(5, _length) * Math.pow(7, _decimalCount)) % Integer.MAX_VALUE);
+    }
 }

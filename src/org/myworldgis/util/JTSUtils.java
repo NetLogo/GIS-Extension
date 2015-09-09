@@ -202,9 +202,9 @@ public final strictfp class JTSUtils {
                 boundary = boundary.union(boundary);
                 Polygonizer polygonizer = new Polygonizer();
                 polygonizer.add(boundary);
-                Collection c = polygonizer.getPolygons();
+                Collection<Polygon> c = polygonizer.getPolygons();
                 if (c.size() > 0) {
-                    Polygon[] polys = (Polygon[])c.toArray(new Polygon[c.size()]);
+                    Polygon[] polys = c.toArray(new Polygon[c.size()]);
                     Arrays.sort(polys, POLYGON_AREA_COMPARATOR);
                     p = polys[0];
                 } else {

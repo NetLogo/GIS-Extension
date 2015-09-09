@@ -302,4 +302,12 @@ public final strictfp class Ellipsoid {
                (((Ellipsoid)obj).radius == this.radius) &&
                (((Ellipsoid)obj).eccsq == this.eccsq);
     }
+
+    private long doublePow(int base, double pow) {
+      return Double.doubleToLongBits(Math.pow(base, pow));
+    }
+
+    public int hashCode() {
+      return (int) ((doublePow(2, radius) * doublePow(3, eccsq)) % Integer.MAX_VALUE);
+    }
 }

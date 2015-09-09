@@ -118,7 +118,11 @@ public final strictfp class Stereographic extends Azimuthal {
             return(false);
         }
     }
-    
+
+    public int hashCode() {
+        return (int) ((super.hashCode() * Math.round(this._k0 / GeometryUtils.EPSILON)) % Integer.MAX_VALUE);
+    }
+
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------

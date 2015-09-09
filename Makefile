@@ -17,7 +17,7 @@ JARSPATH=jai_codec-1.1.3.jar$(COLON)jai_core-1.1.3.jar$(COLON)ngunits-1.0.jar$(C
 
 gis.jar gis.jar.pack.gz: $(SRCS) manifest.txt Makefile NetLogoLite.jar $(JARS) $(addsuffix .pack.gz, $(JARS))
 	mkdir -p classes
-	$(JAVAC) -g -deprecation -Xlint:all -Xlint:-serial -Xlint:-path -encoding us-ascii -source 1.5 -target 1.5 -classpath NetLogoLite.jar$(COLON)$(JARSPATH) -d classes $(SRCS)
+	$(JAVAC) -g -deprecation -Xlint:all -Xlint:-serial -Xlint:-path -encoding us-ascii -source 1.8 -target 1.8 -classpath NetLogoLite.jar$(COLON)$(JARSPATH) -d classes $(SRCS)
 	jar cmf manifest.txt gis.jar -C classes .
 	pack200 --modification-time=latest --effort=9 --strip-debug --no-keep-file-order --unknown-attribute=strip gis.jar.pack.gz gis.jar
 

@@ -627,7 +627,7 @@ public final strictfp class ProjectionUtils {
             return("i["+(index/2)+" "+isEntry+" "+azimuth+" "+"("+lat+","+lon+")]");
         }
         
-        public boolean equals (Object obj) {
+        public boolean equals(Object obj) {
             return((obj == this) ||
                    ((obj instanceof ClippingIntersection) &&
                     (((ClippingIntersection)obj).lon == this.lon) &&
@@ -635,8 +635,17 @@ public final strictfp class ProjectionUtils {
                     (((ClippingIntersection)obj).azimuth == this.azimuth) &&
                     (((ClippingIntersection)obj).isEntry == this.isEntry)));
         }
+
+        private long doublePow(int base, double pow) {
+            return Double.doubleToLongBits(Math.pow(base, pow));
+        }
+
+        public int hashCode() {
+            int entryInt = (isEntry) ? 1 : 0;
+            return (int) ((doublePow(2, lon) * doublePow(3, lat) * doublePow(5, azimuth) * Math.pow(7, entryInt)) % Integer.MAX_VALUE);
+        }
     }
-    
+
     /** Angular size of each segment added to a polygon to fill a space which
         crosses out of the clipping hemisphere */
     private static double AZIMUTH_FILL_INCREMENT = GeometryUtils.TWO_PI / 360.0;

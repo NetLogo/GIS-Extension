@@ -98,7 +98,7 @@ public abstract strictfp class ApplyCoverage {
             }
             String[] properties = new String[arg1.size()];
             int idx = 0;
-            for (Iterator i = arg1.iterator(); i.hasNext();) {
+            for (Iterator<Object> i = arg1.iterator(); i.hasNext();) {
                 properties[idx++] = (String)i.next();
             }
             _reference[] variables = new _reference[propertyCount];

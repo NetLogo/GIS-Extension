@@ -155,7 +155,13 @@ public final strictfp class ObliqueMercator extends HemisphericalProjection {
             return(false);
         }
     }
-    
+
+    public int hashCode() {
+        return (int) ((super.hashCode() *
+              Math.round(this._k0 / GeometryUtils.EPSILON) *
+              Math.round(this._alpha / GeometryUtils.EPSILON)) % Integer.MAX_VALUE);
+    }
+
     /** */
     private double getT (double phi) {
         double eSinPhi = _e*StrictMath.sin(phi);

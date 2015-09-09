@@ -189,7 +189,7 @@ public abstract strictfp class SpatialRelationship {
             LogoList list = (LogoList)arg;
             Geometry[] geoms = new Geometry[list.size()];
             int gIndex = 0;
-            for (Iterator i = list.iterator(); i.hasNext();) {
+            for (Iterator<Object> i = list.iterator(); i.hasNext();) {
                 geoms[gIndex++] = getGeometry(i.next());
             }
             return JTSUtils.flatten(GISExtension.getState().factory().createGeometryCollection(geoms));

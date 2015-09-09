@@ -114,7 +114,7 @@ public final strictfp class Mercator extends Cylindrical {
             _k0 = newScale;
         }
     }
-    
+
     /** */
     public boolean equals (Object obj) {
         if (super.equals(obj)) {
@@ -124,7 +124,11 @@ public final strictfp class Mercator extends Cylindrical {
             return(false);
         }
     }
-    
+
+    public int hashCode() {
+        return (int) ((super.hashCode() * Math.round(this._k0 / GeometryUtils.EPSILON)) % Integer.MAX_VALUE);
+    }
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------

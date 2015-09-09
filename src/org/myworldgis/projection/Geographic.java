@@ -84,6 +84,10 @@ public final strictfp class Geographic extends AbstractProjection {
         }
     }
     
+    public int hashCode() {
+        return _units.hashCode();
+    }
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------

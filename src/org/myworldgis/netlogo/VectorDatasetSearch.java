@@ -106,7 +106,7 @@ public abstract strictfp class VectorDatasetSearch {
                 throws ExtensionException, LogoException {
             VectorDataset dataset = VectorDataset.getDataset(args[0]);
             String propertyName = getPropertyName(dataset, args[1]);
-            Comparable max = (Comparable)args[2].get();
+            Comparable<Object> max = (Comparable<Object>)args[2].get();
             LogoListBuilder result = new LogoListBuilder();
             for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
                 VectorFeature feature = i.next();
@@ -138,7 +138,7 @@ public abstract strictfp class VectorDatasetSearch {
                 throws ExtensionException, LogoException {
             VectorDataset dataset = VectorDataset.getDataset(args[0]);
             String propertyName = getPropertyName(dataset, args[1]);
-            Comparable min = (Comparable)args[2].get();
+            Comparable<Object> min = (Comparable<Object>)args[2].get();
             LogoListBuilder result = new LogoListBuilder();
             for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
                 VectorFeature feature = i.next();
@@ -171,8 +171,8 @@ public abstract strictfp class VectorDatasetSearch {
                 throws ExtensionException, LogoException {
             VectorDataset dataset = VectorDataset.getDataset(args[0]);
             String propertyName = getPropertyName(dataset, args[1]);
-            Comparable min = (Comparable)args[2].get();
-            Comparable max = (Comparable)args[3].get();
+            Comparable<Object> min = (Comparable<Object>)args[2].get();
+            Comparable<Object> max = (Comparable<Object>)args[3].get();
             LogoListBuilder result = new LogoListBuilder();
             for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
                 VectorFeature feature = i.next();
@@ -203,7 +203,7 @@ public abstract strictfp class VectorDatasetSearch {
                 throws ExtensionException, LogoException {
             VectorDataset dataset = VectorDataset.getDataset(args[0]);
             String propertyName = getPropertyName(dataset, args[1]);
-            Comparable result = null;
+            Comparable<Object> result = null;
             for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
                 VectorFeature feature = i.next();
                 Object value = feature.getProperty(propertyName);
@@ -212,7 +212,7 @@ public abstract strictfp class VectorDatasetSearch {
                         // careful! don't accept NaN values
                         continue;
                     }
-                    result = (Comparable)value;
+                    result = (Comparable<Object>)value;
                 }
             }
             return result;
@@ -237,7 +237,7 @@ public abstract strictfp class VectorDatasetSearch {
                 throws ExtensionException, LogoException {
             VectorDataset dataset = VectorDataset.getDataset(args[0]);
             String propertyName = getPropertyName(dataset, args[1]);
-            Comparable result = null;
+            Comparable<Object> result = null;
             for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
                 VectorFeature feature = i.next();
                 Object value = feature.getProperty(propertyName);
@@ -246,7 +246,7 @@ public abstract strictfp class VectorDatasetSearch {
                         // careful! don't accept NaN values
                         continue;
                     }
-                    result = (Comparable)value;
+                    result = (Comparable<Object>)value;
                 }
             }
             return result;
