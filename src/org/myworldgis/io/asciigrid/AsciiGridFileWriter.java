@@ -74,7 +74,7 @@ public final strictfp class AsciiGridFileWriter implements AsciiGridConstants {
         _out.println();
         
         if (Double.isNaN(nanValue)) {
-            _nanString = "NaN";
+            _nanString = "-9999";
         } else {
             _nanString = VALUE_FORMAT.format(nanValue);
         }
