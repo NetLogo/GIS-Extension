@@ -44,7 +44,7 @@ public final strictfp class StoreDataset extends GISExtension.Command {
         AsciiGridFileWriter asc = new AsciiGridFileWriter(new FileWriter(new File(ascFile)));
         try {
             GridDimensions dimensions = dataset.getDimensions();
-            asc.writeGridInfo(dimensions.getGridSize(), dimensions.getEnvelope(), Double.NaN);
+            asc.writeGridInfo(dimensions.getGridSize(), dimensions.getEnvelope(), -9999);
             asc.writeGridData(dataset.getRaster().getDataBuffer());
         } finally {
             asc.close();
