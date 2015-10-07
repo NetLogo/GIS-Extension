@@ -31,6 +31,6 @@ libraryDependencies ++= Seq(
   "commons-httpclient" % "commons-httpclient" % "3.1",
   "commons-logging"    % "commons-logging"    % "1.2",
   "commons-codec"      % "commons-codec"      % "1.10",
-  "org.ngs"            % "ngunits"            % "1.0.0" from "http://ccl.northwestern.edu/devel/ngunits-1.0.jar",
-  "javax.media"        % "jai_core"           % "1.1.3" from "http://ccl.northwestern.edu/devel/jai_core-1.1.3.jar",
-  "com.sun.media"      % "jai_codec"          % "1.1.3" from "http://ccl.northwestern.edu/devel/jai_codec-1.1.3.jar" )
+  "org.ngs"            % "ngunits"            % "1.0.0" from "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/ngunits-1.0.jar",
+  "javax.media"        % "jai_core"           % "1.1.3" from "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/jai_core-1.1.3.jar",
+  "com.sun.media"      % "jai_codec"          % "1.1.3" from "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/jai_codec-1.1.3.jar" )
