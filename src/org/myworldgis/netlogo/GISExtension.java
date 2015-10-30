@@ -14,7 +14,7 @@ import org.nlogo.api.DefaultCommand;
 import org.nlogo.api.DefaultReporter;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.ExtensionManager;
-import org.nlogo.api.ExtensionObject;
+import org.nlogo.core.ExtensionObject;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.PrimitiveManager;
 

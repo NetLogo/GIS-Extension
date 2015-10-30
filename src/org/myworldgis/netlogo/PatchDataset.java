@@ -16,7 +16,8 @@ import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
 import org.nlogo.prim._reference;
 
@@ -35,7 +36,7 @@ public final strictfp class PatchDataset extends GISExtension.Reporter {
     }
     
     public Syntax getSyntax() {
-        return Syntax.reporterSyntax(new int[] { Syntax.ReferenceType() },
+        return SyntaxJ.reporterSyntax(new int[] { Syntax.ReferenceType() },
                                      Syntax.WildcardType());
     }
 

@@ -14,9 +14,10 @@ import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.LogoList;
+import org.nlogo.core.LogoList;
 import org.nlogo.api.Patch;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.Turtle;
 import org.nlogo.api.World;
 
@@ -38,7 +39,7 @@ public abstract strictfp class RasterDatasetMath {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(), 
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), 
                                                      Syntax.WildcardType() },
                                          Syntax.NumberType());
         }
@@ -95,7 +96,7 @@ public abstract strictfp class RasterDatasetMath {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.ListType(),
                                                      Syntax.NumberType(),
                                                      Syntax.NumberType() },
@@ -120,7 +121,7 @@ public abstract strictfp class RasterDatasetMath {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.NumberType(),
                                                      Syntax.NumberType() },
                                          Syntax.ListType());
@@ -150,7 +151,7 @@ public abstract strictfp class RasterDatasetMath {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.NumberType(),
                                                      Syntax.NumberType(),
                                                      Syntax.ListType(),
@@ -174,7 +175,7 @@ public abstract strictfp class RasterDatasetMath {
             float[] data = new float[matrixElements.size()];
             int row = kernelRows - 1;
             int col = 0;
-            for (Iterator<Object> iterator = matrixElements.iterator(); iterator.hasNext();) {
+            for (Iterator<Object> iterator = matrixElements.javaIterator(); iterator.hasNext();) {
                 // NOTE: reverse order of the rows, since image coordinate system 
                 // (where the convolution is computed) has the reversed y axis
                 data[row*kernelColumns + col] = ((Number)iterator.next()).floatValue();

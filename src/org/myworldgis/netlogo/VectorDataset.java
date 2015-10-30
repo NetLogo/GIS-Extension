@@ -19,9 +19,10 @@ import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.LogoList;
+import org.nlogo.core.LogoList;
 import org.nlogo.api.LogoListBuilder;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 
 
 /**
@@ -41,7 +42,7 @@ public final strictfp class VectorDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.ListType());
         }
         
@@ -67,7 +68,7 @@ public final strictfp class VectorDataset extends Dataset {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.ListType());
         }
         

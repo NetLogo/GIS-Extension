@@ -13,7 +13,8 @@ import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
 
 /**
@@ -36,7 +37,7 @@ public abstract strictfp class GetEnvelope {
         
         /** */
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.ListType());
         }
     
@@ -74,7 +75,7 @@ public abstract strictfp class GetEnvelope {
         
         /** */
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.ListType());
+            return SyntaxJ.reporterSyntax(new int[] { }, Syntax.ListType());
         }
     
         /** */

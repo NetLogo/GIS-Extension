@@ -13,7 +13,8 @@ import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
 import org.nlogo.prim._reference;
 
@@ -34,7 +35,7 @@ public strictfp class ApplyRaster extends GISExtension.Command {
 
     /** */
     public Syntax getSyntax() {
-        return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), 
+        return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), 
                                                 Syntax.ReferenceType() });
     }
 

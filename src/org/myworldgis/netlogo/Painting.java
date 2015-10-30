@@ -26,7 +26,8 @@ import org.nlogo.api.Context;
 import org.nlogo.api.Dump;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
 
 
@@ -47,7 +48,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.NumberType() | Syntax.ListType() );
+            return SyntaxJ.reporterSyntax(new int[] { }, Syntax.NumberType() | Syntax.ListType() );
         }
         
         public Object reportInternal (Argument args[], Context context)
@@ -64,7 +65,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
         }
 
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.NumberType() | Syntax.ListType() });
+            return SyntaxJ.commandSyntax(new int[] { Syntax.NumberType() | Syntax.ListType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -81,7 +82,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
         }
     
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
+            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -151,7 +152,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
 
         /** */
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
+            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
         }
 
         /** */

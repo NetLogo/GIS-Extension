@@ -15,9 +15,10 @@ import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.LogoList;
+import org.nlogo.core.LogoList;
 import org.nlogo.api.Patch;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
 import org.nlogo.prim._reference;
 
@@ -39,7 +40,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), 
+            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), 
                                                     Syntax.StringType(), 
                                                     Syntax.ReferenceType() });
         }
@@ -79,7 +80,7 @@ public abstract strictfp class ApplyCoverage {
             // if someone else were willing to take a look, I'd really 
             // appreciate it. - ER 12/13/07
             
-            return Syntax.commandSyntax(new int[] { Syntax.WildcardType(), 
+            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), 
                                                     Syntax.ListType(), 
                                                     Syntax.ReferenceType() | Syntax.RepeatableType() },
                                         3);
@@ -98,7 +99,7 @@ public abstract strictfp class ApplyCoverage {
             }
             String[] properties = new String[arg1.size()];
             int idx = 0;
-            for (Iterator<Object> i = arg1.iterator(); i.hasNext();) {
+            for (Iterator<Object> i = arg1.javaIterator(); i.hasNext();) {
                 properties[idx++] = (String)i.next();
             }
             _reference[] variables = new _reference[propertyCount];
@@ -120,7 +121,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.NumberType());
+            return SyntaxJ.reporterSyntax(new int[] { }, Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context) 
@@ -137,7 +138,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.NumberType() });
+            return SyntaxJ.commandSyntax(new int[] { Syntax.NumberType() });
         }
         
         public void performInternal (Argument args[], Context context) 
@@ -154,7 +155,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { }, Syntax.NumberType());
+            return SyntaxJ.reporterSyntax(new int[] { }, Syntax.NumberType());
         }
         
         public Object reportInternal (Argument args[], Context context) 
@@ -171,7 +172,7 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return Syntax.commandSyntax(new int[] { Syntax.NumberType() });
+            return SyntaxJ.commandSyntax(new int[] { Syntax.NumberType() });
         }
         
         public void performInternal (Argument args[], Context context) 

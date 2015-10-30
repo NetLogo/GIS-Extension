@@ -9,7 +9,7 @@ import java.util.Iterator;
 import org.myworldgis.projection.Projection;
 import org.myworldgis.projection.ProjectionFormat;
 import org.myworldgis.wkt.WKTElement;
-import org.nlogo.api.LogoList;
+import org.nlogo.core.LogoList;
 import org.nlogo.api.LogoListBuilder;
 
 

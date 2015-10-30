@@ -7,7 +7,7 @@ package org.myworldgis.netlogo;
 import com.vividsolutions.jts.geom.Envelope;
 import java.text.ParseException;
 import org.nlogo.api.Dump;
-import org.nlogo.api.LogoList;
+import org.nlogo.core.LogoList;
 import org.nlogo.api.LogoListBuilder;
 
 

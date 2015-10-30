@@ -8,9 +8,10 @@ import com.vividsolutions.jts.geom.Envelope;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
-import org.nlogo.api.ExtensionObject;
+import org.nlogo.core.ExtensionObject;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 
 
 /**
@@ -26,7 +27,7 @@ public abstract strictfp class Dataset implements ExtensionObject {
     public static final strictfp class GetDatasetType extends GISExtension.Reporter {
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.StringType());
         }
         

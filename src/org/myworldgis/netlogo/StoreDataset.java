@@ -25,7 +25,8 @@ import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 
 
 /**
@@ -196,7 +197,7 @@ public final strictfp class StoreDataset extends GISExtension.Command {
 
     /** */
     public Syntax getSyntax() {
-        return Syntax.commandSyntax(new int[] { Syntax.WildcardType(),
+        return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
                                                 Syntax.StringType() });
     }
     

@@ -7,7 +7,7 @@ package org.myworldgis.netlogo;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import java.awt.geom.AffineTransform;
-import org.nlogo.api.ExtensionObject;
+import org.nlogo.core.ExtensionObject;
 
 
 /**

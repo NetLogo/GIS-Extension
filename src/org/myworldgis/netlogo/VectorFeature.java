@@ -18,11 +18,12 @@ import java.util.Map;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
-import org.nlogo.api.ExtensionObject;
+import org.nlogo.core.ExtensionObject;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.LogoListBuilder;
-import org.nlogo.api.Nobody$;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Nobody$;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 
 
 /**
@@ -42,7 +43,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(),
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType() },
                                          Syntax.ReadableType());
         }
@@ -72,7 +73,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.ListType());
         }
         
@@ -109,7 +110,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType() },
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.WildcardType());
         }
         

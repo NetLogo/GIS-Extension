@@ -18,8 +18,9 @@ import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.LogoList;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.LogoList;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 
 
 /**
@@ -40,7 +41,7 @@ public abstract strictfp class SpatialRelationship {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType() },
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType() },
                                          Syntax.BooleanType());
         }
         
@@ -87,7 +88,7 @@ public abstract strictfp class SpatialRelationship {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(), 
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), 
                                                      Syntax.WildcardType(),
                                                      Syntax.StringType() },
                                          Syntax.BooleanType());
@@ -114,7 +115,7 @@ public abstract strictfp class SpatialRelationship {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(new int[] { Syntax.WildcardType(), 
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), 
                                                      Syntax.WildcardType() },
                                          Syntax.StringType());
         }
@@ -135,7 +136,7 @@ public abstract strictfp class SpatialRelationship {
         }
         
         public Syntax getSyntax() {
-            return Syntax.reporterSyntax(Syntax.PatchsetType(), 
+            return SyntaxJ.reporterSyntax(Syntax.PatchsetType(), 
                                          new int[] { Syntax.WildcardType() },
                                          Syntax.PatchsetType(),
                                          Syntax.NormalPrecedence());
@@ -152,7 +153,7 @@ public abstract strictfp class SpatialRelationship {
                     agents.add((org.nlogo.agent.Agent)agent);
                 }
             }
-            return new org.nlogo.agent.ArrayAgentSet( ((org.nlogo.agent.AgentSet)set).type(),
+            return new org.nlogo.agent.ArrayAgentSet(((org.nlogo.agent.AgentSet)set).kind(),
                                                      agents.toArray(new org.nlogo.agent.Agent[agents.size()]),
                                                      (org.nlogo.agent.World)context.getAgent().world());
         }
@@ -189,7 +190,7 @@ public abstract strictfp class SpatialRelationship {
             LogoList list = (LogoList)arg;
             Geometry[] geoms = new Geometry[list.size()];
             int gIndex = 0;
-            for (Iterator<Object> i = list.iterator(); i.hasNext();) {
+            for (Iterator<Object> i = list.javaIterator(); i.hasNext();) {
                 geoms[gIndex++] = getGeometry(i.next());
             }
             return JTSUtils.flatten(GISExtension.getState().factory().createGeometryCollection(geoms));
