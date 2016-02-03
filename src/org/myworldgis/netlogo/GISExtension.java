@@ -10,8 +10,6 @@ import org.nlogo.api.AgentException;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.DefaultClassManager;
-import org.nlogo.api.DefaultCommand;
-import org.nlogo.api.DefaultReporter;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.ExtensionManager;
 import org.nlogo.core.ExtensionObject;
@@ -29,7 +27,7 @@ public final strictfp class GISExtension extends DefaultClassManager {
     //--------------------------------------------------------------------------
     
     /** */
-    public static abstract strictfp class Reporter extends DefaultReporter {
+    public static abstract strictfp class Reporter implements org.nlogo.api.Reporter {
         
         public abstract Object reportInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, IOException, LogoException, ParseException;
@@ -52,7 +50,7 @@ public final strictfp class GISExtension extends DefaultClassManager {
     }
     
     /** */
-    public static abstract strictfp class Command extends DefaultCommand {
+    public static abstract strictfp class Command implements org.nlogo.api.Command {
         
         public abstract void performInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, IOException, LogoException, ParseException;
