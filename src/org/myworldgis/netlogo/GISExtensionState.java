@@ -19,6 +19,7 @@ import org.nlogo.core.ExtensionObject;
 import org.nlogo.core.File;
 import org.nlogo.api.Link;
 import org.nlogo.api.LogoException;
+import org.nlogo.api.OutputDestinationJ;
 import org.nlogo.api.Patch;
 import org.nlogo.api.Turtle;
 import org.nlogo.nvm.ExtensionContext;
@@ -112,7 +113,7 @@ public final strictfp class GISExtensionState implements ExtensionObject {
                                 c.getAgent(), 
                                 true, 
                                 false,
-                                Workspace.OutputDestination.NORMAL ) ;
+                                OutputDestinationJ.NORMAL()) ;
             } catch (LogoException e) { }
         }
         _projection = newProjection;
