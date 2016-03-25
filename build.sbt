@@ -21,5 +21,4 @@ libraryDependencies ++= Seq(
   "javax.media"        % "jai_core"           % "1.1.3" from "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/jai_core-1.1.3.jar",
   "com.sun.media"      % "jai_codec"          % "1.1.3" from "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/jai_codec-1.1.3.jar" )
 
-netLogoVersion := "6.0-M1"
-
+netLogoVersion := "6.0.0-M2"
