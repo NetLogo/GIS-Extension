@@ -42,7 +42,7 @@ public final strictfp class PatchDataset extends GISExtension.Reporter {
 
     public Object reportInternal (Argument args[], Context context)
             throws ExtensionException, LogoException {
-        _reference patchVar = (_reference)((org.nlogo.nvm.Argument)args[0]).getReporter();
+        _reference patchVar = (_reference)((org.nlogo.nvm.Argument)args[0]).getReference();
         World world = context.getAgent().world();
         int width = world.worldWidth();
         int height = world.worldHeight();

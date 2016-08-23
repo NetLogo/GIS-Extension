@@ -44,7 +44,7 @@ public strictfp class ApplyRaster extends GISExtension.Command {
             throws AgentException, ExtensionException, LogoException {
         RasterDataset dataset = RasterDataset.getDataset(args[0]);
         World world = context.getAgent().world();
-        _reference patchVar = (_reference)((org.nlogo.nvm.Argument)args[1]).getReporter();
+        _reference patchVar = (_reference)((org.nlogo.nvm.Argument)args[1]).getReference();
         Envelope gisEnvelope = GISExtension.getState().getTransformation().getEnvelope(world);
         Dimension gridSize = new Dimension(world.worldWidth(), world.worldHeight());
         RasterDataset resampledDataset = dataset.resample(new GridDimensions(gridSize, gisEnvelope));

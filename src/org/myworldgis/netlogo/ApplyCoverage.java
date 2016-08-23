@@ -40,12 +40,12 @@ public abstract strictfp class ApplyCoverage {
         }
         
         public Syntax getSyntax() {
-            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), 
-                                                    Syntax.StringType(), 
-                                                    Syntax.ReferenceType() });
+            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
+                                                    Syntax.StringType(),
+                                                    Syntax.SymbolType() });
         }
         
-        public void performInternal (Argument args[], Context context) 
+        public void performInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, LogoException {
             Object arg0 = args[0].get();
             if (!(arg0 instanceof VectorDataset)) {
@@ -54,7 +54,7 @@ public abstract strictfp class ApplyCoverage {
             applyCoverages(context.getAgent().world(),
                            (VectorDataset)arg0,
                            new String[] { args[1].getString() },
-                           new _reference[] { (_reference)((org.nlogo.nvm.Argument)args[2]).getReporter() });
+                           new _reference[] { (_reference)((org.nlogo.nvm.Argument)args[2]).getReference() });
         }
     }
     
@@ -104,7 +104,7 @@ public abstract strictfp class ApplyCoverage {
             }
             _reference[] variables = new _reference[propertyCount];
             for (int i = 0; i < propertyCount; i += 1) {
-                variables[i] = (_reference)((org.nlogo.nvm.Argument)args[i+2]).getReporter();
+                variables[i] = (_reference)((org.nlogo.nvm.Argument)args[i+2]).getReference();
             }
             applyCoverages(context.getAgent().world(),
                            (VectorDataset)arg0,
