@@ -13,6 +13,7 @@ import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
+import org.nlogo.core.Reference;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
@@ -44,7 +45,7 @@ public strictfp class ApplyRaster extends GISExtension.Command {
             throws AgentException, ExtensionException, LogoException {
         RasterDataset dataset = RasterDataset.getDataset(args[0]);
         World world = context.getAgent().world();
-        _reference patchVar = (_reference)((org.nlogo.nvm.Argument)args[1]).getReference();
+        Reference patchVar = ((org.nlogo.nvm.Argument)args[1]).getReference();
         Envelope gisEnvelope = GISExtension.getState().getTransformation().getEnvelope(world);
         Dimension gridSize = new Dimension(world.worldWidth(), world.worldHeight());
         RasterDataset resampledDataset = dataset.resample(new GridDimensions(gridSize, gisEnvelope));
@@ -52,7 +53,7 @@ public strictfp class ApplyRaster extends GISExtension.Command {
         for (int px = world.minPxcor(), ix = 0; px <= world.maxPxcor(); px += 1, ix += 1) {
             for (int py = world.minPycor(), iy = raster.getHeight() - 1; py <= world.maxPycor(); py += 1, iy -= 1) {
                 Patch p = world.fastGetPatchAt(px, py);
-                p.setVariable(patchVar.reference.vn(), Double.valueOf(raster.getSampleDouble(ix, iy, 0)));
+                p.setVariable(patchVar.vn(), Double.valueOf(raster.getSampleDouble(ix, iy, 0)));
             }
         }
     }

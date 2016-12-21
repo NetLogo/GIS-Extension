@@ -16,6 +16,7 @@ import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
+import org.nlogo.core.Reference;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
@@ -42,7 +43,7 @@ public final strictfp class PatchDataset extends GISExtension.Reporter {
 
     public Object reportInternal (Argument args[], Context context)
             throws ExtensionException, LogoException {
-        _reference patchVar = (_reference)((org.nlogo.nvm.Argument)args[0]).getReference();
+        Reference patchVar = ((org.nlogo.nvm.Argument)args[0]).getReference();
         World world = context.getAgent().world();
         int width = world.worldWidth();
         int height = world.worldHeight();
@@ -54,7 +55,7 @@ public final strictfp class PatchDataset extends GISExtension.Reporter {
         for (int px = world.minPxcor(), ix = 0; px <= world.maxPxcor(); px += 1, ix += 1) {
             for (int py = world.minPycor(), iy = raster.getHeight() - 1; py <= world.maxPycor(); py += 1, iy -= 1) {
                 Patch p = world.fastGetPatchAt(px, py);
-                Object value = p.getVariable(patchVar.reference.vn());
+                Object value = p.getVariable(patchVar.vn());
                 if (value instanceof Number) {
                     raster.setSample(ix, iy, 0, ((Number)value).doubleValue());
                 } else {

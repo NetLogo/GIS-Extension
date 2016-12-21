@@ -17,34 +17,34 @@ import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.core.LogoList;
 import org.nlogo.api.Patch;
+import org.nlogo.core.Reference;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
-import org.nlogo.prim._reference;
 
 
 /**
- * 
+ *
  */
 public abstract strictfp class ApplyCoverage {
-    
+
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final strictfp class SinglePolygonField extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
                                                     Syntax.StringType(),
-                                                    Syntax.SymbolType() });
+                                                    Syntax.ReferenceType() });
         }
-        
+
         public void performInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, LogoException {
             Object arg0 = args[0].get();
@@ -54,7 +54,7 @@ public abstract strictfp class ApplyCoverage {
             applyCoverages(context.getAgent().world(),
                            (VectorDataset)arg0,
                            new String[] { args[1].getString() },
-                           new _reference[] { (_reference)((org.nlogo.nvm.Argument)args[2]).getReference() });
+                           new Reference[] { ((org.nlogo.nvm.Argument)args[2]).getReference() });
         }
     }
     
@@ -102,9 +102,9 @@ public abstract strictfp class ApplyCoverage {
             for (Iterator<Object> i = arg1.javaIterator(); i.hasNext();) {
                 properties[idx++] = (String)i.next();
             }
-            _reference[] variables = new _reference[propertyCount];
+            Reference[] variables = new Reference[propertyCount];
             for (int i = 0; i < propertyCount; i += 1) {
-                variables[i] = (_reference)((org.nlogo.nvm.Argument)args[i+2]).getReference();
+                variables[i] = ((org.nlogo.core.Referenceable)((org.nlogo.nvm.Argument)args[i+2]).getReference()).makeReference();
             }
             applyCoverages(context.getAgent().world(),
                            (VectorDataset)arg0,
@@ -209,7 +209,7 @@ public abstract strictfp class ApplyCoverage {
     static void applyCoverages (World world,
                                 VectorDataset dataset,
                                 String[] properties,
-                                _reference[] variables) 
+                                Reference[] variables)
             throws AgentException, ExtensionException , LogoException {
         for (int i = 0; i < properties.length; i += 1) {
             if (!dataset.isValidPropertyName(properties[i])) {
@@ -225,16 +225,16 @@ public abstract strictfp class ApplyCoverage {
                 if (features.size() > 1) {
                     Object[] values = aggregatePropertyValues(patchGeometry, properties, features);
                     for (int i = 0; i < properties.length; i += 1) {
-                        p.setVariable(variables[i].reference.vn(), values[i]);
+                        p.setVariable(variables[i].vn(), values[i]);
                     }
                 } else if ((features.size() == 1) &&
                            (JTSUtils.fastGetSharedAreaRatio(patchGeometry, features.get(0).getGeometry()) > singleCellThreshold)) {
                     for (int i = 0; i < properties.length; i += 1) {
-                        p.setVariable(variables[i].reference.vn(), features.get(0).getProperty(properties[i]));
+                        p.setVariable(variables[i].vn(), features.get(0).getProperty(properties[i]));
                     }
                 } else {
                     for (int i = 0; i < properties.length; i += 1) {
-                        p.setVariable(variables[i].reference.vn(), GISExtension.MISSING_VALUE);
+                        p.setVariable(variables[i].vn(), GISExtension.MISSING_VALUE);
                     }
                 }
             }
