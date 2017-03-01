@@ -1,6 +1,6 @@
 enablePlugins(org.nlogo.build.NetLogoExtension, org.nlogo.build.ExtensionDocumentationPlugin)
 
-javaSource in Compile <<= baseDirectory(_ / "src")
+javaSource in Compile := baseDirectory.value / "src"
 
 name := "gis"
 
