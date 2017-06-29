@@ -249,7 +249,7 @@ generally not recommended, but it may be useful for some models.
 
 Here is an example of the difference between [set-transformation](#gisset-transformation) and [set-transformation-ds](#gisset-transformation-ds):
 
-      <table width="80%" border="1" rules="cols" style="border-collaps: separate; border-spacing: 4px; text-align: center; margin: 0 auto;">
+<table width="80%" border="1" rules="cols" style="border-collaps: separate; border-spacing: 4px; text-align: center; margin: 0 auto;">
 <tr>
   <td style="padding: 8px">
     <img alt="" src="images/set-transformation.png" width="200">
@@ -265,7 +265,7 @@ Here is an example of the difference between [set-transformation](#gisset-transf
     scale along the x axis is stretched so that the earth covers
     the entire NetLogo View, which in this case distorts the shape
     of the Earth.
-  </table>
+</table>
 
 
 
@@ -1413,7 +1413,7 @@ gis:drawing-color
 Reports the color used by the GIS extension to draw vector features
 into the NetLogo drawing layer. Color can be represented either as
 a NetLogo color (a single number between zero and 140) or an RGB
-color (a list of 3 numbers). See details in the <a href="../../docs/programming.html#colors">Colors</a> section of the
+color (a list of 3 numbers). See details in the [Colors](http://ccl.northwestern.edu/netlogo/docs/programming.html#colors) section of the
 Programming Guide.
 
 
@@ -1428,7 +1428,7 @@ gis:set-drawing-color color
 Sets the color used by the GIS extension to draw vector features
 into the NetLogo drawing layer. *Color* can be represented
 either as a NetLogo color (a single number between zero and 140) or
-an RGB color (a list of 3 numbers). See details in the [Colors]({{{netlogoUrl}}}programming.html#colors) section of the Programming Guide.
+an RGB color (a list of 3 numbers). See details in the [Colors](http://ccl.northwestern.edu/netlogo/docs/programming.html#colors) section of the Programming Guide.
 
 
 
