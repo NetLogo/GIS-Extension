@@ -108,7 +108,7 @@ The primary developer of the GIS extension was Eric Russell.
 The GIS extension makes use of several open-source software
 libraries. For copyright and license information on those, see the
 [copyright](http://ccl.northwestern.edu/netlogo/docs/copyright.html) section of the manual. The
-extension also contains elements borrowed from <a href="http://www.myworldgis.org" target="_blank">My World GIS</a>.
+extension also contains elements borrowed from <a href="https://myworldgis.org" target="_blank">My World GIS</a>.
 
 This documentation and the example NetLogo models are in the public
 domain. The GIS extension itself is free and open source software.
@@ -117,7 +117,7 @@ See the README.md file in the extension/gis directory for details.
 We would love to hear your suggestions on how to improve the GIS
 extension, or just about what you're using it for. Post questions
 and comments at the
-<a href="http://groups.yahoo.com/group/netlogo-users/" target="_blank">NetLogo Users Group</a>, or write directly to Eric Russell and the NetLogo team at
+<a href="https://groups.yahoo.com/group/netlogo-users/" target="_blank">NetLogo Users Group</a>, or write directly to Eric Russell and the NetLogo team at
 [ccl-gis@ccl.northwestern.edu](mailto:ccl-gis@ccl.northwestern.edu)
 
 ## Primitives
@@ -1207,7 +1207,7 @@ method will be one of the following:
   is data dependent.
 
 For more information on these sampling methods and on raster
-sampling in general, see <a href="http://en.wikipedia.org/wiki/Image_scaling" target="_blank">this wikipedia
+sampling in general, see <a href="https://en.wikipedia.org/wiki/Image_scaling" target="_blank">this wikipedia
 article</a>.
 
 
@@ -1367,7 +1367,7 @@ following order:
 The key element is specified by column and row within the matrix.
 Columns are numbered from left to right, beginning with zero. Rows
 are numbered from top to bottom, also beginning with zero. So, for
-example, the kernel for the horizontal <a href="http://en.wikipedia.org/wiki/Sobel_operator" target="_blank">Sobel operator</a>,
+example, the kernel for the horizontal <a href="https://en.wikipedia.org/wiki/Sobel_operator" target="_blank">Sobel operator</a>,
 which looks like this:
       <table width="25%" border="1" style="text-align: center; margin: 0 auto;" align="center">
 <tr>
