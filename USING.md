@@ -95,7 +95,7 @@ The primary developer of the GIS extension was Eric Russell.
 The GIS extension makes use of several open-source software
 libraries. For copyright and license information on those, see the
 [copyright](http://ccl.northwestern.edu/netlogo/docs/copyright.html) section of the manual. The
-extension also contains elements borrowed from <a href="http://www.myworldgis.org" target="_blank">My World GIS</a>.
+extension also contains elements borrowed from <a href="https://myworldgis.org" target="_blank">My World GIS</a>.
 
 This documentation and the example NetLogo models are in the public
 domain. The GIS extension itself is free and open source software.
@@ -104,5 +104,5 @@ See the README.md file in the extension/gis directory for details.
 We would love to hear your suggestions on how to improve the GIS
 extension, or just about what you're using it for. Post questions
 and comments at the
-<a href="http://groups.yahoo.com/group/netlogo-users/" target="_blank">NetLogo Users Group</a>, or write directly to Eric Russell and the NetLogo team at
+<a href="https://groups.yahoo.com/group/netlogo-users/" target="_blank">NetLogo Users Group</a>, or write directly to Eric Russell and the NetLogo team at
 [ccl-gis@ccl.northwestern.edu](mailto:ccl-gis@ccl.northwestern.edu)
