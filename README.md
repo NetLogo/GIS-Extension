@@ -1732,7 +1732,7 @@ developing additional software which invokes such additional API, you must
 promptly publish broadly an accurate specification for such API for free use
 by all developers.  You may not create, or authorize your licensees to create
 additional classes, interfaces, or subpackages that are in any way identified
-as "java", "javax", "sun" or similar convention as specified by Sun in any
+as "java", "java", "sun" or similar convention as specified by Sun in any
 naming convention designation. 
 
 4.  Java Runtime Availability.  Refer to the appropriate version of the Java
