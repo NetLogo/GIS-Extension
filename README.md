@@ -9,7 +9,7 @@ Use the netlogo.jar.url environment variable to tell sbt which NetLogo.jar to co
 
     sbt -Dnetlogo.jar.url=file:///path/to/NetLogo/target/NetLogo.jar package
 
-If compilation succeeds, `bitmap.jar` will be created.
+If compilation succeeds, `gis.jar` will be created.
 
 ## Using
 
