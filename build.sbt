@@ -4,7 +4,7 @@ javaSource in Compile := baseDirectory.value / "src"
 
 name := "gis"
 
-version := "1.1.1"
+version := "1.1.2"
 
 netLogoClassManager := "org.myworldgis.netlogo.GISExtension"
 
@@ -23,4 +23,4 @@ libraryDependencies ++= Seq(
   "javax.media"        % "jai_core"           % "1.1.3" from "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/jai_core-1.1.3.jar",
   "com.sun.media"      % "jai_codec"          % "1.1.3" from "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/jai_codec-1.1.3.jar" )
 
-netLogoVersion := "6.0.4-9328ba6"
+netLogoVersion := "6.1.0-RC1"
