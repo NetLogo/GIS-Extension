@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.nlogo.api.Agent;
+import org.nlogo.api.AgentSet;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
@@ -59,6 +61,90 @@ public final strictfp class VectorDataset extends Dataset {
             }
         }
     }
+    
+    /** */
+    public static final strictfp class GetMinimumDistanceFromDataset extends GISExtension.Reporter {
+        
+        public String getAgentClassString() {
+            return "OTPL";
+        }
+        
+        public Syntax getSyntax() {
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), Syntax.WildcardType() },
+                                         Syntax.WildcardType());
+        }
+        
+        public Object reportInternal (Argument args[], Context context)
+                throws ExtensionException, LogoException {
+             try {
+                Double distance = Double.NaN;
+                Double temp_distance = Double.NaN;
+                Geometry obj_geom = null;
+                if( args.length != 2) {
+                    throw new ExtensionException("function needs two parameters");
+                }
+
+                if ( args[1].get() instanceof VectorFeature) {
+                    obj_geom = ((VectorFeature)args[1].get()).getGeometry();
+                } else if (args[1].get() instanceof Agent) {
+                    obj_geom = GISExtension.getState().agentGeometry((Agent)args[1].get());
+                } 
+
+                if( obj_geom == null ) {
+                    throw new ExtensionException("not a VectorFeature, Agent: " + args[1].get());
+                }
+
+                if ( args[0].get() instanceof VectorDataset ) {
+                    VectorDataset dataset = VectorDataset.getDataset(args[0]);
+
+
+                    for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
+                        VectorFeature feature = i.next();
+
+                        Geometry geom = i.next().getGeometry();
+                        if( geom != null && !geom.isEmpty() ) {
+                            temp_distance = obj_geom.distance(geom);
+                        }
+                        if(Double.isNaN(distance)) {
+                            distance = temp_distance;
+                        }
+                        else  if( distance > temp_distance) {
+                            distance = temp_distance;
+                        }
+                    }
+                    return distance;
+                }
+                else if (args[0].get() instanceof AgentSet) {
+
+                    AgentSet set = (AgentSet)args[0].get();
+                   
+                    for (Iterator<Agent> i = set.agents().iterator(); i.hasNext();) {
+                        Geometry geom = GISExtension.getState().agentGeometry(i.next());
+                        if( geom != null && !geom.isEmpty() ) {
+                            temp_distance = obj_geom.distance(geom);
+                        }
+                        if(Double.isNaN(distance)) {
+                            distance = temp_distance;
+                        }
+                        else  if( distance > temp_distance) {
+                            distance = temp_distance;
+                        }                        
+                    }
+                    return distance;
+                }    
+                else {
+                    return Double.NaN;
+                }
+            } catch (ExtensionException e) {
+                throw e;
+            } catch (Throwable t) {
+                ExtensionException e = new ExtensionException("error parsing envelope");
+                e.initCause(t);
+                throw e;
+            }
+        }
+    }
+
     
     /** */
     public static final strictfp class GetPropertyNames extends GISExtension.Reporter {
