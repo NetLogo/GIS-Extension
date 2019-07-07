@@ -101,7 +101,7 @@ public final strictfp class VectorDataset extends Dataset {
                     for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
                         VectorFeature feature = i.next();
 
-                        Geometry geom = i.next().getGeometry();
+                        Geometry geom = feature.getGeometry();
                         if( geom != null && !geom.isEmpty() ) {
                             temp_distance = obj_geom.distance(geom);
                         }
