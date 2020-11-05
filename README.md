@@ -202,7 +202,7 @@ and comments at the
 ### `gis:set-transformation`
 
 ```NetLogo
-gis:set-transformation gis-envelope netlogo-envelope
+gis:set-transformation *gis-envelope* *netlogo-envelope*
 ```
 
 
@@ -236,7 +236,7 @@ you should probably be using [set-world-envelope](#gisset-world-envelope).
 ### `gis:set-transformation-ds`
 
 ```NetLogo
-gis:set-transformation-ds gis-envelope netlogo-envelope
+gis:set-transformation-ds *gis-envelope* *netlogo-envelope*
 ```
 
 
@@ -272,7 +272,7 @@ Here is an example of the difference between [set-transformation](#gisset-transf
 ### `gis:set-world-envelope`
 
 ```NetLogo
-gis:set-world-envelope gis-envelope
+gis:set-world-envelope *gis-envelope*
 ```
 
 
@@ -294,7 +294,7 @@ part of it.
 ### `gis:set-world-envelope-ds`
 
 ```NetLogo
-gis:set-world-envelope-ds gis-envelope
+gis:set-world-envelope-ds *gis-envelope*
 ```
 
 
@@ -334,7 +334,7 @@ list of the form:
 ### `gis:envelope-of`
 
 ```NetLogo
-gis:envelope-of thing
+gis:envelope-of *thing*
 ```
 
 
@@ -353,8 +353,8 @@ consists of a four-element list of the form:
 ### `gis:envelope-union-of`
 
 ```NetLogo
-gis:envelope-union-of envelope1 envelope2
-gis:envelope-union-of envelope1 ...
+gis:envelope-union-of *envelope1* *envelope2*
+(gis:envelope-union-of *envelope1...*)
 ```
 
 
@@ -375,7 +375,7 @@ be unpredictable.
 ### `gis:load-coordinate-system`
 
 ```NetLogo
-gis:load-coordinate-system file
+gis:load-coordinate-system *file*
 ```
 
 
@@ -422,7 +422,7 @@ for a complete list of WKT projections and their parameters.
 ### `gis:set-coordinate-system`
 
 ```NetLogo
-gis:set-coordinate-system system
+gis:set-coordinate-system *system*
 ```
 
 
@@ -442,7 +442,7 @@ documentation for [load-coordinate-system](#gisload-coordinate-system)
 ### `gis:load-dataset`
 
 ```NetLogo
-gis:load-dataset file
+gis:load-dataset *file*
 ```
 
 
@@ -473,7 +473,7 @@ Currently, two types of data file are supported:
 ### `gis:store-dataset`
 
 ```NetLogo
-gis:store-dataset dataset file
+gis:store-dataset *dataset* *file*
 ```
 
 
@@ -491,7 +491,7 @@ only save those datasets as ESRI ASCII grid files.
 ### `gis:type-of`
 
 ```NetLogo
-gis:type-of dataset
+gis:type-of *dataset*
 ```
 
 Reports the type of the given GIS dataset: either "VECTOR" or "RASTER"
@@ -500,7 +500,7 @@ Reports the type of the given GIS dataset: either "VECTOR" or "RASTER"
 ### `gis:patch-dataset`
 
 ```NetLogo
-gis:patch-dataset patch-variable
+gis:patch-dataset *patch-variable*
 ```
 
 
@@ -515,7 +515,7 @@ primitive copies values from a patch variable to a raster dataset.
 ### `gis:turtle-dataset`
 
 ```NetLogo
-gis:turtle-dataset turtle-set
+gis:turtle-dataset *turtle-set*
 ```
 
 
@@ -531,7 +531,7 @@ agentset.
 ### `gis:link-dataset`
 
 ```NetLogo
-gis:link-dataset link-set
+gis:link-dataset *link-set*
 ```
 
 
@@ -547,7 +547,7 @@ common to every link in the agentset.
 ### `gis:shape-type-of`
 
 ```NetLogo
-gis:shape-type-of VectorDataset
+gis:shape-type-of *VectorDataset*
 ```
 
 
@@ -558,7 +558,7 @@ values are "POINT", "LINE", and "POLYGON".
 ### `gis:property-names`
 
 ```NetLogo
-gis:property-names VectorDataset
+gis:property-names *VectorDataset*
 ```
 
 
@@ -571,7 +571,7 @@ VectorDataset, suitable for use in [gis:property-value](#gisproperty-value).
 ### `gis:feature-list-of`
 
 ```NetLogo
-gis:feature-list-of VectorDataset
+gis:feature-list-of *VectorDataset*
 ```
 
 Reports a list of all VectorFeatures in the given dataset.
@@ -580,7 +580,7 @@ Reports a list of all VectorFeatures in the given dataset.
 ### `gis:vertex-lists-of`
 
 ```NetLogo
-gis:vertex-lists-of VectorFeature
+gis:vertex-lists-of *VectorFeature*
 ```
 
 
@@ -598,7 +598,7 @@ the list will be the same.
 ### `gis:centroid-of`
 
 ```NetLogo
-gis:centroid-of VectorFeature
+gis:centroid-of *VectorFeature*
 ```
 
 
@@ -617,7 +617,7 @@ for more details on the polygon centroid algorithm.
 ### `gis:location-of`
 
 ```NetLogo
-gis:location-of Vertex
+gis:location-of *Vertex*
 ```
 
 
@@ -631,7 +631,7 @@ vertex lies outside the NetLogo world.
 ### `gis:property-value`
 
 ```NetLogo
-gis:property-value VectorFeature property-name
+gis:property-value *VectorFeature* *property-name*
 ```
 
 
@@ -653,7 +653,7 @@ values are converted to strings using ISO 8601 format
 ### `gis:find-features`
 
 ```NetLogo
-gis:find-features VectorDataset property-name specified-value
+gis:find-features *VectorDataset* *property-name* *specified-value*
 ```
 
 
@@ -668,7 +668,7 @@ character "*" will match any number of occurrences
 ### `gis:find-one-feature`
 
 ```NetLogo
-gis:find-one-feature VectorDataset property-name specified-value
+gis:find-one-feature *VectorDataset* *property-name* *specified-value*
 ```
 
 
@@ -686,7 +686,7 @@ searching stops as soon as a match is found. Reports
 ### `gis:find-less-than`
 
 ```NetLogo
-gis:find-less-than VectorDataset property-name value
+gis:find-less-than *VectorDataset* *property-name* *value*
 ```
 
 
@@ -702,7 +702,7 @@ or a numeric value for a string property will cause an error.
 ### `gis:find-greater-than`
 
 ```NetLogo
-gis:find-greater-than VectorDataset property-name value
+gis:find-greater-than *VectorDataset* *property-name* *value*
 ```
 
 
@@ -718,7 +718,7 @@ or a numeric value for a string property will cause an error.
 ### `gis:find-range`
 
 ```NetLogo
-gis:find-range VectorDataset property-name minimum-value maximum-value
+gis:find-range *VectorDataset* *property-name* *minimum-value* *maximum-value*
 ```
 
 
@@ -735,7 +735,7 @@ or a numeric value for a string property will cause an error.
 ### `gis:property-minimum`
 
 ```NetLogo
-gis:property-minimum VectorDataset property-name
+gis:property-minimum *VectorDataset* *property-name*
 ```
 
 
@@ -749,7 +749,7 @@ Java Documentation</a>.
 ### `gis:property-maximum`
 
 ```NetLogo
-gis:property-maximum VectorDataset property-name
+gis:property-maximum *VectorDataset* *property-name*
 ```
 
 
@@ -763,7 +763,7 @@ Java Documentation</a>.
 ### `gis:apply-coverage`
 
 ```NetLogo
-gis:apply-coverage VectorDataset property-name patch-variable
+gis:apply-coverage *VectorDataset* *property-name* *patch-variable*
 ```
 
 
@@ -811,7 +811,7 @@ Reports the current coverage minimum threshold used by [gis:apply-coverage](#gis
 ### `gis:set-coverage-minimum-threshold`
 
 ```NetLogo
-gis:set-coverage-minimum-threshold new-threshold
+gis:set-coverage-minimum-threshold *new-threshold*
 ```
 
 Sets the current coverage minimum threshold to be used by [gis:apply-coverage](#gisapply-coverage).
@@ -829,7 +829,7 @@ Reports the current coverage maximum threshold used by [gis:apply-coverage](#gis
 ### `gis:set-coverage-maximum-threshold`
 
 ```NetLogo
-gis:set-coverage-maximum-threshold new-threshold
+gis:set-coverage-maximum-threshold *new-threshold*
 ```
 
 Sets the current coverage maximum threshold to be used by [gis:apply-coverage](#gisapply-coverage).
@@ -838,7 +838,7 @@ Sets the current coverage maximum threshold to be used by [gis:apply-coverage](#
 ### `gis:intersects?`
 
 ```NetLogo
-gis:intersects? x y
+gis:intersects? *x* *y*
 ```
 
 
@@ -868,7 +868,7 @@ objects x and y may be any one of:
 ### `gis:contains?`
 
 ```NetLogo
-gis:contains? x y
+gis:contains? *x* *y*
 ```
 
 
@@ -899,7 +899,7 @@ boundaries. The objects x and y may be any one of
 ### `gis:contained-by?`
 
 ```NetLogo
-gis:contained-by? x y
+gis:contained-by? *x* *y*
 ```
 
 
@@ -929,7 +929,7 @@ representation. The objects x and y may be any one of:
 ### `gis:have-relationship?`
 
 ```NetLogo
-gis:have-relationship? x y
+gis:have-relationship? *x* *y*
 ```
 
 
@@ -1018,7 +1018,7 @@ The objects x and y may be any one of:
 ### `gis:relationship-of`
 
 ```NetLogo
-gis:relationship-of x y
+gis:relationship-of *x* *y*
 ```
 
 
@@ -1091,7 +1091,7 @@ The objects x and y may be any one of:
 ### `gis:intersecting`
 
 ```NetLogo
-gis:intersecting patch-set data
+gis:intersecting *patch-set* *data*
 ```
 
 
@@ -1105,7 +1105,7 @@ or a list containing any of the above.
 ### `gis:width-of`
 
 ```NetLogo
-gis:width-of RasterDataset
+gis:width-of *RasterDataset*
 ```
 
 
@@ -1118,7 +1118,7 @@ GIS space.
 ### `gis:height-of`
 
 ```NetLogo
-gis:height-of RasterDataset
+gis:height-of *RasterDataset*
 ```
 
 
@@ -1131,7 +1131,7 @@ in GIS space.
 ### `gis:raster-value`
 
 ```NetLogo
-gis:raster-value RasterDataset x y
+gis:raster-value *RasterDataset* *x* *y*
 ```
 
 
@@ -1146,7 +1146,7 @@ the bottom right cell is (`gis:width-of dataset` - 1,
 ### `gis:set-raster-value`
 
 ```NetLogo
-gis:set-raster-value RasterDataset x y value
+gis:set-raster-value *RasterDataset* *x* *y* *value*
 ```
 
 
@@ -1161,7 +1161,7 @@ from top to bottom, beginning with zero. So the upper left cell is
 ### `gis:minimum-of`
 
 ```NetLogo
-gis:minimum-of RasterDataset
+gis:minimum-of *RasterDataset*
 ```
 
 Reports the highest value in the given raster dataset.
@@ -1170,7 +1170,7 @@ Reports the highest value in the given raster dataset.
 ### `gis:maximum-of`
 
 ```NetLogo
-gis:maximum-of RasterDataset
+gis:maximum-of *RasterDataset*
 ```
 
 Reports the lowest value in the given raster dataset.
@@ -1179,7 +1179,7 @@ Reports the lowest value in the given raster dataset.
 ### `gis:sampling-method-of`
 
 ```NetLogo
-gis:sampling-method-of RasterDataset
+gis:sampling-method-of *RasterDataset*
 ```
 
 
@@ -1215,7 +1215,7 @@ article</a>.
 ### `gis:set-sampling-method`
 
 ```NetLogo
-gis:set-sampling-method RasterDataset sampling-method
+gis:set-sampling-method *RasterDataset* *sampling-method*
 ```
 
 
@@ -1238,7 +1238,7 @@ for a more specific description of each sampling method.
 ### `gis:raster-sample`
 
 ```NetLogo
-gis:raster-sample RasterDataset sample-location
+gis:raster-sample *RasterDataset* *sample-location*
 ```
 
 
@@ -1289,7 +1289,7 @@ covered by the requested area.
 ### `gis:raster-world-envelope`
 
 ```NetLogo
-gis:raster-world-envelope RasterDataset x y
+gis:raster-world-envelope *RasterDataset* *x* *y*
 ```
 
 
@@ -1310,7 +1310,7 @@ bottom right cell is (`gis:width-of dataset` - 1, `gis:height-of dataset` - 1).
 ### `gis:create-raster`
 
 ```NetLogo
-gis:create-raster width height envelope
+gis:create-raster *width* *height* *envelope*
 ```
 
 
@@ -1322,7 +1322,7 @@ number of columns and rows, covering the given envelope.
 ### `gis:resample`
 
 ```NetLogo
-gis:resample RasterDataset envelope width height
+gis:resample *RasterDataset* *envelope* *width* *height*
 ```
 
 
@@ -1339,7 +1339,7 @@ using the `"NEAREST_NEIGHBOR"` method.
 ### `gis:convolve`
 
 ```NetLogo
-gis:convolve RasterDataset kernel-rows kernel-columns kernel key-column key-row
+gis:convolve *RasterDataset* *kernel-rows* *kernel-columns* *kernel* *key-column* *key-row*
 ```
 
 
@@ -1386,7 +1386,7 @@ let horizontal-gradient gis:convolve dataset 3 3 [1 0 -1 2 0 -2 1 0 -1] 1 1
 ### `gis:apply-raster`
 
 ```NetLogo
-gis:apply-raster RasterDataset patch-variable
+gis:apply-raster *RasterDataset* *patch-variable*
 ```
 
 
@@ -1421,7 +1421,7 @@ Programming Guide.
 ### `gis:set-drawing-color`
 
 ```NetLogo
-gis:set-drawing-color color
+gis:set-drawing-color *color*
 ```
 
 
@@ -1435,7 +1435,7 @@ an RGB color (a list of 3 numbers). See details in the [Colors](http://ccl.north
 ### `gis:draw`
 
 ```NetLogo
-gis:draw vector-data line-thickness
+gis:draw *vector-data* *line-thickness*
 ```
 
 
@@ -1451,7 +1451,7 @@ the line thickness.
 ### `gis:fill`
 
 ```NetLogo
-gis:fill vector-data line-thickness
+gis:fill *vector-data* *line-thickness*
 ```
 
 
@@ -1466,7 +1466,7 @@ radius equal to the line thickness.
 ### `gis:paint`
 
 ```NetLogo
-gis:paint RasterDataset transparency
+gis:paint *RasterDataset* *transparency*
 ```
 
 
@@ -1484,7 +1484,7 @@ opaque) to 255 (completely transparent).
 ### `gis:import-wms-drawing`
 
 ```NetLogo
-gis:import-wms-drawing server-url spatial-reference layers transparency
+gis:import-wms-drawing *server-url* *spatial-reference* *layers* *transparency*
 ```
 
 
