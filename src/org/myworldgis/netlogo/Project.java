@@ -1,5 +1,6 @@
 package org.myworldgis.netlogo;
 
+import org.myworldgis.projection.Geographic;
 import org.myworldgis.projection.Projection;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -12,6 +13,12 @@ import org.nlogo.api.LogoException;
 import org.nlogo.api.LogoListBuilder;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
+import org.ngs.ngunits.SI;
+import org.ngs.ngunits.NonSI;
+import org.ngs.ngunits.Unit;
+import org.ngs.ngunits.UnitConverter;
+import org.ngs.ngunits.quantity.Angle;
+
 
 /**
  * 
@@ -21,6 +28,8 @@ public final strictfp class Project extends GISExtension.Reporter {
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation
     //--------------------------------------------------------------------------
+
+    private final Coordinate _temp = new Coordinate();
     
     /** */
     public String getAgentClassString() {
@@ -39,18 +48,25 @@ public final strictfp class Project extends GISExtension.Reporter {
         double lat = args[0].getDoubleValue();
         double lon = args[1].getDoubleValue();
         LogoListBuilder result = new LogoListBuilder();
-
         Projection dstProj = GISExtension.getState().getProjection();
         if (dstProj == null){
             throw new ExtensionException("You must use gis:load-coordinate-system or gis:set-coordinate-system before you can project lat/lon pairs.");
         }
         System.out.println("latLon " + lat + " " + lon);
         GeometryTransformer forward = dstProj.getForwardTransformer();
-        GeometryFactory factory = new GeometryFactory();
+        GeometryFactory factory = GISExtension.getState().factory();
         Coordinate latLonRadians = new Coordinate(Projection.DEGREES_TO_RADIANS.convert(lat), Projection.DEGREES_TO_RADIANS.convert(lon)); 
-        System.out.println("latLonRadians " + latLonRadians.toString());
         Geometry point = factory.createPoint(latLonRadians);
-        point = forward.transform(point);
+        if (dstProj instanceof Geographic){
+            System.out.println("geographic:");
+            // System.out.println("center:" + dstProj.getCenter().toString());
+            // System.out.println("northing:" + dstProj.getCenterNorthing());
+            // System.out.println("easting:" + dstProj.getCenterEasting());
+            Coordinate latLon = new Coordinate(lat, lon);
+            point = factory.createPoint(latLon);
+        } else {
+            point = forward.transform(point);
+        }
         if (point == null){
             return result.toLogoList();
         }
@@ -59,7 +75,10 @@ public final strictfp class Project extends GISExtension.Reporter {
             return result.toLogoList();
         }
         System.out.println("Projected " + projected.toString());
-        Coordinate transformed = GISExtension.getState().gisToNetLogo(projected, null);
+        Coordinate transformed = GISExtension.getState().gisToNetLogo(projected, _temp);
+        if (transformed == null){
+            return result.toLogoList();
+        }
         System.out.println("Transformed " + transformed.toString());        
         if(transformed != null){
             result.add(Double.valueOf(transformed.x));
