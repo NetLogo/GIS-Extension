@@ -2,6 +2,9 @@ package org.myworldgis.netlogo;
 
 import org.myworldgis.projection.Geographic;
 import org.myworldgis.projection.Projection;
+import org.myworldgis.projection.ProjectionUtils;
+import org.myworldgis.util.GeometryUtils;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -52,18 +55,21 @@ public final strictfp class Project extends GISExtension.Reporter {
         if (dstProj == null){
             throw new ExtensionException("You must use gis:load-coordinate-system or gis:set-coordinate-system before you can project lat/lon pairs.");
         }
-        System.out.println("latLon " + lat + " " + lon);
+        System.out.println("lonLat " + lon + " " + lat);
         GeometryTransformer forward = dstProj.getForwardTransformer();
         GeometryFactory factory = GISExtension.getState().factory();
-        Coordinate latLonRadians = new Coordinate(Projection.DEGREES_TO_RADIANS.convert(lat), Projection.DEGREES_TO_RADIANS.convert(lon)); 
-        Geometry point = factory.createPoint(latLonRadians);
+        Coordinate lonLatRadians = new Coordinate(Projection.DEGREES_TO_RADIANS.convert(lon), Projection.DEGREES_TO_RADIANS.convert(lat)); 
+        Geometry point = factory.createPoint(lonLatRadians);
         if (dstProj instanceof Geographic){
             System.out.println("geographic:");
-            // System.out.println("center:" + dstProj.getCenter().toString());
-            // System.out.println("northing:" + dstProj.getCenterNorthing());
-            // System.out.println("easting:" + dstProj.getCenterEasting());
-            Coordinate latLon = new Coordinate(lat, lon);
-            point = factory.createPoint(latLon);
+            System.out.println("center:" + dstProj.getCenter().toString());
+            Double lonOffset = Projection.RADIANS_TO_DEGREES.convert(dstProj.getCenter().x);
+            System.out.println("lonOffset" + lonOffset);
+            lon = lon - lonOffset;
+            while (lon > 180.0) { lon -= 360.0; }
+            while (lon < -180.0) { lon += 360.0; }
+            Coordinate lonLat = new Coordinate(lon, lat);
+            point = factory.createPoint(lonLat);
         } else {
             point = forward.transform(point);
         }
