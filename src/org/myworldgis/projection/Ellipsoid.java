@@ -164,7 +164,7 @@ public final strictfp class Ellipsoid {
     public final static Ellipsoid WGS_72 = new Ellipsoid(true, "WGS 72", 6378135.0, SI.METRE, 0.006694318); 
     
     /** */
-    public final static Ellipsoid WGS_84 = new Ellipsoid(true, "WGS 84", 6378137.0, SI.METRE, 0.00669438); 
+    public final static Ellipsoid WGS_84 = new Ellipsoid(true, "WGS 84", 6378137.0, SI.METRE, 0.0066943799901413165); 
     
     /** */
     public final static Ellipsoid SPHERE = new Ellipsoid(true, "Sphere", 6370997.0, SI.METRE, 0.0); 
