@@ -7,6 +7,7 @@ import org.nlogo.api.LogoException;
 import org.nlogo.api.LogoListBuilder;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
+import org.myworldgis.projection.Ellipsoid;
 import org.myworldgis.projection.Geographic;
 import org.myworldgis.projection.Projection;
 import org.ngs.ngunits.NonSI;
@@ -52,11 +53,25 @@ public final strictfp class ProjectLatLon extends GISExtension.Reporter {
         if (point == null){
             return result.toLogoList();
         }
+        
+    //     /** */
+    // public final static Ellipsoid WGS_72 = new Ellipsoid(true, "WGS 72", 6378135.0, SI.METRE, 0.006694318); 
+    
+    // /** */
+    // public final static Ellipsoid WGS_84 = new Ellipsoid(true, "WGS 84", 6378137.0, SI.METRE, 0.0066943799901413165); 
+        
+        Ellipsoid srcEllipsoid = new Ellipsoid("WGS 84", 6378137.0, SI.METER, 298.257223563);
+        // Ellipsoid srcEllipsoid = new Ellipsoid("WGS 72", 6378135.0, SI.METER, 298.26);
+        Ellipsoid dstEllipsoid = dstProj.getEllipsoid();
 
-        boolean reproject = !isDefaultGeographicProjection(dstProj);
+        System.out.println("srcEllipsoid:" + srcEllipsoid.radius + " " + srcEllipsoid.eccsq);
+        System.out.println("dstEllipsoid:" + dstEllipsoid.radius + " " + dstEllipsoid.eccsq);
+
+        boolean reproject = !(dstProj instanceof Geographic) || !srcEllipsoid.equals(dstEllipsoid);
         if(reproject){
+            System.out.println("reprojecting");
             GeometryTransformer forward = dstProj.getForwardTransformer();
-            GeometryTransformer inverse = new Geographic(Projection.DEFAULT_ELLIPSOID, Projection.DEFAULT_CENTER, NonSI.DEGREE_ANGLE).getInverseTransformer();
+            GeometryTransformer inverse = new Geographic(srcEllipsoid, Projection.DEFAULT_CENTER, NonSI.DEGREE_ANGLE).getInverseTransformer();
             point = forward.transform(inverse.transform(point));
         }
 
@@ -71,17 +86,5 @@ public final strictfp class ProjectLatLon extends GISExtension.Reporter {
             result.add(Double.valueOf(transformed.y));
         }
         return result.toLogoList();
-    }
-
-    private boolean isDefaultGeographicProjection(Projection projection){
-        if (projection instanceof Geographic){
-            Geographic geographic = (Geographic) projection;
-            if(geographic.getCenter().equals2D(Projection.DEFAULT_CENTER) 
-                && geographic.getEllipsoid().equals(Projection.DEFAULT_ELLIPSOID)
-                && geographic.getUnits().getConverterTo(SI.RADIAN).convert(1.0) == Projection.DEGREES_TO_RADIANS.convert(1.0)){
-                return true;
-            }
-        }
-        return false;
     }
 }
