@@ -20,30 +20,72 @@ import com.vividsolutions.jts.geom.util.GeometryTransformer;
 /**
  * 
  */
-public final strictfp class ProjectLatLon extends GISExtension.Reporter {
-    
-    //--------------------------------------------------------------------------
-    // GISExtension.Reporter implementation
-    //--------------------------------------------------------------------------
+public abstract strictfp class ProjectLatLon {
 
-    /** */
-    public String getAgentClassString() {
-        return "OTPL";
+    private static final Ellipsoid WGS84 = new Ellipsoid("WGS 84", 6378137.0, SI.METER, 298.257223563);
+
+    /**
+     * 
+     */
+    public static final strictfp class ProjectFromEllipsoid extends GISExtension.Reporter {
+
+        /** */
+        public String getAgentClassString() {
+            return "OTPL";
+        }
+        
+        /** */
+        public Syntax getSyntax() {
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.NumberType(), 
+                                                        Syntax.NumberType(), 
+                                                        Syntax.NumberType(), 
+                                                        Syntax.NumberType() },
+                                        Syntax.ListType());
+        }
+
+        /** */
+        public Object reportInternal (Argument args[], Context context) 
+                throws ExtensionException , LogoException {
+            double lat = args[0].getDoubleValue();
+            double lon = args[1].getDoubleValue();
+            double ellispoidRadius = args[2].getDoubleValue();
+            double ellispoidInverseFlattening = args[3].getDoubleValue();
+            Ellipsoid srcEllipsoid = new Ellipsoid("user", ellispoidRadius, SI.METER, ellispoidInverseFlattening);
+            return projectPointGivenEllipsoid(lat, lon, srcEllipsoid);
+        }
     }
-    
-    /** */
-    public Syntax getSyntax() {
-        return SyntaxJ.reporterSyntax(new int[] { Syntax.NumberType(), Syntax.NumberType() },
-                                     Syntax.ListType());
+
+    /**
+     * 
+     */
+    public static final strictfp class ProjectWGS84 extends GISExtension.Reporter {
+
+        /** */
+        public String getAgentClassString() {
+            return "OTPL";
+        }
+        
+        /** */
+        public Syntax getSyntax() {
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.NumberType(), Syntax.NumberType() },
+                                        Syntax.ListType());
+        }
+        
+        /** */
+        public Object reportInternal (Argument args[], Context context) 
+                throws ExtensionException , LogoException {
+            double lat = args[0].getDoubleValue();
+            double lon = args[1].getDoubleValue();
+            return projectPointGivenEllipsoid(lat, lon, WGS84);
+        }
     }
-    
-    /** */
-    public Object reportInternal (Argument args[], Context context) 
+
+    /**
+     * 
+     */
+    public static Object projectPointGivenEllipsoid(double lat, double lon, Ellipsoid srcEllipsoid)
             throws ExtensionException , LogoException {
-        double lat = args[0].getDoubleValue();
-        double lon = args[1].getDoubleValue();
         LogoListBuilder result = new LogoListBuilder();
-
         Projection dstProj = GISExtension.getState().getProjection();
         if (dstProj == null){
             throw new ExtensionException("You must use gis:load-coordinate-system or gis:set-coordinate-system before you can project lat/lon pairs.");
@@ -54,22 +96,13 @@ public final strictfp class ProjectLatLon extends GISExtension.Reporter {
             return result.toLogoList();
         }
         
-    //     /** */
-    // public final static Ellipsoid WGS_72 = new Ellipsoid(true, "WGS 72", 6378135.0, SI.METRE, 0.006694318); 
-    
-    // /** */
-    // public final static Ellipsoid WGS_84 = new Ellipsoid(true, "WGS 84", 6378137.0, SI.METRE, 0.0066943799901413165); 
-        
-        Ellipsoid srcEllipsoid = new Ellipsoid("WGS 84", 6378137.0, SI.METER, 298.257223563);
-        // Ellipsoid srcEllipsoid = new Ellipsoid("WGS 72", 6378135.0, SI.METER, 298.26);
         Ellipsoid dstEllipsoid = dstProj.getEllipsoid();
-
-        System.out.println("srcEllipsoid:" + srcEllipsoid.radius + " " + srcEllipsoid.eccsq);
-        System.out.println("dstEllipsoid:" + dstEllipsoid.radius + " " + dstEllipsoid.eccsq);
-
-        boolean reproject = !(dstProj instanceof Geographic) || !srcEllipsoid.equals(dstEllipsoid);
-        if(reproject){
-            System.out.println("reprojecting");
+        // In cases where the destination projection and destination reference 
+        // ellipsoid are the same as the given reference ellipsoid, don't 
+        // reproject and introduce a loss precision. cf. similar behavior 
+        // in LoadDataset.java 
+        boolean shouldReproject = !(dstProj instanceof Geographic) || !srcEllipsoid.equals(dstEllipsoid);
+        if(shouldReproject){
             GeometryTransformer forward = dstProj.getForwardTransformer();
             GeometryTransformer inverse = new Geographic(srcEllipsoid, Projection.DEFAULT_CENTER, NonSI.DEGREE_ANGLE).getInverseTransformer();
             point = forward.transform(inverse.transform(point));
