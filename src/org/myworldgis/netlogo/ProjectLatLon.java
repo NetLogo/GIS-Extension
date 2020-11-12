@@ -86,6 +86,9 @@ public abstract strictfp class ProjectLatLon {
     public static Object projectPointGivenEllipsoid(double lat, double lon, Ellipsoid srcEllipsoid)
             throws ExtensionException , LogoException {
         LogoListBuilder result = new LogoListBuilder();
+        if(lat > 90 || lat < -90 || lon > 180 || lon < -180){
+            return result.toLogoList();
+        }
         Projection dstProj = GISExtension.getState().getProjection();
         if (dstProj == null){
             throw new ExtensionException("You must use gis:load-coordinate-system or gis:set-coordinate-system before you can project lat/lon pairs.");
