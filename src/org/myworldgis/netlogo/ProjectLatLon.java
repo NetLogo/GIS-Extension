@@ -102,7 +102,7 @@ public abstract strictfp class ProjectLatLon {
         Ellipsoid dstEllipsoid = dstProj.getEllipsoid();
         // in cases where the current projection uses a geographic (as opposed to projected)
         // coordinate system (i.e. values are expressed in terms of angular distance as 
-        // opposed to linear distance on a 2D projection) and the given reference ellipsoid
+        // opposed to linear distance on a 2D projection) and the given ellipsoid
         // is the same one used as the destination projection, do not reproject and 
         // introduce precision errors. cf. similar behavior in LoadDataset.java
         boolean shouldReproject = !(dstProj instanceof Geographic) || !srcEllipsoid.equals(dstEllipsoid);
