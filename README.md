@@ -453,7 +453,9 @@ gis:project-lat-lon latitude longitude
     transformation. 
 
     Like the `location-of` primitive, the reported xcor and ycor
-    values are reported in a two-item list of `[xcor ycor]`. 
+    values are reported in a two-item list of `[xcor ycor]`
+    and an empty list if the specified point is outside of 
+    the bounds of the netlogo world. 
     For instance:
     ```
     let location-of-abbey-road-studios gis:project-lat-lon 51.5320787 -0.1802646
@@ -487,7 +489,9 @@ gis:project-lat-lon-from-ellipsoid latitude longitude ellipsoid-radius ellipsoid
     transformation and the given ellipsoid parameters. 
 
     Like the `location-of` primitive, the reported xcor and ycor
-    values are reported in a two-item list of `[xcor ycor]`. 
+    values are reported in a two-item list of `[xcor ycor]`
+    and an empty list if the specified point is outside of 
+    the bounds of the netlogo world. 
 
     The two defining parameters of a  ellipsoid for 
     the purposes of this primitive are the radius and the 
