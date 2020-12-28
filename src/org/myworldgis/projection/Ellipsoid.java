@@ -164,6 +164,9 @@ public final strictfp class Ellipsoid {
     public final static Ellipsoid WGS_72 = new Ellipsoid(true, "WGS 72", 6378135.0, SI.METRE, 0.006694318); 
     
     /** */
+    // Increased precision to better match the values commonly used in other specifications of WGS84, 
+    // Using the US Dept. of Defense as a source: https://earth-info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf Table 3.1
+    // - James Hovet 10/2020
     public final static Ellipsoid WGS_84 = new Ellipsoid(true, "WGS 84", 6378137.0, SI.METRE, 0.0066943799901413165); 
     
     /** */

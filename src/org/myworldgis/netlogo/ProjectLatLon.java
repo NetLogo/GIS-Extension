@@ -18,8 +18,6 @@ import com.vividsolutions.jts.geom.util.GeometryTransformer;
 
 public abstract strictfp class ProjectLatLon {
 
-    private static final Ellipsoid WGS84 = new Ellipsoid("WGS 84", 6378137.0, SI.METER, 298.257223563);
-
     public static final strictfp class ProjectFromEllipsoid extends GISExtension.Reporter {
 
         public String getAgentClassString() {
@@ -60,7 +58,7 @@ public abstract strictfp class ProjectLatLon {
                 throws ExtensionException , LogoException {
             double lat = args[0].getDoubleValue();
             double lon = args[1].getDoubleValue();
-            return projectPointGivenEllipsoid(lat, lon, WGS84);
+            return projectPointGivenEllipsoid(lat, lon, Ellipsoid.WGS_84);
         }
     }
 
