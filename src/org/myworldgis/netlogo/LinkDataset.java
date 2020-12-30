@@ -66,6 +66,10 @@ public final strictfp class LinkDataset extends GISExtension.Reporter {
             variableNames[i] = world.linksOwnNameAt(i);
         }
         for (int i = allLinksVarCount; i < breedVarCount; i += 1) {
+            // variableNames[i] = world.linkBreedsOwnNameAt(breed, i);
+            // OK, so, it looks like this *should* be linkBreedsOwnNameAt, but 
+            // for some reason I can't get to that code from world.
+            // It *does* exist in LinkManagement.scala though. 
             variableNames[i] = world.breedsOwnNameAt(breed, i);
         }
         VectorDataset.PropertyType variableTypes[] = new VectorDataset.PropertyType[breedVarCount];
