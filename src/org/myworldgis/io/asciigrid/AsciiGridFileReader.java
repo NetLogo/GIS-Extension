@@ -149,6 +149,7 @@ public final strictfp class AsciiGridFileReader implements AsciiGridConstants {
                 String token = tokens.nextToken();
                 if (token.length() > 0) {
                     try {
+                        token = token.replace('e', 'E'); // NumberFormat.parse only accepts an uppercase E for scientific notation. -James Hovet 10/2020
                         Number n = VALUE_FORMAT.parse(token);
                         if ((n != null) && (n.doubleValue() != _nanValue)) { 
                             value = n.doubleValue();
