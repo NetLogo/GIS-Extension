@@ -1,0 +1,4 @@
+linkDatasetWithDatasetBreeds
+  OPEN> extensions/gis/examples/link_dataset_with_dataset_breeds.nlogo
+  O> setup
+  test => true

@@ -47,7 +47,9 @@ public final strictfp class LinkDataset extends GISExtension.Reporter {
     /** */
     public Object reportInternal (Argument args[], Context context) 
             throws ExtensionException, LogoException {
-        World world = context.getAgent().world();
+        org.nlogo.agent.World world = (org.nlogo.agent.World) context.getAgent().world(); // workaround to weird 
+        // interface issue. linkBreedsOwnNameAt is in org.nlogo.agent.World but not org.nlogo.api.World, so we 
+        // need to do a cast here. - James Hovet 1/2021
         AgentSet links = (AgentSet)args[0].get();
         AgentSet breed = null;
         for (Iterator<Agent> i = links.agents().iterator(); i.hasNext();) {
@@ -66,7 +68,7 @@ public final strictfp class LinkDataset extends GISExtension.Reporter {
             variableNames[i] = world.linksOwnNameAt(i);
         }
         for (int i = allLinksVarCount; i < breedVarCount; i += 1) {
-            variableNames[i] = world.breedsOwnNameAt(breed, i);
+            variableNames[i] = world.linkBreedsOwnNameAt((org.nlogo.agent.AgentSet) breed, i);
         }
         VectorDataset.PropertyType variableTypes[] = new VectorDataset.PropertyType[breedVarCount];
         Arrays.fill(variableTypes, VectorDataset.PropertyType.NUMBER);
