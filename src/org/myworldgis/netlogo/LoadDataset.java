@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import org.myworldgis.io.asciigrid.AsciiGridFileReader;
+import org.myworldgis.io.geojson.GeoJsonReader;
 import org.myworldgis.io.shapefile.DBaseFileReader;
 import org.myworldgis.io.shapefile.ESRIShapefileReader;
 import org.myworldgis.projection.Projection;
@@ -121,6 +122,28 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             }
         }
     }
+
+    private static VectorDataset loadGeoJson (String geojsonFilePath, Projection dstProj) throws ExtensionException, IOException {
+        File geojsonFile = null;
+        try {
+            GeoJsonReader reader;
+            geojsonFile = GISExtension.getState().getFile(geojsonFilePath);
+            if (geojsonFile == null){
+                throw new ExtensionException("Geojson file " + geojsonFilePath + " not found");
+            }
+            try {
+                reader = new GeoJsonReader(geojsonFile, GISExtension.getState().factory());
+            } catch (org.json.simple.parser.ParseException e){
+                throw new ExtensionException("Error parsing " + geojsonFilePath);
+            }
+
+            return reader.getDataset();
+        } finally {
+            if (geojsonFile != null) {
+                try {geojsonFile.close(true); } catch (IOException e) { }
+            }
+        }
+    }
     
     /** */
     private static RasterDataset loadAsciiGrid (String ascFilePath,
@@ -191,6 +214,9 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
         } else if (extension.equalsIgnoreCase(AsciiGridFileReader.ASCII_GRID_FILE_EXTENSION_1) ||
                    extension.equalsIgnoreCase(AsciiGridFileReader.ASCII_GRID_FILE_EXTENSION_2)) {
             result = loadAsciiGrid(dataFilePath, datasetProjection, netLogoProjection);
+        } else if (extension.equalsIgnoreCase(GeoJsonReader.GEOJSON_EXTENSION) || 
+                   extension.equalsIgnoreCase(GeoJsonReader.JSON_EXTENSION)){
+            result = loadGeoJson(dataFilePath, netLogoProjection);
         } else {
             throw new ExtensionException("unsupported file type "+extension);
         }
