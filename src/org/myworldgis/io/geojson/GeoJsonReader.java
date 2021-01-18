@@ -12,6 +12,7 @@ import java.util.Set;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LinearRing;
 
 import org.myworldgis.netlogo.VectorDataset;
 import org.myworldgis.netlogo.VectorDataset.PropertyType;
@@ -77,7 +78,7 @@ public class GeoJsonReader {
                    topLevelType.equals("MultiPolygon")) {
             parseSingleGeometryDataset();
         } else {
-            throw new ExtensionException(topLevelType + " is not a valid GeoJSON type");
+            throw new ExtensionException(topLevelType + " is not a supported GeoJSON type");
         }
     }
 
@@ -105,6 +106,7 @@ public class GeoJsonReader {
         this.propertyNames = new String[numProperties];
         this.propertyTypes = new PropertyType[numProperties];
         for (Object entryObj : firstFeatureProperties.entrySet()) {
+            @SuppressWarnings("unchecked")
             Map.Entry<String, Object> entry = (Map.Entry<String, Object>) entryObj;
 
             this.propertiesToIndices.put(entry.getKey().toString(), propertyIndex);
@@ -123,7 +125,6 @@ public class GeoJsonReader {
             JSONObject propertiesObject = (JSONObject) feature.get("properties");
             for(int i = 0; i < this.numProperties; i++){
                 if (!propertiesObject.containsKey(propertyNames[i])) {
-                    // continue;
                     throw new ExtensionException(propertyNames[i] + " is missing from at least one feature");
                 }
                 Object thisPropertyValue = propertiesObject.get(propertyNames[i]);
@@ -215,7 +216,7 @@ public class GeoJsonReader {
     private Geometry parseCoordinates(JSONArray coordinates, String geojsonShapeType) throws ExtensionException{
         switch (geojsonShapeType) {
             case "Point":
-                Geometry point = factory.createPoint(new Coordinate((Double) coordinates.get(0),(Double) coordinates.get(1)));
+                Geometry point = factory.createPoint(JSONPairToCoordinate(coordinates));
                 return point;
             case "LineString":
                 Coordinate[] linePoints = new Coordinate[coordinates.size()];
@@ -224,13 +225,38 @@ public class GeoJsonReader {
                 }
                 Geometry line = factory.createLineString(linePoints);
                 return line;
+            case "Polygon":
+                if(coordinates.size() < 1){throw new ExtensionException("Empty polygon in geojson file");}
+                int numRings = coordinates.size();
+                int numHoles = numRings - 1;
+
+                JSONArray shellArr = (JSONArray) coordinates.get(0);
+                Coordinate[] shellCoords = new Coordinate[shellArr.size()];
+                for(int j = 0; j < shellArr.size(); j++){
+                    shellCoords[j] = JSONPairToCoordinate((JSONArray)shellArr.get(j));
+                }
+                LinearRing shell = factory.createLinearRing(shellCoords);
+
+                Coordinate[][] holeCoords = new Coordinate[numHoles][];
+                LinearRing[] holeRings = new LinearRing[numHoles];
+                for (int i = 0; i < numHoles; i++) {
+                    JSONArray thisRing = (JSONArray) coordinates.get(i + 1);
+                    holeCoords[i] = new Coordinate[thisRing.size()];
+                    for (int j = 0; j < thisRing.size(); j++) {
+                        holeCoords[i][j] = JSONPairToCoordinate((JSONArray) thisRing.get(j));
+                    }
+                    holeRings[i] = factory.createLinearRing(holeCoords[i]);
+                }
+
+                Geometry polygon = factory.createPolygon(shell, holeRings);
+                return polygon;
             default:
                 throw new ExtensionException(geojsonShapeType + " is not a supported geojson shape type");
         }
     }
 
     private static Coordinate JSONPairToCoordinate(JSONArray arr){
-        return new Coordinate((Double) arr.get(0), (Double) arr.get(1));
+        return new Coordinate(((Number) arr.get(0)).doubleValue(), ((Number) arr.get(1)).doubleValue());
     }
 
     private static ShapeType mapStringToShapeType(String str) throws ExtensionException {
