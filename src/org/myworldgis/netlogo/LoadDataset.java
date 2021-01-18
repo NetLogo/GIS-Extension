@@ -19,9 +19,12 @@ import org.myworldgis.io.asciigrid.AsciiGridFileReader;
 import org.myworldgis.io.geojson.GeoJsonReader;
 import org.myworldgis.io.shapefile.DBaseFileReader;
 import org.myworldgis.io.shapefile.ESRIShapefileReader;
+import org.myworldgis.projection.Ellipsoid;
+import org.myworldgis.projection.Geographic;
 import org.myworldgis.projection.Projection;
 import org.myworldgis.projection.ProjectionFormat;
 import org.myworldgis.util.StringUtils;
+import org.ngs.ngunits.NonSI;
 import org.ngs.ngunits.converter.AbstractUnitConverter;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
@@ -124,6 +127,17 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
     }
 
     private static VectorDataset loadGeoJson (String geojsonFilePath, Projection dstProj) throws ExtensionException, IOException {
+
+        Projection srcProj = new Geographic(Ellipsoid.WGS_84, Projection.DEFAULT_CENTER, NonSI.DEGREE_ANGLE);
+        GeometryTransformer inverse = srcProj.getInverseTransformer();
+        GeometryTransformer forward = null;
+        boolean reproject = false;
+        if ((dstProj != null) &&
+            (!srcProj.equals(dstProj))) {
+            forward = dstProj.getForwardTransformer();
+            reproject = true;
+        }
+
         File geojsonFile = null;
         try {
             GeoJsonReader reader;
@@ -137,7 +151,20 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                 throw new ExtensionException("Error parsing " + geojsonFilePath);
             }
 
-            return reader.getDataset();
+            VectorDataset result = new VectorDataset(reader.getShapeType(), 
+                                                     reader.getPropertyNames(), 
+                                                     reader.getPropertyTypes());
+
+            Geometry[] geometries = reader.getGeometries();
+            Object[][] propertyValues = reader.getPropertyValues();
+            for(int i = 0; i < reader.size(); i++){
+                if (reproject) {
+                    geometries[i] = forward.transform(inverse.transform(geometries[i]));
+                }
+                result.add(geometries[i], propertyValues[i]);
+            }
+
+            return result;
         } finally {
             if (geojsonFile != null) {
                 try {geojsonFile.close(true); } catch (IOException e) { }
