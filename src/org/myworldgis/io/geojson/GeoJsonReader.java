@@ -69,29 +69,34 @@ public class GeoJsonReader {
             parseFeatureCollection();
         } else if (topLevelType.equals("Feature")) {
             parseSingleFeatureDataset();
-        } else if (topLevelType.equals("Geometry")) {
+        } else if (topLevelType.equals("Point")           ||
+                   topLevelType.equals("MultiPoint")      ||
+                   topLevelType.equals("LineString")      ||
+                   topLevelType.equals("MultiLineString") ||
+                   topLevelType.equals("Polygon")         ||
+                   topLevelType.equals("MultiPolygon")) {
             parseSingleGeometryDataset();
         } else {
             throw new ExtensionException(topLevelType + " is not a valid GeoJSON type");
         }
     }
 
-    public void parseFeatureCollection() throws ExtensionException {
-        JSONArray features = (JSONArray) geojson.get("features");
+    public void extractShapeInfo(JSONObject geometry) throws ExtensionException {
+        String geometryTypeString = geometry.get("type").toString();
+        this.shapeType = mapStringToShapeType(geometryTypeString);
+        this.geojsonShapeType = geometryTypeString;
+    }
 
-        if (features.size() < 1) {
-            throw new ExtensionException("Each FeatureCollection must have at least one feature.");
+    public void parseGeometryObject(JSONObject geometry, int featureIndex) throws ExtensionException {
+        if (!geometry.get("type").toString().equals(this.geojsonShapeType)) { 
+            throw new ExtensionException("Only homogenous FeatureCollections are supported");
         }
-        this.size = features.size();
-        this.geometries = new Geometry[size];
-        this.propertyValues = new Object[size][];
 
-        JSONObject firstFeature = (JSONObject) features.get(0);
+        JSONArray coordinates = (JSONArray) geometry.get("coordinates");
+        this.geometries[featureIndex] = parseCoordinates(coordinates, this.geojsonShapeType);
+    }
 
-        String firstGeometryTypeString = ((JSONObject) firstFeature.get("geometry")).get("type").toString();
-        this.shapeType = mapStringToShapeType(firstGeometryTypeString);
-        this.geojsonShapeType = firstGeometryTypeString;
-
+    public void extractPropertyInfoFromFeature(JSONObject firstFeature) throws ExtensionException {
         JSONObject firstFeatureProperties = ((JSONObject) firstFeature.get("properties"));
         this.numProperties = firstFeatureProperties.size();
 
@@ -106,21 +111,13 @@ public class GeoJsonReader {
             this.propertyNames[propertyIndex] = entry.getKey().toString(); 
             this.propertyTypes[propertyIndex] = getPropertyTypeForValue(entry.getValue());
 
-            // System.out.println(propertyIndex + " : " + propertyNames[propertyIndex] + " : " + propertyTypes[propertyIndex]);
             propertyIndex ++;
         }
+    }
 
-        int featureIndex = 0;
-        for (Object featureObj : features) {
-            JSONObject feature = (JSONObject) featureObj;
+    public void parseFeatureObject(JSONObject feature, int featureIndex) throws ExtensionException {
             JSONObject geometry = (JSONObject) feature.get("geometry");
-            if (!geometry.get("type").toString().equals(firstGeometryTypeString)) { 
-                throw new ExtensionException("Only homogenous FeatureCollections are supported");
-            }
-
-            JSONArray coordinates = (JSONArray) geometry.get("coordinates");
-            this.geometries[featureIndex] = factory.createPoint(new Coordinate((Double) coordinates.get(0),(Double) coordinates.get(1)));
-            this.geometries[featureIndex] = parseGeometry(coordinates, this.geojsonShapeType);
+            parseGeometryObject(geometry, featureIndex);
 
             Object[] thesePropertyValues = new Object[this.numProperties];
             JSONObject propertiesObject = (JSONObject) feature.get("properties");
@@ -138,15 +135,56 @@ public class GeoJsonReader {
                 thesePropertyValues[i] = thisPropertyValue;
             }
             this.propertyValues[featureIndex] = thesePropertyValues;
-            featureIndex ++;
+
+    }
+
+    public void parseFeatureCollection() throws ExtensionException {
+        JSONArray features = (JSONArray) geojson.get("features");
+
+        if (features.size() < 1) {
+            throw new ExtensionException("Each FeatureCollection must have at least one feature.");
+        }
+
+        this.size = features.size();
+        this.geometries = new Geometry[size];
+        this.propertyValues = new Object[size][];
+
+        JSONObject firstFeature = (JSONObject) features.get(0);
+
+        extractShapeInfo((JSONObject) firstFeature.get("geometry"));
+        extractPropertyInfoFromFeature(firstFeature);
+
+        int featureIndex = 0;
+        for (Object featureObj : features) {
+            JSONObject feature = (JSONObject) featureObj;
+            parseFeatureObject(feature, featureIndex);
+            featureIndex++;
         }
     }
 
     public void parseSingleFeatureDataset() throws ExtensionException {
-        return;
+        this.size = 1;
+        this.geometries = new Geometry[size];
+        this.propertyValues = new Object[size][];
+
+        JSONObject firstFeature = geojson;
+
+        extractShapeInfo((JSONObject) firstFeature.get("geometry"));
+        extractPropertyInfoFromFeature(firstFeature);
+
+        parseFeatureObject(firstFeature, 0);
     }
 
     public void parseSingleGeometryDataset() throws ExtensionException {
+        this.size = 1;
+        this.geometries = new Geometry[size];
+        this.propertyValues = new Object[size][0];
+
+        extractShapeInfo(geojson);
+        this.propertyNames = new String[0];
+        this.propertyTypes = new PropertyType[0];
+
+        parseGeometryObject(geojson, 0);
         return;
     }
 
@@ -174,7 +212,7 @@ public class GeoJsonReader {
         return propertyValues;
     }
 
-    private Geometry parseGeometry(JSONArray coordinates, String geojsonShapeType) throws ExtensionException{
+    private Geometry parseCoordinates(JSONArray coordinates, String geojsonShapeType) throws ExtensionException{
         switch (geojsonShapeType) {
             case "Point":
                 Geometry point = factory.createPoint(new Coordinate((Double) coordinates.get(0),(Double) coordinates.get(1)));
