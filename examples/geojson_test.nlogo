@@ -1,13 +1,22 @@
 extensions [gis]
 
-globals [stations]
+globals [stations_shp stations_geojson]
 
 to load
-  set stations gis:load-dataset "test_DC_metro_stations.geojson"
+  clear-all
+
+  set stations_shp     gis:load-dataset "test_DC_metro_stations.shp"
+  set stations_geojson gis:load-dataset "test_DC_metro_stations.geojson"
+
+  ;gis:set-world-envelope gis:envelope-of stations_shp
+  gis:set-world-envelope gis:envelope-of stations_geojson
 end
 
 to draw
-  gis:draw stations 1
+  ;gis:set-drawing-color red
+  ;gis:draw stations_shp 1
+  gis:set-drawing-color blue
+  gis:draw stations_geojson 1
 end
 @#$#@#$#@
 GRAPHICS-WINDOW

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import org.myworldgis.netlogo.VectorDataset;
@@ -99,19 +101,28 @@ public class GeoJsonReader {
                 throw new ExtensionException("Only homogenous FeatureCollections are supported");
             }
 
-            JSONObject properties = (JSONObject) feature.get("properties");
+            //TODO: Generalize to other shape types
+            JSONArray coordinates = (JSONArray) geometry.get("coordinates");
+            Geometry geom = factory.createPoint(new Coordinate((Double) coordinates.get(0),(Double) coordinates.get(1)));
+
+
+            Object[] thesePropertyValues = new Object[featureCount];
+            JSONObject propertiesObject = (JSONObject) feature.get("properties");
             for(int i = 0; i < featureCount; i++){
-                if (!properties.containsKey(propertyNames[i])) {
+                if (!propertiesObject.containsKey(propertyNames[i])) {
                     continue;
                     // throw new ExtensionException(propertyNames[i] + " is missing from at least one feature");
                 }
-                Object thisPropertyValue = properties.get(propertyNames[i]);
+                Object thisPropertyValue = propertiesObject.get(propertyNames[i]);
                 PropertyType thisPropertyType = getPropertyTypeForValue(thisPropertyValue);
                 if (!thisPropertyType.equals(propertyTypes[i])) {
                     throw new ExtensionException("Not all " + propertyNames[i] + "'s are the same datatype");
                 }
                 System.out.println(i + " : " + thisPropertyValue + " : " + propertyTypes[i]);
+                thesePropertyValues[i] = thisPropertyValue;
             }
+
+            out.add(geom, thesePropertyValues); // TODO: Consider refactoring to behave like the other importers that don't actually create the VectorDataset themselves and turn add() back to private.
 
         }
 
