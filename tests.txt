@@ -2,3 +2,44 @@ linkDatasetWithDatasetBreeds
   OPEN> extensions/gis/examples/link_dataset_with_dataset_breeds.nlogo
   O> setup
   test => true
+
+testGeoJSONImport_DC_Metro
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-metro
+
+testGeoJSONImport_Point
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-Point
+  
+testGeoJSONImport_MultiPoint
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-MultiPoint
+  
+testGeoJSONImport_LineString
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-LineString
+  
+testGeoJSONImport_MutliLineString
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-MutliLineString
+  
+testGeoJSONImport_Polygon
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-Polygon
+  
+testGeoJSONImport_MultiPolygon
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-MultiPolygon
+  
+testGeoJSONImport_Feature
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-Feature
+  
+testGeoJSONImport_FeatureCollection
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-FeatureCollection
+  
+testGeoJSONImport_GeometryCollection 
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-GeometryCollection 
+  
