@@ -26,7 +26,11 @@ testGeoJSONImport_MutliLineString
 testGeoJSONImport_Polygon
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-Polygon
-  
+
+testGeoJSONImport_Polygon_with_hole
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-Polygon_with_hole
+
 testGeoJSONImport_MultiPolygon
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-MultiPolygon
@@ -35,11 +39,11 @@ testGeoJSONImport_Feature
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-Feature
   
-testGeoJSONImport_FeatureCollection
+testGeoJSONImport_FeatureCollectionHeterogenous
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
-  O> test-FeatureCollection
+  test-FeatureCollectionHeterogenous => true
   
 testGeoJSONImport_GeometryCollection 
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
-  O> test-GeometryCollection 
+  test-GeometryCollection => true
   

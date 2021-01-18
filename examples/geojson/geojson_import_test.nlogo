@@ -4,61 +4,100 @@ globals [dataset]
 to test-metro
   clear-all
   set dataset gis:load-dataset "test_DC_metro_stations.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
 
 end
 
 to test-Point
-clear-all
-set dataset gis:load-dataset "Point.geojson"
-
+	clear-all
+	set dataset gis:load-dataset "Point.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:draw dataset 1
 end
 
 to test-MultiPoint
-clear-all
-set dataset gis:load-dataset "MultiPoint.geojson"
-
+	clear-all
+	set dataset gis:load-dataset "MultiPoint.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:draw dataset 1
 end
 
 to test-LineString
-clear-all
-set dataset gis:load-dataset "LineString.geojson"
-
+	clear-all
+	set dataset gis:load-dataset "LineString.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:draw dataset 1
 end
 
 to test-MutliLineString
-clear-all
-set dataset gis:load-dataset "MutliLineString.geojson"
-
+	clear-all
+	set dataset gis:load-dataset "MutliLineString.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:draw dataset 1
 end
 
 to test-Polygon
-clear-all
-set dataset gis:load-dataset "Polygon.geojson"
+	clear-all
+	set dataset gis:load-dataset "Polygon.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:fill dataset 1
+end
 
+to test-Polygon_with_hole
+	clear-all
+	set dataset gis:load-dataset "Polygon_with_hole.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:fill dataset 1
 end
 
 to test-MultiPolygon
-clear-all
-set dataset gis:load-dataset "MultiPolygon.geojson"
-
+	clear-all
+	set dataset gis:load-dataset "MultiPolygon.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:fill dataset 1
 end
 
 to test-Feature
-clear-all
-set dataset gis:load-dataset "Feature.geojson"
-
+	clear-all
+	set dataset gis:load-dataset "Feature.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:draw dataset 1
 end
 
-to test-FeatureCollection
-clear-all
-set dataset gis:load-dataset "FeatureCollection.geojson"
+to-report test-FeatureCollectionHeterogenous
+	clear-all
+  let passed true
+  carefully [
+    set dataset gis:load-dataset "FeatureCollectionHeterogenous.geojson"
+    set passed false
+  ] [
 
+  ]
+
+  report passed
 end
 
-to test-GeometryCollection
-clear-all
-set dataset gis:load-dataset "GeometryCollection .geojson"
+to-report test-GeometryCollection
+	clear-all
+  let passed true
+  carefully [
+    set dataset gis:load-dataset "GeometryCollection.geojson"
+    set passed false
+  ] [
 
+  ]
+
+  report passed
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
