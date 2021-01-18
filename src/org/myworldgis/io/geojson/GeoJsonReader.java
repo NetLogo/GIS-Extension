@@ -43,6 +43,7 @@ public class GeoJsonReader {
     GeometryFactory factory;
 
     ShapeType             shapeType;
+    String                geojsonShapeType;
     int                   size;
     int                   numProperties;
     Map<String, Integer>  propertiesToIndices;
@@ -89,6 +90,7 @@ public class GeoJsonReader {
 
         String firstGeometryTypeString = ((JSONObject) firstFeature.get("geometry")).get("type").toString();
         this.shapeType = mapStringToShapeType(firstGeometryTypeString);
+        this.geojsonShapeType = firstGeometryTypeString;
 
         JSONObject firstFeatureProperties = ((JSONObject) firstFeature.get("properties"));
         this.numProperties = firstFeatureProperties.size();
@@ -116,11 +118,9 @@ public class GeoJsonReader {
                 throw new ExtensionException("Only homogenous FeatureCollections are supported");
             }
 
-            // TODO: Generalize to other shape types
             JSONArray coordinates = (JSONArray) geometry.get("coordinates");
-            Geometry geom = factory.createPoint(new Coordinate((Double) coordinates.get(0),(Double) coordinates.get(1)));
-            this.geometries[featureIndex] = geom;
-
+            this.geometries[featureIndex] = factory.createPoint(new Coordinate((Double) coordinates.get(0),(Double) coordinates.get(1)));
+            this.geometries[featureIndex] = parseGeometry(coordinates, this.geojsonShapeType);
 
             Object[] thesePropertyValues = new Object[this.numProperties];
             JSONObject propertiesObject = (JSONObject) feature.get("properties");
@@ -174,12 +174,32 @@ public class GeoJsonReader {
         return propertyValues;
     }
 
+    private Geometry parseGeometry(JSONArray coordinates, String geojsonShapeType) throws ExtensionException{
+        switch (geojsonShapeType) {
+            case "Point":
+                Geometry point = factory.createPoint(new Coordinate((Double) coordinates.get(0),(Double) coordinates.get(1)));
+                return point;
+            case "LineString":
+                Coordinate[] linePoints = new Coordinate[coordinates.size()];
+                for (int i = 0; i < coordinates.size(); i++) {
+                    linePoints[i] = JSONPairToCoordinate((JSONArray) coordinates.get(i));
+                }
+                Geometry line = factory.createLineString(linePoints);
+                return line;
+            default:
+                throw new ExtensionException(geojsonShapeType + " is not a supported geojson shape type");
+        }
+    }
+
+    private static Coordinate JSONPairToCoordinate(JSONArray arr){
+        return new Coordinate((Double) arr.get(0), (Double) arr.get(1));
+    }
 
     private static ShapeType mapStringToShapeType(String str) throws ExtensionException {
         if (geoJsonStringTypesToShapeTypes.containsKey(str)) {
             return geoJsonStringTypesToShapeTypes.get(str);
         } else {
-            throw new ExtensionException(str + "is not a valid geojson geometry type");
+            throw new ExtensionException(str + "is not a supported geojson geometry type");
         }
     }
 
