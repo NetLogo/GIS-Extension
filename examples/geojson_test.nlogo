@@ -5,6 +5,8 @@ globals [stations_shp stations_geojson]
 to load
   clear-all
 
+  ;gis:set-coordinate-system "PROJCS[\"Europe_Lambert_Conformal_Conic\",GEOGCS[\"ED50\",DATUM[\"European_Datum_1950\",SPHEROID[\"International 1924\",6378388,297,AUTHORITY[\"EPSG\",\"7022\"]],TOWGS84[-87,-98,-121,0,0,0,0],AUTHORITY[\"EPSG\",\"6230\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4230\"]],PROJECTION[\"Lambert_Conformal_Conic_2SP\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",10.0],PARAMETER[\"Standard_Parallel_1\",43.0],PARAMETER[\"Standard_Parallel_2\",62.0],PARAMETER[\"Latitude_Of_Origin\",30.0],UNIT[\"Meter\",1.0],AUTHORITY[\"Esri\",\"102014\"]]"
+
   set stations_shp     gis:load-dataset "test_DC_metro_stations.shp"
   set stations_geojson gis:load-dataset "test_DC_metro_stations.geojson"
 
@@ -13,8 +15,41 @@ to load
 end
 
 to draw
-  ;gis:set-drawing-color red
-  ;gis:draw stations_shp 1
+  gis:set-drawing-color red
+  gis:draw stations_shp 1
+  gis:set-drawing-color blue
+  gis:draw stations_geojson 1
+end
+
+to test_equality
+  let shp_property_names gis:property-names stations_shp
+  let geojson_property_names gis:property-names stations_geojson
+
+  foreach shp_property_names [ [shp_name] ->
+    if not member? shp_name geojson_property_names [error "mismatch"]
+  ]
+
+  foreach geojson_property_names [ [geojson_name] ->
+    if not member? geojson_name shp_property_names [error "mismatch"]
+  ]
+
+  foreach gis:feature-list-of stations_geojson [ [station_geojson] ->
+    foreach gis:property-names stations_geojson [ [ name_geojson ] ->
+     show (word name_geojson ":" gis:property-value station_geojson name_geojson)
+    ]
+  ]
+end
+
+to test
+  clear-all
+  set stations_shp     gis:load-dataset "test_DC_metro_stations.shp"
+  gis:set-world-envelope gis:envelope-of stations_shp
+  gis:set-drawing-color red
+  gis:draw stations_shp 1
+
+  gis:set-coordinate-system "PROJCS[\"Europe_Lambert_Conformal_Conic\",GEOGCS[\"ED50\",DATUM[\"European_Datum_1950\",SPHEROID[\"International 1924\",6378388,297,AUTHORITY[\"EPSG\",\"7022\"]],TOWGS84[-87,-98,-121,0,0,0,0],AUTHORITY[\"EPSG\",\"6230\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4230\"]],PROJECTION[\"Lambert_Conformal_Conic_2SP\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",10.0],PARAMETER[\"Standard_Parallel_1\",43.0],PARAMETER[\"Standard_Parallel_2\",62.0],PARAMETER[\"Latitude_Of_Origin\",30.0],UNIT[\"Meter\",1.0],AUTHORITY[\"Esri\",\"102014\"]]"
+  set stations_geojson gis:load-dataset "test_DC_metro_stations.geojson"
+  gis:set-world-envelope gis:envelope-of stations_geojson
   gis:set-drawing-color blue
   gis:draw stations_geojson 1
 end
@@ -64,12 +99,29 @@ NIL
 1
 
 BUTTON
-66
-170
-129
-203
+58
+157
+121
+190
 NIL
 draw
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+40
+230
+150
+263
+NIL
+test_equality
 NIL
 1
 T
