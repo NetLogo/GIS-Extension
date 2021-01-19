@@ -1,20 +1,18 @@
 package org.myworldgis.io.geojson;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
+import com.vividsolutions.jts.geom.Polygon;
 
-import org.myworldgis.netlogo.VectorDataset;
 import org.myworldgis.netlogo.VectorDataset.PropertyType;
 import org.myworldgis.netlogo.VectorDataset.ShapeType;
 import org.nlogo.api.ExtensionException;
@@ -34,9 +32,9 @@ public class GeoJsonReader {
         tmpMap.put("Point", ShapeType.POINT);
         tmpMap.put("MultiPoint", ShapeType.POINT);
         tmpMap.put("LineString", ShapeType.LINE);
-        // tmpMap.put("MultiLineString", ShapeType.LINE); // Not yet implemented
+        tmpMap.put("MultiLineString", ShapeType.LINE);
         tmpMap.put("Polygon", ShapeType.POLYGON);
-        // tmpMap.put("MultiPolygon", ShapeType.POLYGON); // Not yet implemented
+        tmpMap.put("MultiPolygon", ShapeType.POLYGON);
         geoJsonStringTypesToShapeTypes = Collections.unmodifiableMap(tmpMap);
     }
 
@@ -218,41 +216,71 @@ public class GeoJsonReader {
             case "Point":
                 Geometry point = factory.createPoint(JSONPairToCoordinate(coordinates));
                 return point;
-            case "LineString":
-                Coordinate[] linePoints = new Coordinate[coordinates.size()];
+            case "MultiPoint":
+                Coordinate[] pointCoords = new Coordinate[coordinates.size()];
                 for (int i = 0; i < coordinates.size(); i++) {
-                    linePoints[i] = JSONPairToCoordinate((JSONArray) coordinates.get(i));
+                    pointCoords[i] = JSONPairToCoordinate((JSONArray) coordinates.get(i));
                 }
-                Geometry line = factory.createLineString(linePoints);
-                return line;
+                Geometry points = factory.createMultiPoint(pointCoords);
+                return points;
+            case "LineString":
+                return parseSingleLineString(coordinates);
+            case "MultiLineString":
+                LineString[] subLines = new LineString[coordinates.size()];
+                for (int i = 0; i < coordinates.size(); i++) {
+                    subLines[i] = parseSingleLineString((JSONArray) coordinates.get(i));
+                }
+                Geometry lines = factory.createMultiLineString(subLines);
+                return lines;
             case "Polygon":
-                if(coordinates.size() < 1){throw new ExtensionException("Empty polygon in geojson file");}
-                int numRings = coordinates.size();
-                int numHoles = numRings - 1;
-
-                JSONArray shellArr = (JSONArray) coordinates.get(0);
-                Coordinate[] shellCoords = new Coordinate[shellArr.size()];
-                for(int j = 0; j < shellArr.size(); j++){
-                    shellCoords[j] = JSONPairToCoordinate((JSONArray)shellArr.get(j));
+                return parseSingleComplexPolygon(coordinates);
+            case "MultiPolygon":
+                if(coordinates.size() < 1){throw new ExtensionException("One of the MultiPolygons has no polygons within it");}
+                Polygon[] subPolygons = new Polygon[coordinates.size()];
+                for (int i = 0; i < coordinates.size(); i++) {
+                    subPolygons[i] = parseSingleComplexPolygon((JSONArray) coordinates.get(i));
                 }
-                LinearRing shell = factory.createLinearRing(shellCoords);
-
-                Coordinate[][] holeCoords = new Coordinate[numHoles][];
-                LinearRing[] holeRings = new LinearRing[numHoles];
-                for (int i = 0; i < numHoles; i++) {
-                    JSONArray thisRing = (JSONArray) coordinates.get(i + 1);
-                    holeCoords[i] = new Coordinate[thisRing.size()];
-                    for (int j = 0; j < thisRing.size(); j++) {
-                        holeCoords[i][j] = JSONPairToCoordinate((JSONArray) thisRing.get(j));
-                    }
-                    holeRings[i] = factory.createLinearRing(holeCoords[i]);
-                }
-
-                Geometry polygon = factory.createPolygon(shell, holeRings);
-                return polygon;
+                Geometry polygons = factory.createMultiPolygon(subPolygons);
+                return polygons;
             default:
                 throw new ExtensionException(geojsonShapeType + " is not a supported geojson shape type");
         }
+    }
+
+    private LineString parseSingleLineString(JSONArray coordinates) throws ExtensionException {
+        Coordinate[] linePoints = new Coordinate[coordinates.size()];
+                for (int i = 0; i < coordinates.size(); i++) {
+                    linePoints[i] = JSONPairToCoordinate((JSONArray) coordinates.get(i));
+                }
+        LineString line = factory.createLineString(linePoints);
+        return line;
+    }
+
+    private Polygon parseSingleComplexPolygon(JSONArray coordinates) throws ExtensionException {
+        if (coordinates.size() < 1) { throw new ExtensionException("Empty polygon in geojson file");}
+        int numRings = coordinates.size();
+        int numHoles = numRings - 1;
+
+        JSONArray shellArr = (JSONArray) coordinates.get(0);
+        Coordinate[] shellCoords = new Coordinate[shellArr.size()];
+        for(int j = 0; j < shellArr.size(); j++){
+            shellCoords[j] = JSONPairToCoordinate((JSONArray)shellArr.get(j));
+        }
+        LinearRing shell = factory.createLinearRing(shellCoords);
+
+        Coordinate[][] holeCoords = new Coordinate[numHoles][];
+        LinearRing[] holeRings = new LinearRing[numHoles];
+        for (int i = 0; i < numHoles; i++) {
+            JSONArray thisRing = (JSONArray) coordinates.get(i + 1);
+            holeCoords[i] = new Coordinate[thisRing.size()];
+            for (int j = 0; j < thisRing.size(); j++) {
+                holeCoords[i][j] = JSONPairToCoordinate((JSONArray) thisRing.get(j));
+            }
+            holeRings[i] = factory.createLinearRing(holeCoords[i]);
+        }
+
+        Polygon polygon = factory.createPolygon(shell, holeRings);
+        return polygon;
     }
 
     private static Coordinate JSONPairToCoordinate(JSONArray arr){

@@ -19,9 +19,9 @@ testGeoJSONImport_LineString
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-LineString
   
-testGeoJSONImport_MutliLineString
+testGeoJSONImport_MultiLineString
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
-  O> test-MutliLineString
+  O> test-MultiLineString
   
 testGeoJSONImport_Polygon
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
