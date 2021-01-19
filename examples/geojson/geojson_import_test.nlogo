@@ -34,9 +34,9 @@ to test-LineString
 	gis:draw dataset 1
 end
 
-to test-MutliLineString
+to test-MultiLineString
 	clear-all
-	set dataset gis:load-dataset "MutliLineString.geojson"
+	set dataset gis:load-dataset "MultiLineString.geojson"
 	gis:set-world-envelope gis:envelope-of dataset
 	gis:set-drawing-color red
 	gis:draw dataset 1
