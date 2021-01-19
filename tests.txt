@@ -2,3 +2,23 @@ linkDatasetWithDatasetBreeds
   OPEN> extensions/gis/examples/link_dataset_with_dataset_breeds.nlogo
   O> setup
   test => true
+
+TestProjectLatLon-wgs84-wgs84
+  OPEN> extensions/gis/examples/project-lat-lon.nlogo
+  O> run-test-wgs84-wgs84
+
+TestProjectLatLon-wgs84-projected
+  OPEN> extensions/gis/examples/project-lat-lon.nlogo
+  O> run-test-wgs84-projected
+
+TestProjectLatLon-nad83-nad83
+  OPEN> extensions/gis/examples/project-lat-lon.nlogo
+  O> run-test-nad83-nad83
+
+TestProjectLatLon-nad83-wgs84
+  OPEN> extensions/gis/examples/project-lat-lon.nlogo
+  O> run-test-nad83-wgs84
+
+TestProjectLatLon-nad83-projected
+  OPEN> extensions/gis/examples/project-lat-lon.nlogo
+  O> run-test-nad83-projected
