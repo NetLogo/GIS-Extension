@@ -126,8 +126,8 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
         }
     }
 
-    private static VectorDataset loadGeoJson (String geojsonFilePath, Projection dstProj) throws ExtensionException, IOException {
-
+    private static VectorDataset loadGeoJson (String geojsonFilePath, 
+                                              Projection dstProj) throws ExtensionException, IOException {
         Projection srcProj = new Geographic(Ellipsoid.WGS_84, Projection.DEFAULT_CENTER, NonSI.DEGREE_ANGLE);
         GeometryTransformer inverse = srcProj.getInverseTransformer();
         GeometryTransformer forward = null;
@@ -157,7 +157,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
 
             Geometry[] geometries = reader.getGeometries();
             Object[][] propertyValues = reader.getPropertyValues();
-            for(int i = 0; i < reader.size(); i++){
+            for (int i = 0; i < reader.size(); i++) {
                 if (reproject) {
                     geometries[i] = forward.transform(inverse.transform(geometries[i]));
                 }

@@ -72,6 +72,41 @@ to test-Feature
 	gis:set-world-envelope gis:envelope-of dataset
 	gis:set-drawing-color red
 	gis:draw dataset 1
+
+  let names gis:property-names dataset
+
+  if length names != 2 [
+    error "Wrong number of properties"
+  ]
+
+  let first_item item 0 gis:feature-list-of dataset
+
+  if gis:property-value first_item "string" != "stringVal" or gis:property-value first_item "number" != 3.14 [
+    error "Wrong values"
+  ]
+end
+
+to test-FeatureCollectionHomogenous
+	clear-all
+	set dataset gis:load-dataset "FeatureCollectionHomogenous.geojson"
+	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-drawing-color red
+	gis:fill dataset 1
+
+  let names gis:property-names dataset
+
+  if length names != 2 [
+    error "Wrong number of properties"
+  ]
+
+  let feature0 gis:find-one-feature dataset "string" "stringVal0"
+  show feature0
+  if gis:property-value feature0 "number" != 0 [ error "feature0 has the wrong value" ]
+
+  let feature1 gis:find-one-feature dataset "string" "stringVal1"
+  if gis:property-value feature1 "number" != 1 [ error "feature0 has the wrong value" ]
+	
+
 end
 
 to-report test-FeatureCollectionHeterogenous
@@ -126,6 +161,23 @@ GRAPHICS-WINDOW
 1
 ticks
 30.0
+
+BUTTON
+46
+110
+298
+143
+NIL
+test-FeatureCollectionHomogenous
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
