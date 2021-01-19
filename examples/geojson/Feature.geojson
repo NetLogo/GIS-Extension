@@ -64,6 +64,7 @@
         ]
     },
     "properties": {
-        "name": "Plaza Road Park"
+        "string" : "stringVal",
+        "number" : 3.14
     }
 }

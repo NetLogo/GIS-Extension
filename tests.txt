@@ -58,6 +58,10 @@ TestGeoJSONImport_MultiPolygon
 TestGeoJSONImport_Feature
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-Feature
+
+testGeoJSONImport_FeatureCollectionHomogenous
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-FeatureCollectionHomogenous
   
 TestGeoJSONImport_FeatureCollectionHeterogenous
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo

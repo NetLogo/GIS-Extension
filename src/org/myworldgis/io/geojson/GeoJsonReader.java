@@ -121,7 +121,7 @@ public class GeoJsonReader {
 
             Object[] thesePropertyValues = new Object[this.numProperties];
             JSONObject propertiesObject = (JSONObject) feature.get("properties");
-            for(int i = 0; i < this.numProperties; i++){
+            for (int i = 0; i < this.numProperties; i++) {
                 if (!propertiesObject.containsKey(propertyNames[i])) {
                     throw new ExtensionException(propertyNames[i] + " is missing from at least one feature");
                 }
@@ -130,8 +130,11 @@ public class GeoJsonReader {
                 if (!thisPropertyType.equals(propertyTypes[i])) {
                     throw new ExtensionException("Not all " + propertyNames[i] + "'s are the same datatype");
                 }
-                // System.out.println(i + " : " + thisPropertyValue + " : " + propertyTypes[i]);
-                thesePropertyValues[i] = thisPropertyValue;
+                if (thisPropertyType == PropertyType.NUMBER) {
+                    thesePropertyValues[i] = ((Number) thisPropertyValue).doubleValue();
+                } else {
+                    thesePropertyValues[i] = thisPropertyValue.toString();
+                }
             }
             this.propertyValues[featureIndex] = thesePropertyValues;
 
@@ -187,31 +190,31 @@ public class GeoJsonReader {
         return;
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public ShapeType getShapeType(){
+    public ShapeType getShapeType() {
         return shapeType;
     }
 
-    public String[] getPropertyNames(){
+    public String[] getPropertyNames() {
         return propertyNames;
     }
 
-    public PropertyType[] getPropertyTypes(){
+    public PropertyType[] getPropertyTypes() {
         return propertyTypes;
     }
 
-    public Geometry[] getGeometries(){
+    public Geometry[] getGeometries() {
         return geometries;
     }
 
-    public Object[][] getPropertyValues(){
+    public Object[][] getPropertyValues() {
         return propertyValues;
     }
 
-    private Geometry parseCoordinates(JSONArray coordinates, String geojsonShapeType) throws ExtensionException{
+    private Geometry parseCoordinates(JSONArray coordinates, String geojsonShapeType) throws ExtensionException {
         switch (geojsonShapeType) {
             case "Point":
                 Geometry point = factory.createPoint(JSONPairToCoordinate(coordinates));
@@ -235,7 +238,9 @@ public class GeoJsonReader {
             case "Polygon":
                 return parseSingleComplexPolygon(coordinates);
             case "MultiPolygon":
-                if(coordinates.size() < 1){throw new ExtensionException("One of the MultiPolygons has no polygons within it");}
+                if (coordinates.size() < 1) {
+                    throw new ExtensionException("One of the MultiPolygons has no polygons within it");
+                }
                 Polygon[] subPolygons = new Polygon[coordinates.size()];
                 for (int i = 0; i < coordinates.size(); i++) {
                     subPolygons[i] = parseSingleComplexPolygon((JSONArray) coordinates.get(i));
@@ -263,7 +268,7 @@ public class GeoJsonReader {
 
         JSONArray shellArr = (JSONArray) coordinates.get(0);
         Coordinate[] shellCoords = new Coordinate[shellArr.size()];
-        for(int j = 0; j < shellArr.size(); j++){
+        for (int j = 0; j < shellArr.size(); j++) {
             shellCoords[j] = JSONPairToCoordinate((JSONArray)shellArr.get(j));
         }
         LinearRing shell = factory.createLinearRing(shellCoords);
@@ -283,7 +288,7 @@ public class GeoJsonReader {
         return polygon;
     }
 
-    private static Coordinate JSONPairToCoordinate(JSONArray arr){
+    private static Coordinate JSONPairToCoordinate(JSONArray arr) {
         return new Coordinate(((Number) arr.get(0)).doubleValue(), ((Number) arr.get(1)).doubleValue());
     }
 
@@ -296,9 +301,9 @@ public class GeoJsonReader {
     }
 
     private static PropertyType getPropertyTypeForValue(Object obj) throws ExtensionException {
-        if(obj instanceof String){
+        if (obj instanceof String) {
             return PropertyType.STRING;
-        } else if (obj instanceof Double){
+        } else if (obj instanceof Number) {
             return PropertyType.NUMBER;
         } else {
             throw new ExtensionException(obj + " is not a valid property type");
