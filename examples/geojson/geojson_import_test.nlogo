@@ -75,7 +75,7 @@ to test-Feature
 
   let names gis:property-names dataset
 
-  if length names != 2 [
+  if length names != 4 [
     error "Wrong number of properties"
   ]
 
@@ -83,6 +83,12 @@ to test-Feature
 
   if gis:property-value first_item "string" != "stringVal" or gis:property-value first_item "number" != 3.14 [
     error "Wrong values"
+  ]
+
+  show gis:property-value first_item "not-supported-array"
+  show gis:property-value first_item "not-supported-object"
+  if gis:property-value first_item "not-supported-array" != "[1,2,3]" or gis:property-value first_item "not-supported-object" != "{\"key\":\"value\"}" [
+    error "json stringify error"
   ]
 end
 
@@ -168,7 +174,7 @@ BUTTON
 298
 143
 NIL
-test-FeatureCollectionHomogenous
+test-Feature
 NIL
 1
 T

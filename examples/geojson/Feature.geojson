@@ -65,6 +65,8 @@
     },
     "properties": {
         "string" : "stringVal",
-        "number" : 3.14
+        "number" : 3.14,
+        "not-supported-array" : [1, 2, 3],
+        "not-supported-object" : {"key" : "value"}
     }
 }
