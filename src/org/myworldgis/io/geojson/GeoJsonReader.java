@@ -133,7 +133,11 @@ public class GeoJsonReader {
                 if (thisPropertyType == PropertyType.NUMBER) {
                     thesePropertyValues[i] = ((Number) thisPropertyValue).doubleValue();
                 } else {
-                    thesePropertyValues[i] = thisPropertyValue.toString();
+                    if (thisPropertyValue instanceof JSONObject){
+                        thesePropertyValues[i] = ((JSONObject) thisPropertyValue).toJSONString();
+                    } else {
+                        thesePropertyValues[i] = thisPropertyValue.toString();
+                    }
                 }
             }
             this.propertyValues[featureIndex] = thesePropertyValues;
@@ -301,12 +305,10 @@ public class GeoJsonReader {
     }
 
     private static PropertyType getPropertyTypeForValue(Object obj) throws ExtensionException {
-        if (obj instanceof String) {
-            return PropertyType.STRING;
-        } else if (obj instanceof Number) {
+        if (obj instanceof Number) {
             return PropertyType.NUMBER;
         } else {
-            throw new ExtensionException(obj + " is not a valid property type");
+            return PropertyType.STRING;
         }
     }
 }
