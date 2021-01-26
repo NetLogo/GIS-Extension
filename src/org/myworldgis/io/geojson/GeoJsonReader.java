@@ -1,5 +1,6 @@
 package org.myworldgis.io.geojson;
 
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -58,12 +59,13 @@ public class GeoJsonReader {
         this.containsDefaultValues = false;
         this.propertyNamesToDatatypes = new HashMap<String, PropertyType>();
 
-        //TODO: Figure out why file.reader() wouldn't go into parser.parse. 
-        Scanner s = new Scanner(file.getInputStream()).useDelimiter("\\Z");
-        String out = s.hasNext() ? s.next() : "";
+        // //TODO: Figure out why file.reader() wouldn't go into parser.parse. 
+        // Scanner s = new Scanner(file.getInputStream()).useDelimiter("\\Z");
+        // String out = s.hasNext() ? s.next() : "";
 
+        InputStreamReader reader = new InputStreamReader(file.getInputStream());
         JSONParser parser = new JSONParser();
-        this.geojson = (JSONObject) parser.parse(out);
+        this.geojson = (JSONObject) parser.parse(reader);
 
         String topLevelType = geojson.get("type").toString();
 
