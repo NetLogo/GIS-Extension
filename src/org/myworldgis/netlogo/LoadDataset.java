@@ -31,8 +31,13 @@ import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.core.File;
 import org.nlogo.api.LogoException;
+import org.nlogo.api.OutputDestination;
+import org.nlogo.api.OutputDestinationJ;
+import org.nlogo.api.Workspace;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
+import org.nlogo.core.prim._const;
+import org.nlogo.nvm.ExtensionContext;
 import org.nlogo.api.World;
 
 
@@ -40,6 +45,8 @@ import org.nlogo.api.World;
  * 
  */
 public final strictfp class LoadDataset extends GISExtension.Reporter {
+
+    private static Context _context;
     
     //--------------------------------------------------------------------------
     // Class methods
@@ -150,6 +157,14 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             } catch (org.json.simple.parser.ParseException e){
                 throw new ExtensionException("Error parsing " + geojsonFilePath);
             }
+            if (reader.getContainsDefaultValues()) {
+                String errorString = "Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
+                        + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.";
+                Workspace ws = ((ExtensionContext)_context).workspace();
+                try {
+                    ws.outputObject(errorString, _context.getAgent(), true, false, OutputDestinationJ.NORMAL());
+                } catch (LogoException e) { }
+            }
 
             VectorDataset result = new VectorDataset(reader.getShapeType(), 
                                                      reader.getPropertyNames(), 
@@ -222,6 +237,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
     /** */
     public Object reportInternal (Argument args[], Context context) 
             throws ExtensionException, IOException, LogoException, ParseException {
+        _context = context;
         String dataFilePath = args[0].getString();
         Projection netLogoProjection = GISExtension.getState().getProjection();
         Projection datasetProjection = null;

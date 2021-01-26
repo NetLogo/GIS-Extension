@@ -74,6 +74,7 @@ to test-Feature
 	gis:draw dataset 1
 
   let names gis:property-names dataset
+  show names
 
   if length names != 4 [
     error "Wrong number of properties"
@@ -106,13 +107,11 @@ to test-FeatureCollectionHomogenous
   ]
 
   let feature0 gis:find-one-feature dataset "string" "stringVal0"
-  show feature0
   if gis:property-value feature0 "number" != 0 [ error "feature0 has the wrong value" ]
 
   let feature1 gis:find-one-feature dataset "string" "stringVal1"
   if gis:property-value feature1 "number" != 1 [ error "feature0 has the wrong value" ]
 	
-
 end
 
 to-report test-FeatureCollectionHeterogenous
@@ -126,6 +125,27 @@ to-report test-FeatureCollectionHeterogenous
   ]
 
   report passed
+end
+
+to test-FeatureCollectionDefaultFilling
+  clear-all
+  set dataset gis:load-dataset "FeatureCollectionDefaultFilling.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
+	
+  let names gis:property-names dataset
+
+  if length names != 3 [
+	  error "Wrong number of properties"
+  ]
+
+  let feature0 gis:find-one-feature dataset "key" "0"
+  if gis:property-value feature0 "number" != 0 [ error "numeric default not working" ]
+
+  let feature1 gis:find-one-feature dataset "key" "1"
+  if gis:property-value feature1 "string" != "" [ error "string default not working" ]
+
 end
 
 to-report test-GeometryCollection
