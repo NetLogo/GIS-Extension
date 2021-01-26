@@ -46,6 +46,10 @@ testGeoJSONImport_FeatureCollectionHomogenous
 testGeoJSONImport_FeatureCollectionHeterogenous
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   test-FeatureCollectionHeterogenous => true
+
+testGeoJSONImport_FeatureCollectionDefaultFilling
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-FeatureCollectionDefaultFilling
   
 testGeoJSONImport_GeometryCollection 
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo

@@ -41,19 +41,22 @@ public class GeoJsonReader {
     JSONObject geojson;
     GeometryFactory factory;
 
-    ShapeType             shapeType;
-    String                geojsonShapeType;
-    int                   size;
-    int                   numProperties;
-    Map<String, Integer>  propertiesToIndices;
-    String[]              propertyNames;
-    PropertyType[]        propertyTypes;
-    Geometry[]            geometries;
-    Object[][]            propertyValues;
+    ShapeType                 shapeType;
+    String                    geojsonShapeType;
+    int                       size;
+    int                       numProperties;
+    Map<String, PropertyType> propertyNamesToDatatypes;
+    String[]                  propertyNames;
+    PropertyType[]            propertyTypes;
+    Geometry[]                geometries;
+    Object[][]                propertyValues;
+    boolean                   containsDefaultValues;
     
 
     public GeoJsonReader(File file, GeometryFactory factory) throws IOException, ParseException, ExtensionException {
         this.factory = factory;
+        this.containsDefaultValues = false;
+        this.propertyNamesToDatatypes = new HashMap<String, PropertyType>();
 
         //TODO: Figure out why file.reader() wouldn't go into parser.parse. 
         Scanner s = new Scanner(file.getInputStream()).useDelimiter("\\Z");
@@ -80,13 +83,13 @@ public class GeoJsonReader {
         }
     }
 
-    public void extractShapeInfo(JSONObject geometry) throws ExtensionException {
+    private void extractShapeInfo(JSONObject geometry) throws ExtensionException {
         String geometryTypeString = geometry.get("type").toString();
         this.shapeType = mapStringToShapeType(geometryTypeString);
         this.geojsonShapeType = geometryTypeString;
     }
 
-    public void parseGeometryObject(JSONObject geometry, int featureIndex) throws ExtensionException {
+    private void parseGeometryObject(JSONObject geometry, int featureIndex) throws ExtensionException {
         if (!geometry.get("type").toString().equals(this.geojsonShapeType)) { 
             throw new ExtensionException("Only homogenous FeatureCollections are supported");
         }
@@ -95,41 +98,65 @@ public class GeoJsonReader {
         this.geometries[featureIndex] = parseCoordinates(coordinates, this.geojsonShapeType);
     }
 
-    public void extractPropertyInfoFromFeature(JSONObject firstFeature) throws ExtensionException {
-        JSONObject firstFeatureProperties = ((JSONObject) firstFeature.get("properties"));
-        this.numProperties = firstFeatureProperties.size();
+    private void extractSchemaFromFeatures(JSONArray features) throws ExtensionException {
+        for (Object featureObj : features) {
+            JSONObject feature = (JSONObject) featureObj;
+            parseSchemaOfSingleFeature(feature);
+        }
+    }
 
-        int propertyIndex = 0;
-        this.propertiesToIndices = new HashMap<String, Integer>();
-        this.propertyNames = new String[numProperties];
-        this.propertyTypes = new PropertyType[numProperties];
-        for (Object entryObj : firstFeatureProperties.entrySet()) {
+    public void parseSchemaOfSingleFeature(JSONObject feature) throws ExtensionException {
+        JSONObject properties = (JSONObject) feature.get("properties");
+        for (Object entryObj : properties.entrySet()) {
             @SuppressWarnings("unchecked")
             Map.Entry<String, Object> entry = (Map.Entry<String, Object>) entryObj;
 
-            this.propertiesToIndices.put(entry.getKey().toString(), propertyIndex);
-            this.propertyNames[propertyIndex] = entry.getKey().toString(); 
-            this.propertyTypes[propertyIndex] = getPropertyTypeForValue(entry.getValue());
+            if (this.propertyNamesToDatatypes.containsKey(entry.getKey())){
+                PropertyType existingType = this.propertyNamesToDatatypes.get(entry.getKey());
+                PropertyType newType = getPropertyTypeForValue(entry.getValue());
+                if (existingType != newType) {
+                    throw new ExtensionException("All features properties of the same name must be of the same datatype. "
+                    + "The property " + entry.getKey() + "has one value of type of " + existingType.toString() 
+                    + "and one property type of " + newType.toString());
+                }
+            } else {
+                this.propertyNamesToDatatypes.put(entry.getKey(), getPropertyTypeForValue(entry.getValue()));
+            }
+        }
+    }
 
-            propertyIndex ++;
+    private void finalizeSchema() {
+        this.numProperties = this.propertyNamesToDatatypes.size();
+        this.propertyNames = new String[numProperties];
+        this.propertyTypes = new PropertyType[numProperties];
+
+        int i = 0;
+        for (Map.Entry<String, PropertyType> property : this.propertyNamesToDatatypes.entrySet()) {
+            this.propertyNames[i] = property.getKey();
+            this.propertyTypes[i] = property.getValue();
+            i++;
         }
     }
 
     public void parseFeatureObject(JSONObject feature, int featureIndex) throws ExtensionException {
-            JSONObject geometry = (JSONObject) feature.get("geometry");
-            parseGeometryObject(geometry, featureIndex);
+        JSONObject geometry = (JSONObject) feature.get("geometry");
+        parseGeometryObject(geometry, featureIndex);
 
-            Object[] thesePropertyValues = new Object[this.numProperties];
-            JSONObject propertiesObject = (JSONObject) feature.get("properties");
-            for (int i = 0; i < this.numProperties; i++) {
-                if (!propertiesObject.containsKey(propertyNames[i])) {
-                    throw new ExtensionException(propertyNames[i] + " is missing from at least one feature");
+        Object[] thesePropertyValues = new Object[this.numProperties];
+        JSONObject propertiesObject = (JSONObject) feature.get("properties");
+
+        for (int i = 0; i < this.numProperties; i++) {
+            PropertyType thisPropertyType = this.propertyTypes[i];
+            if (!propertiesObject.containsKey(this.propertyNames[i])) {
+                this.containsDefaultValues = true;
+                if (thisPropertyType == PropertyType.NUMBER) {
+                    thesePropertyValues[i] = 0.0;
+                } else {
+                    thesePropertyValues[i] = "";
                 }
-                Object thisPropertyValue = propertiesObject.get(propertyNames[i]);
-                PropertyType thisPropertyType = getPropertyTypeForValue(thisPropertyValue);
-                if (!thisPropertyType.equals(propertyTypes[i])) {
-                    throw new ExtensionException("Not all " + propertyNames[i] + "'s are the same datatype");
-                }
+            } else {
+                Object thisPropertyValue = propertiesObject.get(this.propertyNames[i]);
+
                 if (thisPropertyType == PropertyType.NUMBER) {
                     thesePropertyValues[i] = ((Number) thisPropertyValue).doubleValue();
                 } else {
@@ -140,8 +167,8 @@ public class GeoJsonReader {
                     }
                 }
             }
-            this.propertyValues[featureIndex] = thesePropertyValues;
-
+        }
+        this.propertyValues[featureIndex] = thesePropertyValues;
     }
 
     public void parseFeatureCollection() throws ExtensionException {
@@ -158,7 +185,8 @@ public class GeoJsonReader {
         JSONObject firstFeature = (JSONObject) features.get(0);
 
         extractShapeInfo((JSONObject) firstFeature.get("geometry"));
-        extractPropertyInfoFromFeature(firstFeature);
+        extractSchemaFromFeatures(features);
+        finalizeSchema();
 
         int featureIndex = 0;
         for (Object featureObj : features) {
@@ -176,7 +204,8 @@ public class GeoJsonReader {
         JSONObject firstFeature = geojson;
 
         extractShapeInfo((JSONObject) firstFeature.get("geometry"));
-        extractPropertyInfoFromFeature(firstFeature);
+        parseSchemaOfSingleFeature(firstFeature);
+        finalizeSchema();
 
         parseFeatureObject(firstFeature, 0);
     }
@@ -187,8 +216,7 @@ public class GeoJsonReader {
         this.propertyValues = new Object[size][0];
 
         extractShapeInfo(geojson);
-        this.propertyNames = new String[0];
-        this.propertyTypes = new PropertyType[0];
+        finalizeSchema();
 
         parseGeometryObject(geojson, 0);
         return;
@@ -216,6 +244,10 @@ public class GeoJsonReader {
 
     public Object[][] getPropertyValues() {
         return propertyValues;
+    }
+
+    public boolean getContainsDefaultValues() {
+        return containsDefaultValues;
     }
 
     private Geometry parseCoordinates(JSONArray coordinates, String geojsonShapeType) throws ExtensionException {
