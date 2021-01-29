@@ -16,19 +16,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import org.myworldgis.io.asciigrid.AsciiGridFileReader;
+import org.myworldgis.io.geojson.GeoJsonReader;
 import org.myworldgis.io.shapefile.DBaseFileReader;
 import org.myworldgis.io.shapefile.ESRIShapefileReader;
+import org.myworldgis.projection.Ellipsoid;
+import org.myworldgis.projection.Geographic;
 import org.myworldgis.projection.Projection;
 import org.myworldgis.projection.ProjectionFormat;
 import org.myworldgis.util.StringUtils;
+import org.ngs.ngunits.NonSI;
 import org.ngs.ngunits.converter.AbstractUnitConverter;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.core.File;
 import org.nlogo.api.LogoException;
+import org.nlogo.api.OutputDestination;
+import org.nlogo.api.OutputDestinationJ;
+import org.nlogo.api.Workspace;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
+import org.nlogo.core.prim._const;
+import org.nlogo.nvm.ExtensionContext;
 import org.nlogo.api.World;
 
 
@@ -36,6 +45,8 @@ import org.nlogo.api.World;
  * 
  */
 public final strictfp class LoadDataset extends GISExtension.Reporter {
+
+    private static Context _context;
     
     //--------------------------------------------------------------------------
     // Class methods
@@ -121,6 +132,60 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             }
         }
     }
+
+    private static VectorDataset loadGeoJson (String geojsonFilePath, 
+                                              Projection dstProj) throws ExtensionException, IOException {
+        Projection srcProj = new Geographic(Ellipsoid.WGS_84, Projection.DEFAULT_CENTER, NonSI.DEGREE_ANGLE);
+        GeometryTransformer inverse = srcProj.getInverseTransformer();
+        GeometryTransformer forward = null;
+        boolean reproject = false;
+        if ((dstProj != null) &&
+            (!srcProj.equals(dstProj))) {
+            forward = dstProj.getForwardTransformer();
+            reproject = true;
+        }
+
+        File geojsonFile = null;
+        try {
+            GeoJsonReader reader;
+            geojsonFile = GISExtension.getState().getFile(geojsonFilePath);
+            if (geojsonFile == null){
+                throw new ExtensionException("Geojson file " + geojsonFilePath + " not found");
+            }
+            try {
+                reader = new GeoJsonReader(geojsonFile, GISExtension.getState().factory());
+            } catch (org.json.simple.parser.ParseException e){
+                throw new ExtensionException("Error parsing " + geojsonFilePath);
+            }
+            if (reader.getContainsDefaultValues()) {
+                String errorString = "Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
+                        + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.";
+                Workspace ws = ((ExtensionContext)_context).workspace();
+                try {
+                    ws.outputObject(errorString, _context.getAgent(), true, false, OutputDestinationJ.NORMAL());
+                } catch (LogoException e) { }
+            }
+
+            VectorDataset result = new VectorDataset(reader.getShapeType(), 
+                                                     reader.getPropertyNames(), 
+                                                     reader.getPropertyTypes());
+
+            Geometry[] geometries = reader.getGeometries();
+            Object[][] propertyValues = reader.getPropertyValues();
+            for (int i = 0; i < reader.size(); i++) {
+                if (reproject) {
+                    geometries[i] = forward.transform(inverse.transform(geometries[i]));
+                }
+                result.add(geometries[i], propertyValues[i]);
+            }
+
+            return result;
+        } finally {
+            if (geojsonFile != null) {
+                try {geojsonFile.close(true); } catch (IOException e) { }
+            }
+        }
+    }
     
     /** */
     private static RasterDataset loadAsciiGrid (String ascFilePath,
@@ -172,6 +237,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
     /** */
     public Object reportInternal (Argument args[], Context context) 
             throws ExtensionException, IOException, LogoException, ParseException {
+        _context = context;
         String dataFilePath = args[0].getString();
         Projection netLogoProjection = GISExtension.getState().getProjection();
         Projection datasetProjection = null;
@@ -191,6 +257,9 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
         } else if (extension.equalsIgnoreCase(AsciiGridFileReader.ASCII_GRID_FILE_EXTENSION_1) ||
                    extension.equalsIgnoreCase(AsciiGridFileReader.ASCII_GRID_FILE_EXTENSION_2)) {
             result = loadAsciiGrid(dataFilePath, datasetProjection, netLogoProjection);
+        } else if (extension.equalsIgnoreCase(GeoJsonReader.GEOJSON_EXTENSION) || 
+                   extension.equalsIgnoreCase(GeoJsonReader.JSON_EXTENSION)){
+            result = loadGeoJson(dataFilePath, netLogoProjection);
         } else {
             throw new ExtensionException("unsupported file type "+extension);
         }

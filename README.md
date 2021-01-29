@@ -444,7 +444,7 @@ documentation for [load-coordinate-system](#gisload-coordinate-system)
 ### `gis:project-lat-lon`
 
 ```NetLogo
-gis:project-lat-lon latitude longitude
+gis:project-lat-lon *latitude* *longitude*
 ```
 
 
@@ -453,7 +453,7 @@ gis:project-lat-lon latitude longitude
     transformation. 
 
     Like the `location-of` primitive, the reported xcor and ycor
-    values are reported in a two-item list of `[xcor ycor]`
+    values are reported in a two-item list of `[xcor ycor]` 
     and an empty list if the specified point is outside of 
     the bounds of the netlogo world. 
     For instance:
@@ -480,7 +480,7 @@ gis:project-lat-lon latitude longitude
 ### `gis:project-lat-lon-from-ellipsoid`
 
 ```NetLogo
-gis:project-lat-lon-from-ellipsoid latitude longitude ellipsoid-radius ellipsoid-inverse-flattening
+gis:project-lat-lon-from-ellipsoid *latitude* *longitude* *ellipsoid-radius* *ellipsoid-inverse-flattening*
 ```
 
 
@@ -523,19 +523,19 @@ gis:load-dataset *file*
 ```
 
 
-Loads the given data file, re-projecting the data as necessary if a
-global projection is defined and if the data file itself has an
-associated .prj file, then reports the resulting dataset.
+Loads the given data file, re-projecting the data as necessary. 
 
-If no ".prj" file is present, then `load-dataset`
-assumes that the projection of the data being loaded is the same as
+For ESRI shapefiles and ESRI grid files, if there is a ".prj" file 
+associated with the file, then `load-datset` will consult that file
+and re-project to the current global projection if needed. If no ".prj"
+file is found, then the data is assumed to use the same projection as
 the current global coordinate system.
 
-Relative paths are resolved relative to the location of the current
-model, or the user's home directory if the current model
-hasn't been saved yet.
+For GeoJSON files, as per the most-recent specification (RFC 7946), 
+the coordinate system for GeoJSON files is always WGS84 and will be 
+imported accordingly. 
 
-Currently, two types of data file are supported:
+Currently, three types of data file are supported:
 
 * "**.shp**" (ESRI shapefile): contains vector data,
   consisting of points, lines, or polygons. When the target file is a
@@ -544,6 +544,22 @@ Currently, two types of data file are supported:
   contains raster data, consisting of a grid of values. When
   the target file is an ASCII grid file, `load-dataset`
   reports a RasterDataset.
+* "**.geojson**" or "**.json**" (GeoJSON): contains vector data 
+  similar to shapefiles and similarly reports a VectorDataset. 
+
+Note that not all aspects of the GeoJSON standard are supported. 
+In particular, to be properly imported, a GeoJSON file must 
+satisfy the following: 
+
+* It only contain numeric or string data within the properties. 
+  all other json data will be stringified. 
+* All "Features" within a "FeatureCollection" must be of the same
+  shape type ("Point", "LineString", etc.) Additionally, if not all
+  the "Features" in the "FeatureCollection" have the same set of 
+  property names, default values will be supplied where there
+  are missing entries (0 for numbers and "" for strings.)
+* It must not use "GeometryCollection", which is not supported
+  
 
 
 

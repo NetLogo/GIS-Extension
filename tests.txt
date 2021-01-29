@@ -22,3 +22,56 @@ TestProjectLatLon-nad83-wgs84
 TestProjectLatLon-nad83-projected
   OPEN> extensions/gis/examples/project-lat-lon.nlogo
   O> run-test-nad83-projected
+
+TestGeoJSONImport_DC_Metro
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-metro
+
+TestGeoJSONImport_Point
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-Point
+  
+TestGeoJSONImport_MultiPoint
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-MultiPoint
+  
+TestGeoJSONImport_LineString
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-LineString
+  
+TestGeoJSONImport_MutliLineString
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-MultiLineString
+  
+TestGeoJSONImport_Polygon
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-Polygon
+
+TestGeoJSONImport_Polygon_with_hole
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-Polygon_with_hole
+
+TestGeoJSONImport_MultiPolygon
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-MultiPolygon
+  
+TestGeoJSONImport_Feature
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-Feature
+
+testGeoJSONImport_FeatureCollectionHomogenous
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-FeatureCollectionHomogenous
+  
+TestGeoJSONImport_FeatureCollectionHeterogenous
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  test-FeatureCollectionHeterogenous => true
+
+testGeoJSONImport_FeatureCollectionDefaultFilling
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  O> test-FeatureCollectionDefaultFilling
+  
+TestGeoJSONImport_GeometryCollection 
+  OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
+  test-GeometryCollection => true
+  
