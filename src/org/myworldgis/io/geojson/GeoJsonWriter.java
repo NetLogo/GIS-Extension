@@ -1,7 +1,9 @@
 package org.myworldgis.io.geojson;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Writer;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -26,32 +28,40 @@ public class GeoJsonWriter implements GeoJsonConstants {
         this.features = new JSONArray();
 
         setupJsonObject();
-
         processVectorFeatures();
-
         writeToFile();
     }
 
+    @SuppressWarnings("unchecked")
     private void setupJsonObject() {
-
+        root.put("type", "FeatureCollection");  
     }
 
+    @SuppressWarnings("unchecked")
     private void processVectorFeatures() throws IOException {
-        VectorDataset.Property[] props = dataset.getProperties();
+        VectorDataset.Property[] propSchema = dataset.getProperties();
         for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext(); ) {
-            System.out.println("---");
             VectorFeature f = i.next();
+
+            JSONObject thisFeatureJson = new JSONObject();
+            thisFeatureJson.put("type", "Feature");
+
             Geometry g = f.getGeometry();
-            System.out.println("geom: ");
-            System.out.println(g.getGeometryType());
-            for (VectorDataset.Property prop : props) {
-                System.out.println(prop.getName());
-                System.out.println(f.getProperty(prop.getName()));
+            thisFeatureJson.put("geometry", "null");
+
+            JSONObject thisPropertiesObj = new JSONObject();
+            for (VectorDataset.Property prop : propSchema) {
+                String propName = prop.getName();
+                thisPropertiesObj.put(propName, f.getProperty(propName));
             }
+            thisFeatureJson.put("properties", thisPropertiesObj);
+            this.features.add(thisFeatureJson);
         }
     }
 
-    private void writeToFile() {
-
+    @SuppressWarnings("unchecked")
+    private void writeToFile() throws IOException {
+        root.put("features", this.features);
+        file.writeBytes(root.toJSONString());
     }
 }
