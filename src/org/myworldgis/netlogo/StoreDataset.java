@@ -226,7 +226,7 @@ public final strictfp class StoreDataset extends GISExtension.Command {
             if (StringUtils.hasFileExtension(fileName, GeoJsonWriter.GEOJSON_EXTENSION ) ||
                 StringUtils.hasFileExtension(fileName, GeoJsonWriter.JSON_EXTENSION)) {
                 dataFile = storeGeoJsonFile((VectorDataset) arg0, dataFile);
-            } else { // TODO: make a decision on backwards compat. here. Before, any file extension would create a shapefile, even a nonsensical one. Even though its unlikely, there could be someone whose model breaks if the extension complains if there is a export with a weird or non-existent extension (they get converted into .shp anyway)
+            } else { // TODO: write a comment to explain this better
                 dataFile = storeShapefile((VectorDataset)arg0, dataFile);
             }
         } else {

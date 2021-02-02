@@ -75,3 +75,42 @@ TestGeoJSONImport_GeometryCollection
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   test-GeometryCollection => true
   
+TestGeoJSONExport_DC_Metro
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-metro
+
+TestGeoJSONExport_Point
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-Point
+  
+TestGeoJSONExport_MultiPoint
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-MultiPoint
+  
+TestGeoJSONExport_LineString
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-LineString
+  
+TestGeoJSONExport_MutliLineString
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-MultiLineString
+  
+TestGeoJSONExport_Polygon
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-Polygon
+
+TestGeoJSONExport_Polygon_with_hole
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-Polygon_with_hole
+
+TestGeoJSONExport_MultiPolygon
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-MultiPolygon
+  
+TestGeoJSONExport_Feature
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-Feature
+
+testGeoJSONExport_FeatureCollectionHomogenous
+  OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
+  O> test-FeatureCollectionHomogenous
