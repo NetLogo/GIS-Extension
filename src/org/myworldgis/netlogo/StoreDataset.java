@@ -188,14 +188,8 @@ public final strictfp class StoreDataset extends GISExtension.Command {
     }
 
     private static String storeGeoJsonFile(VectorDataset dataset, String filename) throws IOException{
- 
         GeoJsonWriter geojson = new GeoJsonWriter(new RandomAccessFile(filename, "rw"),
                                                   dataset);
-        // ESRIShapefileWriter shp = new ESRIShapefileWriter(new RandomAccessFile(shpFile, "rw"),
-        //                                                   dataset.getEnvelope(),
-        //                                                   esriShapeType(dataset),
-        //                                                   AbstractUnitConverter.IDENTITY,
-        //                                                   GISExtension.getState().factory());
         return filename;
     }
     
@@ -220,21 +214,24 @@ public final strictfp class StoreDataset extends GISExtension.Command {
         Object arg0 = args[0].get();
         String fileName = args[1].getString();
         String dataFile = context.attachCurrentDirectory(fileName);
+        boolean geojsonMode = StringUtils.hasFileExtension(fileName, GeoJsonWriter.GEOJSON_EXTENSION ) ||
+                              StringUtils.hasFileExtension(fileName, GeoJsonWriter.JSON_EXTENSION);
         if (arg0 instanceof RasterDataset) {
             dataFile = storeAsciiGrid((RasterDataset)arg0, dataFile);
         } else if (arg0 instanceof VectorDataset) {
-            if (StringUtils.hasFileExtension(fileName, GeoJsonWriter.GEOJSON_EXTENSION ) ||
-                StringUtils.hasFileExtension(fileName, GeoJsonWriter.JSON_EXTENSION)) {
+            if (geojsonMode) {
                 dataFile = storeGeoJsonFile((VectorDataset) arg0, dataFile);
-            } else { // TODO: write a comment to explain this better
+            } else {
                 dataFile = storeShapefile((VectorDataset)arg0, dataFile);
             }
         } else {
             throw new ExtensionException("not a dataset " + arg0);
         }
-        String prjFile = StringUtils.changeFileExtension(dataFile, "prj");
-        if (GISExtension.getState().getProjection() != null) {
-            storeProjection(GISExtension.getState().getProjection(), prjFile);
+        if (!geojsonMode) {
+            String prjFile = StringUtils.changeFileExtension(dataFile, "prj");
+            if (GISExtension.getState().getProjection() != null) {
+                storeProjection(GISExtension.getState().getProjection(), prjFile);
+            }
         }
     }
 }

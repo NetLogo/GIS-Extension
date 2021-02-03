@@ -50,12 +50,12 @@ public class GeoJsonWriter implements GeoJsonConstants {
             JSONObject thisFeatureJson = new JSONObject();
             thisFeatureJson.put("type", "Feature");
             thisFeatureJson.put("geometry", createGeometryObject(f.getGeometry()));
-            thisFeatureJson.put("properties", getPropertiesJsonObject(f, propSchema));
+            thisFeatureJson.put("properties", createPropertiesObject(f, propSchema));
             this.features.add(thisFeatureJson);
         }
     }
 
-    private JSONObject getPropertiesJsonObject(VectorFeature f, VectorDataset.Property[] propSchema) {
+    private JSONObject createPropertiesObject(VectorFeature f, VectorDataset.Property[] propSchema) {
         JSONObject props = new JSONObject();
         for (VectorDataset.Property prop : propSchema) {
             String propName = prop.getName();
@@ -153,8 +153,6 @@ public class GeoJsonWriter implements GeoJsonConstants {
 
         return out;
     }
-    
-    
     
     //--------------------------------------------------------------------------
     // Geometry to JSON Utils
