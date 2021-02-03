@@ -65,6 +65,43 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
     }
     
+    public static final strictfp class SetProperty extends GISExtension.Command {
+        
+        public String getAgentClassString() {
+            return "OTPL";
+        }
+        
+        public Syntax getSyntax() {
+            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
+                                                     Syntax.StringType(),
+                                                     Syntax.StringType() | Syntax.NumberType() });
+        }
+        
+        public void performInternal (Argument args[], Context context)
+                throws ExtensionException, LogoException {
+            VectorFeature feature = getFeature(args[0]);
+            String key = args[1].getString().toUpperCase();
+            if (!feature.hasProperty(key)) {
+                throw new ExtensionException("feature does not have property '" + key + "'");
+            }
+
+            Object value = args[2].get();
+            if (value instanceof String) {
+                if (feature.getProperty(key) instanceof String) {
+                    feature._properties.put(key, value);
+                } else {
+                    throw new ExtensionException("Tried to set a string property to a number value");
+                }
+            } else {
+                if (feature.getProperty(key) instanceof Number) {
+                    feature._properties.put(key, value);
+                } else {
+                    throw new ExtensionException("Tried to set a numeric property to a string value");
+                }
+            }
+        }
+    }
+
     /** */
     public static final strictfp class GetVertexLists extends GISExtension.Reporter {
 

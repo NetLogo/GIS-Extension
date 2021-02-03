@@ -156,6 +156,7 @@ and comments at the
 [`gis:vertex-lists-of`](#gisvertex-lists-of)
 [`gis:centroid-of`](#giscentroid-of)
 [`gis:location-of`](#gislocation-of)
+[`gis:set-property-value`](#gisset-property-value)
 [`gis:property-value`](#gisproperty-value)
 [`gis:find-features`](#gisfind-features)
 [`gis:find-one-feature`](#gisfind-one-feature)
@@ -718,6 +719,21 @@ Reports a two-element list containing the x and y values (in that
 order) of the given vertex translated into NetLogo world space
 using the current transformation, or an empty list if the given
 vertex lies outside the NetLogo world.
+
+
+
+### `gis:set-property-value`
+
+```NetLogo
+gis:set-property-value *VectorFeature* *property-name* *value*
+```
+
+
+Sets the value of the given property of the given VectorFeature. The 
+type of the given value (string or number) must match the property
+type of the VectorFeature. This command may be used in conjunction 
+with store-dataset to make changes to VectorFeatures and export 
+them back as GIS datasets. 
 
 
 

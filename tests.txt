@@ -3,6 +3,11 @@ linkDatasetWithDatasetBreeds
   O> setup
   test => true
 
+TestSetPropertyValue
+  OPEN> extensions/gis/examples/set_property.nlogo
+  O> setup
+  O> test
+ 
 TestProjectLatLon-wgs84-wgs84
   OPEN> extensions/gis/examples/project-lat-lon.nlogo
   O> run-test-wgs84-wgs84
