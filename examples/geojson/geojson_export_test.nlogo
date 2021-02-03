@@ -1,6 +1,10 @@
 extensions [gis]
 globals [dataset reimport]
 
+to-report verticies-to-tuples [list-of-verts]
+  report map gis:location-of list-of-verts
+end
+
 to test-metro
   clear-all
   set dataset gis:load-dataset "test_DC_metro_stations.geojson"
@@ -11,18 +15,44 @@ to test-metro
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
+
 end
 
 to test-Point
 	clear-all
 	set dataset gis:load-dataset "Point.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
+	gis:set-world-envelope (list -180 180 -90 90)
 	gis:set-drawing-color red
 	gis:draw dataset 1
-  clear-drawing
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
-  gis:draw reimport 1
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-MultiPoint
@@ -33,6 +63,20 @@ to test-MultiPoint
 	gis:draw dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-LineString
@@ -43,6 +87,20 @@ to test-LineString
 	gis:draw dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-MultiLineString
@@ -53,6 +111,20 @@ to test-MultiLineString
 	gis:draw dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-Polygon
@@ -63,6 +135,20 @@ to test-Polygon
 	gis:fill dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-Polygon_with_hole
@@ -73,6 +159,20 @@ to test-Polygon_with_hole
 	gis:fill dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-MultiPolygon
@@ -83,6 +183,20 @@ to test-MultiPolygon
 	gis:fill dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-Feature
@@ -114,6 +228,20 @@ to test-Feature
 
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-FeatureCollectionHomogenous
@@ -137,6 +265,20 @@ to test-FeatureCollectionHomogenous
 	
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
