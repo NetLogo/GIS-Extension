@@ -11,67 +11,67 @@ to test-metro
 end
 
 to test-Point
-	clear-all
-	set dataset gis:load-dataset "Point.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "Point.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
 end
 
 to test-MultiPoint
-	clear-all
-	set dataset gis:load-dataset "MultiPoint.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "MultiPoint.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
 end
 
 to test-LineString
-	clear-all
-	set dataset gis:load-dataset "LineString.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "LineString.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
 end
 
 to test-MultiLineString
-	clear-all
-	set dataset gis:load-dataset "MultiLineString.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "MultiLineString.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
 end
 
 to test-Polygon
-	clear-all
-	set dataset gis:load-dataset "Polygon.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:fill dataset 1
+  clear-all
+  set dataset gis:load-dataset "Polygon.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
 end
 
 to test-Polygon_with_hole
-	clear-all
-	set dataset gis:load-dataset "Polygon_with_hole.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:fill dataset 1
+  clear-all
+  set dataset gis:load-dataset "Polygon_with_hole.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
 end
 
 to test-MultiPolygon
-	clear-all
-	set dataset gis:load-dataset "MultiPolygon.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:fill dataset 1
+  clear-all
+  set dataset gis:load-dataset "MultiPolygon.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
 end
 
 to test-Feature
-	clear-all
-	set dataset gis:load-dataset "Feature.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "Feature.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
 
   let names gis:property-names dataset
   show names
@@ -94,11 +94,11 @@ to test-Feature
 end
 
 to test-FeatureCollectionHomogenous
-	clear-all
-	set dataset gis:load-dataset "FeatureCollectionHomogenous.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:fill dataset 1
+  clear-all
+  set dataset gis:load-dataset "FeatureCollectionHomogenous.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
 
   let names gis:property-names dataset
 
@@ -111,11 +111,11 @@ to test-FeatureCollectionHomogenous
 
   let feature1 gis:find-one-feature dataset "string" "stringVal1"
   if gis:property-value feature1 "number" != 1 [ error "feature0 has the wrong value" ]
-	
+  
 end
 
 to-report test-FeatureCollectionHeterogenous
-	clear-all
+  clear-all
   let passed true
   carefully [
     set dataset gis:load-dataset "FeatureCollectionHeterogenous.geojson"
@@ -133,11 +133,11 @@ to test-FeatureCollectionDefaultFilling
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:fill dataset 1
-	
+  
   let names gis:property-names dataset
 
   if length names != 3 [
-	  error "Wrong number of properties"
+    error "Wrong number of properties"
   ]
 
   let feature0 gis:find-one-feature dataset "key" "0"
@@ -149,7 +149,7 @@ to test-FeatureCollectionDefaultFilling
 end
 
 to-report test-GeometryCollection
-	clear-all
+  clear-all
   let passed true
   carefully [
     set dataset gis:load-dataset "GeometryCollection.geojson"

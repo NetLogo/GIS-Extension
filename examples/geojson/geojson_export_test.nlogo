@@ -32,11 +32,11 @@ to test-metro
 end
 
 to test-Point
-	clear-all
-	set dataset gis:load-dataset "Point.geojson"
-	gis:set-world-envelope (list -180 180 -90 90)
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "Point.geojson"
+  gis:set-world-envelope (list -180 180 -90 90)
+  gis:set-drawing-color red
+  gis:draw dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
@@ -56,11 +56,11 @@ to test-Point
 end
 
 to test-MultiPoint
-	clear-all
-	set dataset gis:load-dataset "MultiPoint.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "MultiPoint.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
@@ -80,11 +80,11 @@ to test-MultiPoint
 end
 
 to test-LineString
-	clear-all
-	set dataset gis:load-dataset "LineString.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "LineString.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
@@ -104,11 +104,11 @@ to test-LineString
 end
 
 to test-MultiLineString
-	clear-all
-	set dataset gis:load-dataset "MultiLineString.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "MultiLineString.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
@@ -128,11 +128,11 @@ to test-MultiLineString
 end
 
 to test-Polygon
-	clear-all
-	set dataset gis:load-dataset "Polygon.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:fill dataset 1
+  clear-all
+  set dataset gis:load-dataset "Polygon.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
@@ -152,11 +152,11 @@ to test-Polygon
 end
 
 to test-Polygon_with_hole
-	clear-all
-	set dataset gis:load-dataset "Polygon_with_hole.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:fill dataset 1
+  clear-all
+  set dataset gis:load-dataset "Polygon_with_hole.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
@@ -176,11 +176,11 @@ to test-Polygon_with_hole
 end
 
 to test-MultiPolygon
-	clear-all
-	set dataset gis:load-dataset "MultiPolygon.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:fill dataset 1
+  clear-all
+  set dataset gis:load-dataset "MultiPolygon.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
@@ -200,11 +200,11 @@ to test-MultiPolygon
 end
 
 to test-Feature
-	clear-all
-	set dataset gis:load-dataset "Feature.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:draw dataset 1
+  clear-all
+  set dataset gis:load-dataset "Feature.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
 
   let names gis:property-names dataset
   show names
@@ -245,11 +245,11 @@ to test-Feature
 end
 
 to test-FeatureCollectionHomogenous
-	clear-all
-	set dataset gis:load-dataset "FeatureCollectionHomogenous.geojson"
-	gis:set-world-envelope gis:envelope-of dataset
-	gis:set-drawing-color red
-	gis:fill dataset 1
+  clear-all
+  set dataset gis:load-dataset "FeatureCollectionHomogenous.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:fill dataset 1
 
   let names gis:property-names dataset
 
@@ -262,7 +262,7 @@ to test-FeatureCollectionHomogenous
 
   let feature1 gis:find-one-feature dataset "string" "stringVal1"
   if gis:property-value feature1 "number" != 1 [ error "feature0 has the wrong value" ]
-	
+  
   gis:store-dataset dataset "out.geojson"
   set reimport gis:load-dataset "out.geojson"
 
