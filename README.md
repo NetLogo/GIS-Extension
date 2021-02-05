@@ -525,6 +525,10 @@ gis:load-dataset *file*
 
 Loads the given data file, re-projecting the data as necessary. 
 
+Relative paths are resolved relative to the location of the current
+model, or the user's home directory if the current model
+hasn't been saved yet.
+
 For ESRI shapefiles and ESRI grid files, if there is a ".prj" file 
 associated with the file, then `load-datset` will consult that file
 and re-project to the current global projection if needed. If no ".prj"
@@ -570,14 +574,21 @@ gis:store-dataset *dataset* *file*
 ```
 
 
-Saves the given dataset to the given file. If the name of the file
-does not have the proper file extension, the extension will be
-automatically appended to the name. Relative paths are resolved
-relative to the location of the current model, or the user's
-home directory if the current model hasn't been saved yet.
+Exports the given dataset to the given file. 
 
-Currently, this primitive only works for RasterDatasets, and it can
-only save those datasets as ESRI ASCII grid files.
+For VectorDatasets, two file formats are supported, ESRI shapefiles
+and GeoJSON. If the given file name ends in ".geojson" or ".json", 
+then the file will be exported as a GeoJSON file. If the file name
+ends in any other extension or no extension at all, the dataset
+will be exported as a shapefile and the associated file extensions
+will be supplied (".shp", ".prj", etc.)
+
+For RasterDatasets, only ESRI ASCII grid files are supported and 
+the associated file extensions will be automatically supplied.
+
+Relative paths are resolved relative to the location of the current 
+model, or the user's home directory if the current model hasn't 
+been saved yet.
 
 
 

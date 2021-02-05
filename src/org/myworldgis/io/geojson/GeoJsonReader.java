@@ -23,10 +23,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class GeoJsonReader {
+public class GeoJsonReader implements GeoJsonConstants {
 
-    public final static String GEOJSON_EXTENSION = "geojson";
-    public final static String JSON_EXTENSION = "json";
     private static final Map<String, ShapeType> geoJsonStringTypesToShapeTypes;
     static {
         Map<String, ShapeType> tmpMap = new HashMap<String, ShapeType>();

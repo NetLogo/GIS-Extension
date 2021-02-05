@@ -1,5 +1,9 @@
 extensions [gis]
-globals [dataset]
+globals [dataset reimport]
+
+to-report verticies-to-tuples [list-of-verts]
+  report map gis:location-of list-of-verts
+end
 
 to test-metro
   clear-all
@@ -8,14 +12,47 @@ to test-metro
   gis:set-drawing-color red
   gis:draw dataset 1
 
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
+
 end
 
 to test-Point
   clear-all
   set dataset gis:load-dataset "Point.geojson"
-  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-world-envelope (list -180 180 -90 90)
   gis:set-drawing-color red
   gis:draw dataset 1
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-MultiPoint
@@ -24,6 +61,22 @@ to test-MultiPoint
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-LineString
@@ -32,6 +85,22 @@ to test-LineString
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-MultiLineString
@@ -40,6 +109,22 @@ to test-MultiLineString
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-Polygon
@@ -48,6 +133,22 @@ to test-Polygon
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:fill dataset 1
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-Polygon_with_hole
@@ -56,6 +157,22 @@ to test-Polygon_with_hole
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:fill dataset 1
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-MultiPolygon
@@ -64,6 +181,22 @@ to test-MultiPolygon
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:fill dataset 1
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-Feature
@@ -91,6 +224,24 @@ to test-Feature
   if gis:property-value first_item "not-supported-array" != "[1,2,3]" or gis:property-value first_item "not-supported-object" != "{\"key\":\"value\"}" [
     error "json stringify error"
   ]
+
+
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
+
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
+  ]
+
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
+  ]
+
 end
 
 to test-FeatureCollectionHomogenous
@@ -112,53 +263,22 @@ to test-FeatureCollectionHomogenous
   let feature1 gis:find-one-feature dataset "string" "stringVal1"
   if gis:property-value feature1 "number" != 1 [ error "feature0 has the wrong value" ]
   
-end
+  gis:store-dataset dataset "out.geojson"
+  set reimport gis:load-dataset "out.geojson"
 
-to-report test-FeatureCollectionHeterogenous
-  clear-all
-  let passed true
-  carefully [
-    set dataset gis:load-dataset "FeatureCollectionHeterogenous.geojson"
-    set passed false
-  ] [
-
+  let originalPoints []
+  foreach gis:feature-list-of dataset [ vf ->
+    set originalPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) originalPoints
+  ]
+  let reimportPoints []
+  foreach gis:feature-list-of reimport [ vf ->
+    set reimportPoints lput (map verticies-to-tuples (gis:vertex-lists-of vf)) reimportPoints
   ]
 
-  report passed
-end
-
-to test-FeatureCollectionDefaultFilling
-  clear-all
-  set dataset gis:load-dataset "FeatureCollectionDefaultFilling.geojson"
-  gis:set-world-envelope gis:envelope-of dataset
-  gis:set-drawing-color red
-  gis:fill dataset 1
-  
-  let names gis:property-names dataset
-
-  if length names != 3 [
-    error "Wrong number of properties"
+  if originalPoints != reimportPoints [
+    error "Geometries in Point don't match up"
   ]
 
-  let feature0 gis:find-one-feature dataset "key" "0"
-  if gis:property-value feature0 "number" != 0 [ error "numeric default not working" ]
-
-  let feature1 gis:find-one-feature dataset "key" "1"
-  if gis:property-value feature1 "string" != "" [ error "string default not working" ]
-
-end
-
-to-report test-GeometryCollection
-  clear-all
-  let passed true
-  carefully [
-    set dataset gis:load-dataset "GeometryCollection.geojson"
-    set passed false
-  ] [
-
-  ]
-
-  report passed
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -195,6 +315,57 @@ BUTTON
 143
 NIL
 test-Feature
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+64
+186
+157
+219
+NIL
+test-Point
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+77
+284
+188
+317
+NIL
+test-Polygon
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+67
+382
+208
+415
+NIL
+test-MultiPolygon
 NIL
 1
 T
