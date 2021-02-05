@@ -130,6 +130,7 @@ public final strictfp class GISExtension extends DefaultClassManager {
         primitiveManager.addPrimitive("project-lat-lon", new ProjectLatLon.ProjectWGS84());
         primitiveManager.addPrimitive("project-lat-lon-from-ellipsoid", new ProjectLatLon.ProjectFromEllipsoid());
         primitiveManager.addPrimitive("property-value", new VectorFeature.GetProperty());
+        primitiveManager.addPrimitive("set-property-value", new VectorFeature.SetProperty());
         primitiveManager.addPrimitive("find-features", new VectorDatasetSearch.FindAll());
         primitiveManager.addPrimitive("find-one-feature", new VectorDatasetSearch.FindOne());
         primitiveManager.addPrimitive("find-less-than", new VectorDatasetSearch.FindLessThan());

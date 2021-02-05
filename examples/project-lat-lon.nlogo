@@ -49,7 +49,7 @@ to load-data
 
 
 
-  set world-dataset gis:load-dataset "project-lat-lon-testing/countries.shp"
+  set world-dataset gis:load-dataset "shared-datasets/countries.shp"
 
 end
 
@@ -57,7 +57,7 @@ to run-test-wgs84-wgs84 ;; wgs84 data projected onto wgs84
   clear-all
   gis:set-coordinate-system "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"primem\",0.0],UNIT[\"Degree\",0.017453292519943295]]" ;; default WGS84 geographic
   set points-dataset gis:load-dataset "project-lat-lon-testing/mid-WGS84.shp"
-  set world-dataset gis:load-dataset "project-lat-lon-testing/countries.shp"
+  set world-dataset gis:load-dataset "shared-datasets/countries.shp"
   test-project-lat-lon
 end
 
@@ -65,7 +65,7 @@ to run-test-wgs84-projected ;; wgs84 data projected onto projected coord system 
   clear-all
   gis:set-coordinate-system "PROJCS[\"North_America_Albers_Equal_Area_Conic\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"longitude_of_center\",-96.0],PARAMETER[\"Standard_Parallel_1\",20.0],PARAMETER[\"Standard_Parallel_2\",60.0],PARAMETER[\"latitude_of_center\",40.0],UNIT[\"Meter\",1.0],AUTHORITY[\"Esri\",\"102008\"]]"
   set points-dataset gis:load-dataset "project-lat-lon-testing/mid-WGS84.shp"
-  set world-dataset gis:load-dataset "project-lat-lon-testing/countries.shp"
+  set world-dataset gis:load-dataset "shared-datasets/countries.shp"
   test-project-lat-lon
 end
 
@@ -73,7 +73,7 @@ to run-test-nad83-nad83 ;; NAD83 (epsg104145) data projected onto NAD83
   clear-all
   gis:set-coordinate-system "GEOGCS[\"GCS_NAD_1983_2011\",DATUM[\"D_NAD_1983_2011\",SPHEROID[\"GRS_1980\",6378137.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.017453292519943295]]"
   set points-dataset gis:load-dataset "project-lat-lon-testing/mid-NAD83-2001-epsg104145.shp"
-  set world-dataset gis:load-dataset "project-lat-lon-testing/countries.shp"
+  set world-dataset gis:load-dataset "shared-datasets/countries.shp"
   test-project-lat-lon-with-nad83
 end
 
@@ -81,7 +81,7 @@ to run-test-nad83-wgs84 ;; NAD83 (epsg104145) data projected onto WGS84
   clear-all
   gis:set-coordinate-system "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"primem\",0.0],UNIT[\"Degree\",0.017453292519943295]]" ;; default WGS84 geographic
   set points-dataset gis:load-dataset "project-lat-lon-testing/mid-NAD83-2001-epsg104145.shp"
-  set world-dataset gis:load-dataset "project-lat-lon-testing/countries.shp"
+  set world-dataset gis:load-dataset "shared-datasets/countries.shp"
   test-project-lat-lon-with-nad83
 end
 
@@ -89,7 +89,7 @@ to run-test-nad83-projected ;; NAD83 (epsg104145) data projected onto projected 
   clear-all
   gis:set-coordinate-system "PROJCS[\"North_America_Albers_Equal_Area_Conic\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"False_Easting\",0.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"longitude_of_center\",-96.0],PARAMETER[\"Standard_Parallel_1\",20.0],PARAMETER[\"Standard_Parallel_2\",60.0],PARAMETER[\"latitude_of_center\",40.0],UNIT[\"Meter\",1.0],AUTHORITY[\"Esri\",\"102008\"]]"
   set points-dataset gis:load-dataset "project-lat-lon-testing/mid-NAD83-2001-epsg104145.shp"
-  set world-dataset gis:load-dataset "project-lat-lon-testing/countries.shp"
+  set world-dataset gis:load-dataset "shared-datasets/countries.shp"
   test-project-lat-lon-with-nad83
 end
 
