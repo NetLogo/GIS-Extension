@@ -7,14 +7,26 @@ package org.myworldgis.netlogo;
 import com.vividsolutions.jts.algorithm.CentroidArea;
 import com.vividsolutions.jts.algorithm.CentroidLine;
 import com.vividsolutions.jts.algorithm.CentroidPoint;
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryComponentFilter;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.triangulate.DelaunayTriangulationBuilder;
+
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.myworldgis.netlogo.Painting;
+
+import org.myworldgis.netlogo.VectorDataset.ShapeType;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
@@ -174,6 +186,34 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
     }
 
+    public static final strictfp class GetSamplePointInside extends GISExtension.Reporter {
+
+        public String getAgentClassString() {
+            return "OTPL";
+        }
+        
+        public Syntax getSyntax() {
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
+                                         Syntax.WildcardType());
+        }
+ 
+        public Object reportInternal (Argument args[], Context context) 
+                throws ExtensionException, LogoException {
+
+            VectorFeature feature = getFeature(args[0]);
+            if (feature.getShapeType() != ShapeType.POLYGON) {
+                throw new ExtensionException("Tried to get a point inside of a non-polygon vector feature");
+            }
+
+            feature.setupTriangulation(context);
+
+            CentroidArea ca = new CentroidArea();
+            ca.add(feature.getGeometry());
+            return new Vertex(ca.getCentroid());
+
+        }
+    }
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
@@ -201,6 +241,10 @@ public final strictfp class VectorFeature implements ExtensionObject {
     
     /** */
     private Map<String,Object> _properties;
+
+    private Geometry _triangulation;
+
+    private Double[] _triangulation_areas;  
     
     //--------------------------------------------------------------------------
     // Constructors
@@ -246,6 +290,33 @@ public final strictfp class VectorFeature implements ExtensionObject {
     /** */
     public Object getProperty (String name) {
         return _properties.get(name.toUpperCase());
+    }
+
+    private void setupTriangulation (Context context) throws ExtensionException {
+        DelaunayTriangulationBuilder builder = new DelaunayTriangulationBuilder();
+        builder.setSites(_geometry);
+        builder.setTolerance(0.0);
+        _triangulation = builder.getTriangles(_geometry.getFactory());
+        _triangulation = _triangulation.intersection(_geometry);
+
+        {
+            Geometry geom = _triangulation;
+            
+            BufferedImage drawing = context.getDrawing();
+            Graphics2D g = (Graphics2D)drawing.getGraphics();
+
+            g.setTransform(Painting.getTransform(context.getAgent().world(),
+                                                drawing.getWidth(),
+                                                drawing.getHeight()));
+            AffineTransform t = g.getTransform();
+            double unitsPerPixel = 1.0 / StrictMath.max(t.getScaleX(), t.getScaleY());
+            float segmentRadius = (float)(unitsPerPixel * 1);
+            g.setColor(GISExtension.getState().getColor());
+            g.setStroke(new BasicStroke(segmentRadius, 
+                                        BasicStroke.CAP_BUTT,
+                                        BasicStroke.JOIN_BEVEL)); 
+            g.draw(Painting.toShape(_triangulation, segmentRadius));
+        }
     }
     
     //--------------------------------------------------------------------------
