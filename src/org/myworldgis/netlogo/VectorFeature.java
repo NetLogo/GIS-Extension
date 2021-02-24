@@ -20,9 +20,11 @@ import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 import org.myworldgis.netlogo.Painting;
 
@@ -196,6 +198,35 @@ public final strictfp class VectorFeature implements ExtensionObject {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.WildcardType());
         }
+
+        private static Coordinate randomPointInsideTriangle (Geometry tri) {
+            // For more, see:
+            //  Weisstein, Eric W. "Triangle Point Picking." From MathWorld--A Wolfram Web Resource. https://mathworld.wolfram.com/TrianglePointPicking.html 
+            Random rand = new Random();
+            double weight_b = rand.nextDouble();
+            double weight_c = rand.nextDouble();
+
+            Coordinate[] coords = tri.getCoordinates();
+            Coordinate p_a = coords[0];
+            Coordinate p_b = coords[1];
+            Coordinate p_c = coords[2];
+
+            if (weight_b + weight_c > 1.0) {
+                weight_b = 1.0 - weight_b;
+                weight_c = 1.0 - weight_c;
+            }
+
+            double b_x = weight_b * (p_b.x - p_a.x); 
+            double b_y = weight_b * (p_b.y - p_a.y); 
+            double c_x = weight_c * (p_c.x - p_a.x); 
+            double c_y = weight_c * (p_c.y - p_a.y); 
+
+            double x = b_x + c_x + p_a.x;
+            double y = b_y + c_y + p_a.y;
+
+            return new Coordinate(x, y);
+        }
+
  
         public Object reportInternal (Argument args[], Context context) 
                 throws ExtensionException, LogoException {
@@ -205,11 +236,24 @@ public final strictfp class VectorFeature implements ExtensionObject {
                 throw new ExtensionException("Tried to get a point inside of a non-polygon vector feature");
             }
 
-            feature.setupTriangulation(context);
+            if (feature._triangulation == null) {
+                feature.setupTriangulation(context);
+            }
 
-            CentroidArea ca = new CentroidArea();
-            ca.add(feature.getGeometry());
-            return new Vertex(ca.getCentroid());
+            Random r = new Random();
+            double randBetween = r.nextDouble() * feature._total_area;
+
+            // Arrays.binarySearch will return `(-(insertion point) - 1)`  if the value is not found within the array,
+            // where the insertion point is the point where the key would be placed if it were inserted
+            // https://docs.oracle.com/javase/7/docs/api/java/util/Arrays.html#binarySearch(double[],%20double)
+            // - James Hovet 2/24/21
+            int index = (- Arrays.binarySearch(feature._triangulation_areas_cumulative, randBetween)) - 1;
+
+            // System.out.println(randBetween + " : " + index + " of " + feature._triangulation_areas_cumulative.length);
+
+            Coordinate out = randomPointInsideTriangle(feature._triangulation.getGeometryN(index));
+
+            return new Vertex(out);
 
         }
     }
@@ -242,9 +286,12 @@ public final strictfp class VectorFeature implements ExtensionObject {
     /** */
     private Map<String,Object> _properties;
 
+    /** These three only used for sample-point-inside and are only intialized when the first sample point is 
+     * requested - James Hovet 2/24/21
+     */
     private Geometry _triangulation;
-
-    private Double[] _triangulation_areas;  
+    private double[] _triangulation_areas_cumulative;  
+    private double _total_area;
     
     //--------------------------------------------------------------------------
     // Constructors
@@ -299,23 +346,12 @@ public final strictfp class VectorFeature implements ExtensionObject {
         _triangulation = builder.getTriangles(_geometry.getFactory());
         _triangulation = _triangulation.intersection(_geometry);
 
-        {
-            Geometry geom = _triangulation;
-            
-            BufferedImage drawing = context.getDrawing();
-            Graphics2D g = (Graphics2D)drawing.getGraphics();
-
-            g.setTransform(Painting.getTransform(context.getAgent().world(),
-                                                drawing.getWidth(),
-                                                drawing.getHeight()));
-            AffineTransform t = g.getTransform();
-            double unitsPerPixel = 1.0 / StrictMath.max(t.getScaleX(), t.getScaleY());
-            float segmentRadius = (float)(unitsPerPixel * 1);
-            g.setColor(GISExtension.getState().getColor());
-            g.setStroke(new BasicStroke(segmentRadius, 
-                                        BasicStroke.CAP_BUTT,
-                                        BasicStroke.JOIN_BEVEL)); 
-            g.draw(Painting.toShape(_triangulation, segmentRadius));
+        int numTriangles = _triangulation.getNumGeometries();
+        _triangulation_areas_cumulative = new double[numTriangles];
+        for (int i = 0; i < numTriangles; i++) {
+            double triangleArea = _triangulation.getGeometryN(i).getArea();
+            _total_area += triangleArea;
+            _triangulation_areas_cumulative[i] = _total_area;
         }
     }
     
