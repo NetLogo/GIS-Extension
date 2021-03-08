@@ -10,25 +10,16 @@ import com.vividsolutions.jts.algorithm.CentroidPoint;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryComponentFilter;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.triangulate.DelaunayTriangulationBuilder;
-
-import java.awt.Graphics2D;
-import java.awt.BasicStroke;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-
-import org.myworldgis.netlogo.Painting;
-
 import org.myworldgis.netlogo.VectorDataset.ShapeType;
+import org.myworldgis.util.TriangulationUtil;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
@@ -199,12 +190,11 @@ public final strictfp class VectorFeature implements ExtensionObject {
                                          Syntax.WildcardType());
         }
 
-        private static Coordinate randomPointInsideTriangle (Geometry tri) {
+        private static Coordinate randomPointInsideTriangle (Geometry tri, Random rng) {
             // For more, see:
             //  Weisstein, Eric W. "Triangle Point Picking." From MathWorld--A Wolfram Web Resource. https://mathworld.wolfram.com/TrianglePointPicking.html 
-            Random rand = new Random();
-            double weight_b = rand.nextDouble();
-            double weight_c = rand.nextDouble();
+            double weight_b = rng.nextDouble();
+            double weight_c = rng.nextDouble();
 
             Coordinate[] coords = tri.getCoordinates();
             Coordinate p_a = coords[0];
@@ -227,6 +217,16 @@ public final strictfp class VectorFeature implements ExtensionObject {
             return new Coordinate(x, y);
         }
 
+        private Geometry getRandomTriangleWeightedByArea(VectorFeature feature, Random rng){
+            double randBetween = rng.nextDouble() * feature._total_area;
+            // Arrays.binarySearch will return `(-(insertion point) - 1)`  if the value is not found within the array,
+            // where `insertion point` is the point where the key would be placed if it were to be inserted
+            // https://docs.oracle.com/javase/7/docs/api/java/util/Arrays.html#binarySearch(double[],%20double)
+            // - James Hovet 2/24/21
+            int triangleIndex = (- Arrays.binarySearch(feature._triangulation_areas_cumulative, randBetween)) - 1;
+            return feature._triangulation.getGeometryN(triangleIndex);
+        }
+
  
         public Object reportInternal (Argument args[], Context context) 
                 throws ExtensionException, LogoException {
@@ -237,24 +237,14 @@ public final strictfp class VectorFeature implements ExtensionObject {
             }
 
             if (feature._triangulation == null) {
-                feature.setupTriangulation(context);
+                feature.setupTriangulation();
             }
 
-            Random r = new Random();
-            double randBetween = r.nextDouble() * feature._total_area;
-
-            // Arrays.binarySearch will return `(-(insertion point) - 1)`  if the value is not found within the array,
-            // where the insertion point is the point where the key would be placed if it were inserted
-            // https://docs.oracle.com/javase/7/docs/api/java/util/Arrays.html#binarySearch(double[],%20double)
-            // - James Hovet 2/24/21
-            int index = (- Arrays.binarySearch(feature._triangulation_areas_cumulative, randBetween)) - 1;
-
-            // System.out.println(randBetween + " : " + index + " of " + feature._triangulation_areas_cumulative.length);
-
-            Coordinate out = randomPointInsideTriangle(feature._triangulation.getGeometryN(index));
+            Random rng = context.getRNG();
+            Geometry chosenTriangle = getRandomTriangleWeightedByArea(feature, rng);
+            Coordinate out = randomPointInsideTriangle(chosenTriangle, rng);
 
             return new Vertex(out);
-
         }
     }
 
@@ -339,13 +329,8 @@ public final strictfp class VectorFeature implements ExtensionObject {
         return _properties.get(name.toUpperCase());
     }
 
-    private void setupTriangulation (Context context) throws ExtensionException {
-        DelaunayTriangulationBuilder builder = new DelaunayTriangulationBuilder();
-        builder.setSites(_geometry);
-        builder.setTolerance(0.0);
-        _triangulation = builder.getTriangles(_geometry.getFactory());
-        _triangulation = _triangulation.intersection(_geometry);
-
+    private void setupTriangulation () throws ExtensionException {
+        _triangulation = TriangulationUtil.triangulate(_geometry);
         int numTriangles = _triangulation.getNumGeometries();
         _triangulation_areas_cumulative = new double[numTriangles];
         for (int i = 0; i < numTriangles; i++) {
