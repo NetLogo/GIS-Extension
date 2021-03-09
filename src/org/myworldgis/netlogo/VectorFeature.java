@@ -334,8 +334,8 @@ public final strictfp class VectorFeature implements ExtensionObject {
         int numTriangles = _triangulation.getNumGeometries();
         _triangulation_areas_cumulative = new double[numTriangles];
         for (int i = 0; i < numTriangles; i++) {
-            double triangleArea = _triangulation.getGeometryN(i).getArea();
-            _total_area += triangleArea;
+            double thisTriangleArea = _triangulation.getGeometryN(i).getArea();
+            _total_area += thisTriangleArea;
             _triangulation_areas_cumulative[i] = _total_area;
         }
     }
