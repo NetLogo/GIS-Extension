@@ -36,6 +36,8 @@ public class TriangulationUtil {
         return factory.createPolygon(coords);
     }
 
+    // Consumes triangle verts from the tinfour triangulation and turns them into JTS Polygon triangles within a 
+    // GeometryCollection. - James Hovet 3/8/21
     private static class GeometryCollectionBuilder implements Consumer<Vertex[]> {
         GeometryFactory factory;
         Geometry geom;
@@ -61,46 +63,49 @@ public class TriangulationUtil {
 
     }
 
+    public static PolygonConstraint constraintFromLineString(LineString lineString) {
+        CoordinateSequence seq = lineString.getCoordinateSequence();
+        Vertex[] exteriorVertices = new Vertex[seq.size() - 1];
+        for (int i = 0; i < exteriorVertices.length; i++) {
+            Coordinate c = seq.getCoordinate(i);
+            exteriorVertices[exteriorVertices.length - i - 1] = new Vertex(c.x, c.y, 0);
+        }
+        PolygonConstraint polygonConstraint = new PolygonConstraint(Arrays.asList(exteriorVertices));
+        polygonConstraint.complete();
+        return polygonConstraint;
+    }
+
     public static Geometry triangulate(Geometry geom) throws ExtensionException {
         List<IConstraint> constraints = new ArrayList<>();
         
-        // Initialize the nominal point spacing to its upper bound. -James Hovet 3/8/21
         double nominalPointSpacing = geom.getEnvelopeInternal().maxExtent();
-        int numGeometries = geom.getNumGeometries();
-        for (int n = 0; n < numGeometries; n++) {
-            Polygon thisPolygon = (Polygon) geom.getGeometryN(n);
-            LineString outerRing = thisPolygon.getExteriorRing();
-            CoordinateSequence seq = outerRing.getCoordinateSequence();
-            Vertex[] exteriorVertices = new Vertex[seq.size() - 1];
-            for (int i = 0; i < exteriorVertices.length; i++) {
-                Coordinate c = seq.getCoordinate(i);
-                exteriorVertices[exteriorVertices.length - i - 1] = new Vertex(c.x, c.y, 0);
-            }
-            PolygonConstraint polygonConstraint = new PolygonConstraint(Arrays.asList(exteriorVertices));
-            polygonConstraint.complete();
-            constraints.add(polygonConstraint);
-            nominalPointSpacing = Math.min(nominalPointSpacing, polygonConstraint.getNominalPointSpacing());
 
-            int numInteriorRings = thisPolygon.getNumInteriorRing();
-            for(int interiorRing = 0; interiorRing < numInteriorRings; interiorRing++) {
-                LineString thisRing = thisPolygon.getInteriorRingN(interiorRing);
-                CoordinateSequence thisSeq = thisRing.getCoordinateSequence();
-                Vertex[] verts = new Vertex[thisSeq.size() - 1];
-                for (int i = 0; i < verts.length; i++) {
-                    Coordinate c = thisSeq.getCoordinate(i);
-                    verts[verts.length - i - 1] = new Vertex(c.x, c.y, 0);
-                }
-                PolygonConstraint thisConstraint = new PolygonConstraint(Arrays.asList(verts));
-                nominalPointSpacing = Math.min(nominalPointSpacing, polygonConstraint.getNominalPointSpacing());
-                thisConstraint.complete();
-                constraints.add(thisConstraint);
+        for (int n = 0; n < geom.getNumGeometries(); n++) {
+            Polygon thisPolygon = (Polygon) geom.getGeometryN(n);
+
+            PolygonConstraint outerConstraint = constraintFromLineString(thisPolygon.getExteriorRing());
+            constraints.add(outerConstraint);
+            nominalPointSpacing = Math.min(nominalPointSpacing, outerConstraint.getNominalPointSpacing());
+
+            for (int interiorRing = 0; interiorRing < thisPolygon.getNumInteriorRing(); interiorRing++) {
+                PolygonConstraint thisHoleConstraint = constraintFromLineString(thisPolygon.getInteriorRingN(interiorRing));
+                constraints.add(thisHoleConstraint);
+                nominalPointSpacing = Math.min(nominalPointSpacing, thisHoleConstraint.getNominalPointSpacing());
             }
         }
 
-        int attempts = 0;
-        nominalPointSpacing /= 1000.0; // Reduce the number of times we have to attempt a higher resolution - James Hovet 3/8/21
+        // This library requires a "nominal point spacing" constant in order to function and unfortunatly, doesn't fail
+        // gracefully when the chosen constant is to large or too small. Thankfully it can be within a few orders of 
+        // magnitude of the "ideal" and still function, so we can just start at an upper bound generated from the 
+        // point spacing of the input polygons and try a few until one works or we realize that the input is 
+        // nonsensical. In my testing, all sane/real-world datasets needed a maximum of one extra attempt, 
+        // and I had to create a dataset with an outlandish precision of 10^-17 to reach a point where we give up.  
+        // -James Hovet 3/8/21
+
+        nominalPointSpacing /= 1000.0;
         IIncrementalTin tin = new SemiVirtualIncrementalTin(nominalPointSpacing);
-        while (attempts < 5){
+        int triangulationAttempts = 0;
+        while (triangulationAttempts < 5) {
             try {
                 tin.addConstraints(constraints, true);
                 break;
@@ -109,10 +114,10 @@ public class TriangulationUtil {
                 nominalPointSpacing /= 1000.0;
                 tin = new SemiVirtualIncrementalTin(nominalPointSpacing);
             }
-            attempts += 1;
+            triangulationAttempts += 1;
         }
         
-        if (attempts >= 5){
+        if (triangulationAttempts >= 5) {
             throw new ExtensionException("This polygon is too dense and/or complex to sample a point wihin it. Try simplifying the vector dataset with a tool like QGIS/GRASS v.generalize: https://docs.qgis.org/latest/en/docs/training_manual/processing/generalize.html");
         }
         
