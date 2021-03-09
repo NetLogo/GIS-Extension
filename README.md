@@ -155,6 +155,7 @@ and comments at the
 [`gis:feature-list-of`](#gisfeature-list-of)
 [`gis:vertex-lists-of`](#gisvertex-lists-of)
 [`gis:centroid-of`](#giscentroid-of)
+[`gis:sample-point-inside`](#gissample-point-inside)
 [`gis:location-of`](#gislocation-of)
 [`gis:set-property-value`](#gisset-property-value)
 [`gis:property-value`](#gisproperty-value)
@@ -716,6 +717,29 @@ weighted by segment length. For polygon datasets, the centroid is
 defined as the weighted sum of the centroids of a decomposition of
 the area into (possibly overlapping) triangles. See <a href="http://www.faqs.org/faqs/graphics/algorithms-faq/" target="_blank">this FAQ</a>
 for more details on the polygon centroid algorithm.
+
+
+
+### `gis:sample-point-inside`
+
+```NetLogo
+gis:sample-point-inside *VectorFeature*
+```
+
+
+Reports a single randomly-generated Vertex that lies within the
+given feature polygon. Generated points are uniformly
+distributed within the polygon and both polygon holes and 
+multi-polygon features are supported.
+
+```
+; create 100 turtles randomly distributed throught a VectorFeature `vf`
+crt 100 [
+  let loc gis:location-of gis:sample-point-inside vf
+  set xcor item 0 loc
+  set ycor item 1 loc
+]
+```
 
 
 
