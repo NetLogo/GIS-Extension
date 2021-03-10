@@ -8,6 +8,7 @@ import org.nlogo.agent.World;
 import org.nlogo.api.AgentException;
 import org.nlogo.api.Argument;
 import org.nlogo.api.ExtensionException;
+import org.nlogo.core.LogoList;
 import org.nlogo.core.Syntax;
 import org.nlogo.nvm.AssemblerAssistant;
 import org.nlogo.nvm.CustomAssembled;
@@ -15,26 +16,25 @@ import org.nlogo.nvm.ExtensionContext;
 import scala.Option;
 import scala.Some;
 import scala.collection.JavaConverters;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public strictfp class CreateTurtlesFromPoints  {
+public strictfp class CreateTurtlesFromPoints {
 
-    private static Syntax turtleCreationCommandSyntaxHelper(Object[] syntaxTokens){
+    private static Syntax turtleCreationCommandSyntaxHelper(Object[] syntaxTokens) {
         scala.collection.immutable.List<Object> list = JavaConverters.asScalaBuffer(Arrays.asList(syntaxTokens)).toList();
         return Syntax.commandSyntax(list, Option.empty(), Option.empty(), "O---", Some.apply("-T--"), false, true);
     }
 
-    public static strictfp class Automatic extends GISExtension.Command implements CustomAssembled {
+    private static abstract strictfp class TurtlesFromPoints extends GISExtension.Command implements CustomAssembled {
 
-        public Syntax getSyntax() {
-            return turtleCreationCommandSyntaxHelper(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
-       }
+        public abstract Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) throws ExtensionException;
 
-        public void performInternal (Argument args[], org.nlogo.api.Context context)
+        public void performInternal(Argument args[], org.nlogo.api.Context context)
                 throws ExtensionException, AgentException {
             ExtensionContext eContext = (ExtensionContext) context;
             org.nlogo.nvm.Context nvmContext = eContext.nvmContext();
@@ -60,37 +60,26 @@ public strictfp class CreateTurtlesFromPoints  {
                 throw new ExtensionException(breedName + " is not a defined breed");
             }
 
-            int allTurtlesVarCount = world.getVariablesArraySize((org.nlogo.api.Turtle)null, world.turtles());
-            int breedVarCount = world.getVariablesArraySize((org.nlogo.api.Turtle)null, agentSet);
+            int allTurtlesVarCount = world.getVariablesArraySize((org.nlogo.api.Turtle) null, world.turtles());
+            int breedVarCount = world.getVariablesArraySize((org.nlogo.api.Turtle) null, agentSet);
             String[] variableNames = new String[breedVarCount];
             for (int i = 0; i < allTurtlesVarCount; i += 1) {
-                String varName = world.turtlesOwnNameAt(i);
-                variableNames[i] = world.turtlesOwnNameAt(i);
+                variableNames[i] = world.turtlesOwnNameAt(i).toUpperCase();
             }
             for (int i = allTurtlesVarCount; i < breedVarCount; i += 1) {
-                variableNames[i] = world.breedsOwnNameAt(agentSet, i);
+                variableNames[i] = world.breedsOwnNameAt(agentSet, i).toUpperCase();
             }
 
             VectorDataset.Property[] properties = dataset.getProperties();
             List<String> variableNamesList = Arrays.asList(variableNames);
 
-            HashMap<String, Integer> propertyNameToTurtleVarIndex = new HashMap<String, Integer>();
-            for (VectorDataset.Property prop : properties){
-                String propertyName = prop.getName();
-                if (propertyName.equalsIgnoreCase(("breed")) || propertyName.equalsIgnoreCase("who")) {
-                    continue;
-                }
-                int index = variableNamesList.indexOf(propertyName.replace(' ', '-'));
-                if (index != -1) {
-                    propertyNameToTurtleVarIndex.put(prop.getName(), index);
-                }
-            }
+            Map<String, Integer> propertyNameToTurtleVarIndex = getPropertyNameToTurtleVarIndex(variableNamesList, properties, args);
 
             GISExtensionState state = GISExtension.getState();
             Collection<VectorFeature> features = dataset.getFeatures();
             for (VectorFeature feature : features) {
                 Geometry geom = feature.getGeometry();
-                for (int subPointIndex = 0; subPointIndex < geom.getNumGeometries(); subPointIndex ++) {
+                for (int subPointIndex = 0; subPointIndex < geom.getNumGeometries(); subPointIndex++) {
                     Turtle turtle = world.createTurtle(agentSet);
 
                     for (Map.Entry<String, Integer> entry : propertyNameToTurtleVarIndex.entrySet()) {
@@ -109,28 +98,74 @@ public strictfp class CreateTurtlesFromPoints  {
             nvmContext.runExclusiveJob(agentSet, nvmContext.ip + 1);
         }
 
-        public void assemble(AssemblerAssistant assemblerAssistant){
+        public void assemble(AssemblerAssistant assemblerAssistant) {
             assemblerAssistant.block();
             assemblerAssistant.done();
         }
+
+        protected Map<String, Integer> getAutomaticPropertyNameToTurtleVarIndexMappings(List<String> variableNamesList, VectorDataset.Property[] properties) {
+            HashMap<String, Integer> propertyNameToTurtleVarIndex = new HashMap<String, Integer>();
+            for (VectorDataset.Property prop : properties) {
+                String propertyName = prop.getName();
+                if (propertyName.equalsIgnoreCase(("breed")) || propertyName.equalsIgnoreCase("who")) {
+                    continue;
+                }
+                int index = variableNamesList.indexOf(propertyName.toUpperCase().replace(' ', '-'));
+                if (index != -1) {
+                    propertyNameToTurtleVarIndex.put(prop.getName(), index);
+                }
+            }
+            return propertyNameToTurtleVarIndex;
+        }
     }
 
-//    public static strictfp class Manual extends GISExtension.Command {
-//
-//        public String getAgentClassString() {
-//            return "O";
-//        }
-//
-//        public Syntax getSyntax() {
-//            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
-//                                                    Syntax.StringType(),
-//                                                    Syntax.ListType(),
-//                                                    Syntax.CommandBlockType() | Syntax.OptionalType()});
-//        }
-//
-//        public void performInternal (Argument args[], org.nlogo.api.Context context)
-//                throws ExtensionException {
-//                    System.out.println(args);
-//        }
-//    }
+    public static strictfp class TurtlesFromPointsAutomatic extends TurtlesFromPoints {
+
+        public Syntax getSyntax() {
+            return turtleCreationCommandSyntaxHelper(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
+        }
+
+        public Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) {
+            return getAutomaticPropertyNameToTurtleVarIndexMappings(variableNamesList, properties);
+        }
+    }
+
+    public static strictfp class TurtlesFromPointsManual extends TurtlesFromPoints {
+
+        final ExtensionException improperSyntaxException = new ExtensionException("The variable mapping must be of the form: [[\"property-name\" \"turtle-variable-name\"] [\"property-name\" \"turtle-variable-name\"] (etc.)]");
+
+        public Syntax getSyntax() {
+            return turtleCreationCommandSyntaxHelper(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
+        }
+
+        public Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) throws ExtensionException {
+            Map<String, Integer> propertyNameToTurtleVarIndexMappings = getAutomaticPropertyNameToTurtleVarIndexMappings(variableNamesList, properties);
+
+            LogoList manualList = args[2].getList();
+            for (Object pairing : manualList.javaIterable()){
+                if (!(pairing instanceof LogoList)){
+                    throw improperSyntaxException;
+                }
+
+                LogoList pairingList = ((LogoList) pairing);
+                Object firstObj = pairingList.first();
+                Object secondObj = pairingList.butFirst().first();
+
+                if (!(firstObj instanceof String) || !(secondObj instanceof String)) {
+                    throw improperSyntaxException;
+                }
+
+                String propertyName = (String) firstObj;
+                String variableName = (String) secondObj;
+
+                int index = variableNamesList.indexOf(variableName.toUpperCase());
+                if (index != -1) {
+                    propertyNameToTurtleVarIndexMappings.put(propertyName, index);
+                } else {
+                    throw new ExtensionException("There is no variable " + variableName + " defined. use turtles-own or <breeds>-own to define one.");
+                }
+            }
+            return propertyNameToTurtleVarIndexMappings;
+        }
+    }
 }
