@@ -126,7 +126,7 @@ public final strictfp class GISExtension extends DefaultClassManager {
         primitiveManager.addPrimitive("feature-list-of", new VectorDataset.GetFeatures());
         primitiveManager.addPrimitive("vertex-lists-of", new VectorFeature.GetVertexLists());
         primitiveManager.addPrimitive("centroid-of", new VectorFeature.GetCentroid());
-        primitiveManager.addPrimitive("sample-point-inside", new VectorFeature.GetSamplePointInside());
+        primitiveManager.addPrimitive("random-point-inside", new VectorFeature.GetRandomPointInside());
         primitiveManager.addPrimitive("location-of", new Vertex.GetLocation());
         primitiveManager.addPrimitive("project-lat-lon", new ProjectLatLon.ProjectWGS84());
         primitiveManager.addPrimitive("project-lat-lon-from-ellipsoid", new ProjectLatLon.ProjectFromEllipsoid());

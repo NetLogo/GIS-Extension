@@ -155,7 +155,7 @@ and comments at the
 [`gis:feature-list-of`](#gisfeature-list-of)
 [`gis:vertex-lists-of`](#gisvertex-lists-of)
 [`gis:centroid-of`](#giscentroid-of)
-[`gis:sample-point-inside`](#gissample-point-inside)
+[`gis:random-point-inside`](#gisrandom-point-inside)
 [`gis:location-of`](#gislocation-of)
 [`gis:set-property-value`](#gisset-property-value)
 [`gis:property-value`](#gisproperty-value)
@@ -720,10 +720,10 @@ for more details on the polygon centroid algorithm.
 
 
 
-### `gis:sample-point-inside`
+### `gis:random-point-inside`
 
 ```NetLogo
-gis:sample-point-inside *VectorFeature*
+gis:random-point-inside *VectorFeature*
 ```
 
 
@@ -735,7 +735,7 @@ multi-polygon features are supported.
 ```
 ; create 100 turtles randomly distributed throught a VectorFeature `vf`
 crt 100 [
-  let loc gis:location-of gis:sample-point-inside vf
+  let loc gis:location-of gis:random-point-inside vf
   set xcor item 0 loc
   set ycor item 1 loc
 ]

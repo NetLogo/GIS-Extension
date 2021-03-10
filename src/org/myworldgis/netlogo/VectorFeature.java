@@ -179,7 +179,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
     }
 
-    public static final strictfp class GetSamplePointInside extends GISExtension.Reporter {
+    public static final strictfp class GetRandomPointInside extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -187,10 +187,10 @@ public final strictfp class VectorFeature implements ExtensionObject {
         
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
-                                         Syntax.WildcardType());
+                                         Syntax.ListType());
         }
 
-        private static Coordinate randomPointInsideTriangle (Geometry tri, Random rng) {
+        private static Coordinate randomPointInsideTriangle(Geometry tri, Random rng) {
             // For more, see:
             //  Weisstein, Eric W. "Triangle Point Picking." From MathWorld--A Wolfram Web Resource. https://mathworld.wolfram.com/TrianglePointPicking.html 
             double weight_b = rng.nextDouble();
@@ -276,7 +276,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
     /** */
     private Map<String,Object> _properties;
 
-    /** These three only used for sample-point-inside and are only intialized when the first sample point is 
+    /** These three only used for random-point-inside and are only intialized when the first random point is
      * requested - James Hovet 2/24/21
      */
     private Geometry _triangulation;
@@ -329,7 +329,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
         return _properties.get(name.toUpperCase());
     }
 
-    private void setupTriangulation () throws ExtensionException {
+    private void setupTriangulation() throws ExtensionException {
         _triangulation = TriangulationUtil.triangulate(_geometry);
         int numTriangles = _triangulation.getNumGeometries();
         _triangulation_areas_cumulative = new double[numTriangles];

@@ -118,7 +118,7 @@ public class TriangulationUtil {
         }
         
         if (triangulationAttempts >= 5) {
-            throw new ExtensionException("This polygon is too dense and/or complex to sample a point wihin it. Try simplifying the vector dataset with a tool like QGIS/GRASS v.generalize: https://docs.qgis.org/latest/en/docs/training_manual/processing/generalize.html");
+            throw new ExtensionException("This polygon is too dense and/or complex to generate a point within it. Try simplifying the vector dataset with a tool like QGIS/GRASS v.generalize: https://docs.qgis.org/latest/en/docs/training_manual/processing/generalize.html");
         }
         
         GeometryCollectionBuilder geometryCollectionBuilder = new GeometryCollectionBuilder(geom);
