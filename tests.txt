@@ -133,3 +133,77 @@ testFindFeatures
   O> test-find-features-string
   O> setup
   O> test-find-features-number
+
+testCreateTurtlesFromPoints_color
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-color
+  [color] of turtle 0 => 55
+
+testCreateTurtlesFromPoints_color-str
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-color-str
+  [color] of turtle 0 => 105
+
+testCreateTurtlesFromPoints_heading
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-heading
+  [heading] of turtle 0 => 15
+
+testCreateTurtlesFromPoints_shape
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-shape
+  [shape] of turtle 0 => "circle"
+
+testCreateTurtlesFromPoints_label
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-label
+  [label] of turtle 0 => "circle"
+
+testCreateTurtlesFromPoints_label-color
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-label-color
+  [label-color] of turtle 0 => 55
+
+testCreateTurtlesFromPoints_label-color-str
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-label-color-str
+  [label-color] of turtle 0 => 105
+
+testCreateTurtlesFromPoints_hidden-str
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-hidden-str
+  [hidden?] of turtle 0 => true
+
+testCreateTurtlesFromPoints_hidden-num
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-hidden-num
+  [hidden?] of turtle 0 => true
+
+testCreateTurtlesFromPoints_size
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-size
+  [size] of turtle 0 => 15
+
+testCreateTurtlesFromPoints_pen-mode
+  OPEN> extensions/gis/examples/create-turtles-from-points/built-in-variables-test.nlogo
+  O> setup
+  O> test-pen-mode
+  [pen-mode] of turtle 0 => "down"
+
+testCreateTurtlesFromPoints_position
+  OPEN> extensions/gis/examples/create-turtles-from-points/create-turtles-from-points-testing.nlogo
+  O> test
+
+testCreateTurtlesFromPoints_manual
+  OPEN> extensions/gis/examples/create-turtles-from-points/create-turtles-from-points-testing.nlogo
+  O> test-manual

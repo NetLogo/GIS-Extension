@@ -2,11 +2,13 @@ package org.myworldgis.netlogo;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+import org.nlogo.agent.Box;
 import org.nlogo.agent.TreeAgentSet;
 import org.nlogo.agent.Turtle;
 import org.nlogo.agent.World;
 import org.nlogo.api.AgentException;
 import org.nlogo.api.Argument;
+import org.nlogo.api.Color;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.core.LogoList;
 import org.nlogo.core.Syntax;
@@ -22,9 +24,23 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 public strictfp class CreateTurtlesFromPoints {
 
+    private static final Map<String, Double> localColorNameMap;
+    static {
+        Map<String, Double> tmpMap = new HashMap<String, Double>();
+        for (int i = 0; i < Color.ColorNames().length; i ++) {
+            tmpMap.put(Color.ColorNames()[i], Color.getColorNumberByIndex(i));
+        }
+        localColorNameMap = Collections.unmodifiableMap(tmpMap);
+    }
+
+    // The SyntaxJ convenience class doesn't currently support a command primitive that has a blockAgentClassString
+    // Therefore, this function abstracts away the messy work of plugging inputs into the Scala base
+    // Syntax.commandSyntax procedure to make the proper syntax for an observer primitive that creates a turtle
+    // scope inside its command block. - James Hovet 3/15/21
     private static Syntax turtleCreationCommandSyntaxHelper(Object[] syntaxTokens) {
         scala.collection.immutable.List<Object> list = JavaConverters.asScalaBuffer(Arrays.asList(syntaxTokens)).toList();
         return Syntax.commandSyntax(list, Option.empty(), Option.empty(), "O---", Some.apply("-T--"), false, true);
@@ -32,7 +48,19 @@ public strictfp class CreateTurtlesFromPoints {
 
     private static abstract strictfp class TurtlesFromPoints extends GISExtension.Command implements CustomAssembled {
 
-        public abstract Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) throws ExtensionException;
+        protected Map<String, Integer> getAutomaticPropertyNameToTurtleVarIndexMappings(List<String> variableNamesList, VectorDataset.Property[] properties) {
+            HashMap<String, Integer> propertyNameToTurtleVarIndex = new HashMap<String, Integer>();
+            for (VectorDataset.Property prop : properties) {
+                String propertyName = prop.getName();
+                int index = variableNamesList.indexOf(propertyName.toUpperCase().replace(' ', '-'));
+                if (index != -1) {
+                    propertyNameToTurtleVarIndex.put(prop.getName().toUpperCase(), index);
+                }
+            }
+            return propertyNameToTurtleVarIndex;
+        }
+
+        protected abstract Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) throws ExtensionException;
 
         public void performInternal(Argument args[], org.nlogo.api.Context context)
                 throws ExtensionException, AgentException {
@@ -80,16 +108,70 @@ public strictfp class CreateTurtlesFromPoints {
             for (VectorFeature feature : features) {
                 Geometry geom = feature.getGeometry();
                 for (int subPointIndex = 0; subPointIndex < geom.getNumGeometries(); subPointIndex++) {
-                    Turtle turtle = world.createTurtle(agentSet);
+                    // Copied from default turtle initialization code, otherwise all turtles would be black on creation - James Hovet 3/31/21
+                    Turtle turtle = world.createTurtle(agentSet, nvmContext.job.random.nextInt(14), 0);
 
                     for (Map.Entry<String, Integer> entry : propertyNameToTurtleVarIndex.entrySet()) {
-                        turtle.setTurtleVariable(entry.getValue(), feature.getProperty(entry.getKey()));
-                    }
+                        Geometry thisPoint = geom.getGeometryN(subPointIndex);
+                        Coordinate nlogoPosition = state.gisToNetLogo(thisPoint.getCoordinate(), null);
 
-                    Geometry thisPoint = geom.getGeometryN(subPointIndex);
-                    Coordinate nlogoPosition = state.gisToNetLogo(thisPoint.getCoordinate(), null);
-                    turtle.setTurtleOrLinkVariable("XCOR", nlogoPosition.x);
-                    turtle.setTurtleOrLinkVariable("YCOR", nlogoPosition.y);
+                        // max-pxcor + 0.5 and max-pycor + 0.5 are illegal x and ycor's in NetLogo but are guaranteed to
+                        // occur if you use `gis:set-world-envelope gis:envelope-of dataset` to set your world-envelope.
+                        // This isn't a problem if world wrapping is on, but if it isn't we need to nudge them back into
+                        // the legal area.
+                        if (! world.wrappingAllowedInX() && nlogoPosition.x == world.maxPxcorBoxed() + 0.5) {
+                            nlogoPosition.x = Math.nextDown(nlogoPosition.x);
+                        }
+                        if (! world.wrappingAllowedInY() && nlogoPosition.y == world.maxPycorBoxed() + 0.5) {
+                            nlogoPosition.y = Math.nextDown(nlogoPosition.y);
+                        }
+
+                        turtle.setTurtleOrLinkVariable("XCOR", nlogoPosition.x);
+                        turtle.setTurtleOrLinkVariable("YCOR", nlogoPosition.y);
+
+                        Integer variableIndex = entry.getValue();
+                        String variableName = entry.getKey();
+                        Object valueToSetTo = feature.getProperty(variableName);
+
+                        if ((valueToSetTo != null)
+                                && variableIndex != world.turtlesOwnIndexOf("BREED")
+                                && variableIndex != world.turtlesOwnIndexOf("XCOR")
+                                && variableIndex != world.turtlesOwnIndexOf("YCOR")){
+
+                            if ((variableIndex == world.turtlesOwnIndexOf("COLOR") || variableIndex == world.turtlesOwnIndexOf("LABEL-COLOR")) && valueToSetTo instanceof String) {
+                                String colorName = (String) valueToSetTo;
+                                if (localColorNameMap.containsKey(colorName)) {
+                                    valueToSetTo = localColorNameMap.get(colorName);
+                                } else {
+                                    throw new ExtensionException(colorName + " is not a supported color name. Only the default hues or netlogo color number representations are supported. see https://ccl.northwestern.edu/netlogo/docs/programming.html#colors for a list of default colors and a table of color number representations.");
+                                }
+                            }
+
+                            if (variableIndex == world.turtlesOwnIndexOf("HIDDEN?") && valueToSetTo instanceof String) {
+                                String stringValue = (String) valueToSetTo;
+                                if (stringValue.equalsIgnoreCase("true") || Double.parseDouble(stringValue) == 1) {
+                                    valueToSetTo = true;
+                                } else if (stringValue.equalsIgnoreCase("false") || Double.parseDouble(stringValue) == 0) {
+                                    valueToSetTo = false;
+                                } else {
+                                    throw new ExtensionException(stringValue + " is not a supported boolean value. Only true/false or 0/1 are accepted");
+                                }
+                            }
+
+                            if (variableIndex == world.turtlesOwnIndexOf("HIDDEN?") && valueToSetTo instanceof Number) {
+                                Double doubleValue = (Double) valueToSetTo;
+                                if (doubleValue == 1) {
+                                    valueToSetTo = true;
+                                } else if (doubleValue == 0) {
+                                    valueToSetTo = false;
+                                } else {
+                                    throw new ExtensionException(doubleValue.toString() + " is not a supported boolean value. Only true/false or 0/1 are accepted");
+                                }
+                            }
+
+                            turtle.setTurtleVariable(variableIndex, valueToSetTo);
+                        }
+                    }
 
                     agentSet.add(turtle);
                 }
@@ -103,20 +185,6 @@ public strictfp class CreateTurtlesFromPoints {
             assemblerAssistant.done();
         }
 
-        protected Map<String, Integer> getAutomaticPropertyNameToTurtleVarIndexMappings(List<String> variableNamesList, VectorDataset.Property[] properties) {
-            HashMap<String, Integer> propertyNameToTurtleVarIndex = new HashMap<String, Integer>();
-            for (VectorDataset.Property prop : properties) {
-                String propertyName = prop.getName();
-                if (propertyName.equalsIgnoreCase(("breed")) || propertyName.equalsIgnoreCase("who")) {
-                    continue;
-                }
-                int index = variableNamesList.indexOf(propertyName.toUpperCase().replace(' ', '-'));
-                if (index != -1) {
-                    propertyNameToTurtleVarIndex.put(prop.getName(), index);
-                }
-            }
-            return propertyNameToTurtleVarIndex;
-        }
     }
 
     public static strictfp class TurtlesFromPointsAutomatic extends TurtlesFromPoints {
@@ -155,10 +223,10 @@ public strictfp class CreateTurtlesFromPoints {
                     throw improperSyntaxException;
                 }
 
-                String propertyName = (String) firstObj;
-                String variableName = (String) secondObj;
+                String propertyName = ((String) firstObj).toUpperCase();
+                String variableName = ((String) secondObj).toUpperCase();
 
-                int index = variableNamesList.indexOf(variableName.toUpperCase());
+                int index = variableNamesList.indexOf(variableName);
                 if (index != -1) {
                     propertyNameToTurtleVarIndexMappings.put(propertyName, index);
                 } else {
