@@ -162,7 +162,7 @@ public final strictfp class ProjectionFormat extends Format {
         } else if (wkt.getKeyword().equals("PROJCS")) {
             return parseProjected(wkt);
         } else {
-            throw new ParseException("only GEOGCS and PROJCS are supported", 0);
+            throw new ParseException("only GEOGCS and PROJCS are supported. Try using a tool like QGIS or ArcMap to convert your data to a different projection like WGS84", 0);
         }
     }
     
