@@ -21,7 +21,6 @@ libraryDependencies ++= Seq(
   "commons-codec"              % "commons-codec"      % "1.10",
   "org.ngs"                    % "ngunits"            % "1.0.0" from "https://s3.amazonaws.com/ccl-artifacts/ngunits-1.0.jar",
   "javax.media"                % "jai_core"           % "1.1.3" from "https://s3.amazonaws.com/ccl-artifacts/jai_core-1.1.3.jar",
-  "com.sun.media"              % "jai_codec"          % "1.1.3" from "https://s3.amazonaws.com/ccl-artifacts/jai_codec-1.1.3.jar", 
   "org.tinfour"                % "TinfourCore"        % "2.1.5",
   "com.googlecode.json-simple" % "json-simple"        % "1.1.1")
 
