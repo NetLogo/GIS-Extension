@@ -125,12 +125,14 @@ public final strictfp class GISExtensionState implements ExtensionObject {
     public void datasetLoadNotify () {
         _datasetCount += 1;
     }
-    
+
+    private static final ExtensionException noCoordinateTransformationSetException = new ExtensionException("you must define a coordinate transformation before using any other GIS features. You can use gis:set-transformation directly, or use `gis:set-world-envelope gis:envelope-of dataset` to automatically frame up a given dataset.");
+
     /** */
     public Coordinate netLogoToGIS (Coordinate pt, Coordinate storage) 
             throws ExtensionException {
         if (_transformation == null) {
-            throw new ExtensionException("you must define a coordinate transformation before using any other GIS features");
+            throw noCoordinateTransformationSetException;
         } else {
             return _transformation.netLogoToGIS(pt, storage);
         }
@@ -140,7 +142,7 @@ public final strictfp class GISExtensionState implements ExtensionObject {
     public Coordinate gisToNetLogo (Coordinate pt, Coordinate storage)
             throws ExtensionException {
         if (_transformation == null) {
-            throw new ExtensionException("you must define a coordinate transformation before using any other GIS features");
+            throw noCoordinateTransformationSetException;
         } else {
             return _transformation.gisToNetLogo(pt, storage);
         }
@@ -150,7 +152,7 @@ public final strictfp class GISExtensionState implements ExtensionObject {
     public CoordinateTransformation getTransformation ()
             throws ExtensionException  {
         if (_transformation == null) {
-            throw new ExtensionException("you must define a coordinate transformation before using any other GIS features");
+            throw noCoordinateTransformationSetException;
         } else {
             return _transformation;
         }
