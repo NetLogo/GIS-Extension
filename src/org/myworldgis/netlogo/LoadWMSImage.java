@@ -4,16 +4,15 @@
 
 package org.myworldgis.netlogo;
 
-import com.sun.media.jai.codec.ImageCodec;
 import com.vividsolutions.jts.geom.Envelope;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.PushbackInputStream;
+import javax.imageio.ImageIO;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.myworldgis.util.HttpClientManager;
@@ -70,26 +69,16 @@ public class LoadWMSImage extends GISExtension.Command {
         Dimension pixelBounds = new Dimension(drawing.getWidth(), drawing.getHeight());
         String url = WMSUtils.makeGetMapURL(serverURL, viewBounds, pixelBounds, srs, layers, WMSUtils.ImageFormat.JPEG);
         GetMethod method = new GetMethod(url);
-        RenderedImage image = null;
+        BufferedImage image = null;
         try {
             int statusCode = HttpClientManager.getInstance().execute(method);
             if (statusCode != HttpStatus.SC_OK) {
-                throw(new IOException(HttpClientManager.errorMsg(statusCode, url)));
+                throw (new ExtensionException("Unable to fetch wms image:\n" + HttpClientManager.errorMsg(statusCode, url)));
             }
             PushbackInputStream in = new PushbackInputStream(method.getResponseBodyAsStream(), 12);
-            byte[] beginning = new byte[12];
-            int bytesRead = in.read(beginning, 0, 12);
-            in.unread(beginning, 0, bytesRead);
-            if (bytesRead < 12) {
-                throw new ExtensionException( org.nlogo.util.Utils.reader2String( new java.io.InputStreamReader( in ) ) ) ;
-            } else if ("JFIF".equals(new String(beginning, 6, 4))) {
-                image = ImageCodec.createImageDecoder("JPEG", in, null).decodeAsRenderedImage();
-            } else if ("PNG".equals(new String(beginning, 1, 3))) {
-                // sometimes you get a PNG even when you ask for a JPEG
-                image = ImageCodec.createImageDecoder("PNG", in, null).decodeAsRenderedImage();
-            } else {
-                throw new ExtensionException( org.nlogo.util.Utils.reader2String( new java.io.InputStreamReader( in ) ) ) ;
-            }
+            image = ImageIO.read(in);
+        } catch (IOException e) {
+            throw new ExtensionException("Unable to decode wms image downloaded from: " + url);
         } finally {
             method.releaseConnection();
         }
