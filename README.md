@@ -167,6 +167,8 @@ and comments at the
 [`gis:property-minimum`](#gisproperty-minimum)
 [`gis:property-maximum`](#gisproperty-maximum)
 [`gis:apply-coverage`](#gisapply-coverage)
+[`gis:create-turtles-from-points`](#giscreate-turtles-from-points)
+[`gis:create-turtles-from-points-manual`](#giscreate-turtles-from-points-manual)
 [`gis:coverage-minimum-threshold`](#giscoverage-minimum-threshold)
 [`gis:set-coverage-minimum-threshold`](#gisset-coverage-minimum-threshold)
 [`gis:coverage-maximum-threshold`](#giscoverage-maximum-threshold)
@@ -961,6 +963,103 @@ By default, the minimum threshold is 10% and the maximum threshold
 is 33%. These values may be modified using the four primitives that
 follow.
 
+
+
+### `gis:create-turtles-from-points`
+
+```NetLogo
+gis:create-turtles-from-points *VectorDataset* *breed* *commands*
+```
+
+
+  For each point in a VectorDataset of points, create a turtle of
+  the specified breed at the point's location. For each agent variable
+  (as defined in `<breeds>-own`), if there is a property with the same
+  name in the dataset, set that variable's value to be the value of
+  that property. Finally, execute any commands in the optional
+  command block.
+
+  Property names and variable names are compared case-insensitively.
+  Keep in mind that when importing shapefiles, property names may be
+  modified for backwards compatibility reasons. The names given by
+  `gis:property-names` can always be trusted as authoritative. For
+  manually specifying a mapping between property names and variable
+  names, see the `create-turtles-from-points-manual` primitive.
+
+  For multi-point datasets, a turtle is created at each point of
+  multi-point feature, each with the same set of variable values.
+
+  Built-in variables such as "label" and "heading" are supported.
+  NetLogo color numeric representations are supported for setting
+  "color" and "label-color", as well as the 15 default color string
+  representations ("red", "blue", "black", etc.).
+
+  As an example: say you wanted to create a turtle of breed
+  "cities/city" for each city in a dataset of cities
+  like the one included in the "GIS General Examples" model from
+  the models library. The cities dataset has four properties,
+  "NAME", "COUNTRY", "POPULATION", and "CAPITAL". To map them all
+  to NetLogo turtle variables and set their shapes to circles, you
+  could do this:
+
+```
+extensions [gis]
+breed [cities city]
+cities-own [name country population capital]
+globals [cities-dataset]
+
+to setup
+  set cities-dataset gis:load-dataset "cities.shp"
+  gis:create-turtles-from-points cities-dataset "cities" [
+    set shape "circle"
+  ]
+end
+```
+    
+
+
+### `gis:create-turtles-from-points-manual`
+
+```NetLogo
+gis:create-turtles-from-points-manual *VectorDataset* *breed* *property-mapping* *commands*
+```
+
+
+Like `create-turtles-from-points`, creates a turtle for each point in a
+VectorDataset of points and populates their variables with the values of
+corresponding gis properties.
+
+This primitive can be used to specify
+additional mappings between gis property names and NetLogo variable names.
+These mappings are specified as a list of lists of strings like so:
+`[["property-name" "turtle-variable-name"] ["property-name" "turtle-variable-name"] (etc.)]`
+
+These manual mappings modify the automatic mapping process that takes
+place in the `create-turtles-from-points` primitive, so you only need
+to specify the changes you want to make to the default mappings, and
+the rest of the mappings will be untouched.
+
+To return to the cities example from the
+`create-turtles-from-points` entry, the variable name "capital" is not very
+descriptive. something like "is-capital?" fits the NetLogo style much better.
+To make that change, you would modify the example like so.
+
+```
+extensions [gis]
+breed [cities city]
+cities-own [name country population is-capital?]
+globals [cities-dataset]
+
+to setup
+  set cities-dataset gis:load-dataset "cities.shp"
+  ;; Since we only want to change how the "CAPITAL" property is mapped, we only need to specify that one change.
+  gis:create-turtles-from-points-manual cities-dataset "cities" [["CAPITAL" "is-capital?"]] [
+    set shape "circle"
+  ]
+  ;; Each city turtle still has a name, country, and population set just like the non-manual version.
+end
+```
+    
 
 
 ### `gis:coverage-minimum-threshold`
