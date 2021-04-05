@@ -35,7 +35,7 @@ public abstract strictfp class VectorDatasetSearch {
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
-                                                     Syntax.StringType() },
+                                                     Syntax.StringType() | Syntax.NumberType()},
                                          Syntax.WildcardType());
         }
         
@@ -44,12 +44,23 @@ public abstract strictfp class VectorDatasetSearch {
                 throws ExtensionException, LogoException {
             VectorDataset dataset = VectorDataset.getDataset(args[0]);
             String propertyName = getPropertyName(dataset, args[1]);
-            StringUtils.WildcardMatcher matcher = new StringUtils.WildcardMatcher(args[2].getString());
-            for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
-                VectorFeature feature = i.next();
-                Object value = feature.getProperty(propertyName);
-                if ((value != null) && matcher.matches(value.toString())) {
-                    return feature;
+            if (args[2].get() instanceof String) {
+                StringUtils.WildcardMatcher matcher = new StringUtils.WildcardMatcher(args[2].getString());
+                for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext(); ) {
+                    VectorFeature feature = i.next();
+                    Object value = feature.getProperty(propertyName);
+                    if ((value != null) && matcher.matches(value.toString())) {
+                        return feature;
+                    }
+                }
+            } else {
+                Double number = args[2].getDouble();
+                for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
+                    VectorFeature feature = i.next();
+                    Object value = feature.getProperty(propertyName);
+                    if ((value != null) && value.equals(number)) {
+                        return feature;
+                    }
                 }
             }
             return Nobody$.MODULE$;
@@ -66,22 +77,33 @@ public abstract strictfp class VectorDatasetSearch {
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
-                                                     Syntax.StringType() },
+                                                     Syntax.StringType() | Syntax.NumberType() },
                                          Syntax.ListType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             VectorDataset dataset = VectorDataset.getDataset(args[0]);
             String propertyName = getPropertyName(dataset, args[1]);
-            StringUtils.WildcardMatcher matcher = new StringUtils.WildcardMatcher(args[2].getString());
             LogoListBuilder result = new LogoListBuilder();
-            for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext();) {
-                VectorFeature feature = i.next();
-                Object value = feature.getProperty(propertyName);
-                if ((value != null) && matcher.matches(value.toString())) {
-                    result.add(feature);
+            if (args[2].get() instanceof String) {
+                StringUtils.WildcardMatcher matcher = new StringUtils.WildcardMatcher(args[2].getString());
+                for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext(); ) {
+                    VectorFeature feature = i.next();
+                    Object value = feature.getProperty(propertyName);
+                    if ((value != null) && matcher.matches(value.toString())) {
+                        result.add(feature);
+                    }
+                }
+            } else {
+                Double number = args[2].getDouble();
+                for (Iterator<VectorFeature> i = dataset.getFeatures().iterator(); i.hasNext(); ) {
+                    VectorFeature feature = i.next();
+                    Object value = feature.getProperty(propertyName);
+                    if ((value != null) && value.equals(number)) {
+                        result.add(feature);
+                    }
                 }
             }
             return result.toLogoList();
