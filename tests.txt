@@ -204,6 +204,10 @@ testCreateTurtlesFromPoints_position
   OPEN> extensions/gis/examples/create-turtles-from-points/create-turtles-from-points-testing.nlogo
   O> test
 
+testCreateTurtlesFromPoints_empty-vars
+  OPEN> extensions/gis/examples/create-turtles-from-points/create-turtles-from-points-testing.nlogo
+  O> test-empty
+
 testCreateTurtlesFromPoints_manual
   OPEN> extensions/gis/examples/create-turtles-from-points/create-turtles-from-points-testing.nlogo
   O> test-manual

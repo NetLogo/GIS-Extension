@@ -4,6 +4,8 @@ breed [cities city]
 turtles-own [name]
 cities-own [ population is-capital uid]
 
+breed [no-vars no-var]
+
 to test
   clear-all
   set dataset gis:load-dataset "../shared-datasets/cities.geojson"
@@ -41,6 +43,23 @@ to test-manual
 
     if label != gis:property-value associated_point "name" [error "name mismatch"]
     if name != 0 [error "match not properly overriden"]
+  ]
+end
+
+to test-empty
+  clear-all
+  set dataset gis:load-dataset "../shared-datasets/cities.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
+  gis:create-turtles-from-points dataset "no-vars" []
+
+  ask turtles [
+    let associated_point item 0 gis:find-range dataset "UID" who (who + 2)
+    let point_location gis:location-of gis:centroid-of associated_point
+
+    if item 0 point_location != max-pxcor + 0.5 and item 0 point_location != xcor [error "xcor mismatch"]
+    if item 1 point_location != max-pycor + 0.5 and item 1 point_location != ycor [error "ycor mismatch"]
   ]
 end
 @#$#@#$#@

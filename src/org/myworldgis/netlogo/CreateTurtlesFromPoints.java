@@ -2,7 +2,6 @@ package org.myworldgis.netlogo;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import org.nlogo.agent.Box;
 import org.nlogo.agent.TreeAgentSet;
 import org.nlogo.agent.Turtle;
 import org.nlogo.agent.World;
@@ -41,7 +40,7 @@ public strictfp class CreateTurtlesFromPoints {
     // Therefore, this function abstracts away the messy work of plugging inputs into the Scala base
     // Syntax.commandSyntax procedure to make the proper syntax for an observer primitive that creates a turtle
     // scope inside its command block. - James Hovet 3/15/21
-    private static Syntax turtleCreationCommandSyntaxHelper(Object[] syntaxTokens) {
+    private static Syntax makeTurtleCreationCommandSyntax(Object[] syntaxTokens) {
         scala.collection.immutable.List<Object> list = JavaConverters.asScalaBuffer(Arrays.asList(syntaxTokens)).toList();
         return Syntax.commandSyntax(list, Option.empty(), Option.empty(), "O---", Some.apply("-T--"), false, true);
     }
@@ -110,25 +109,24 @@ public strictfp class CreateTurtlesFromPoints {
                 for (int subPointIndex = 0; subPointIndex < geom.getNumGeometries(); subPointIndex++) {
                     // Copied from default turtle initialization code, otherwise all turtles would be black on creation - James Hovet 3/31/21
                     Turtle turtle = world.createTurtle(agentSet, nvmContext.job.random.nextInt(14), 0);
+                    Geometry thisPoint = geom.getGeometryN(subPointIndex);
+                    Coordinate nlogoPosition = state.gisToNetLogo(thisPoint.getCoordinate(), null);
+
+                    // max-pxcor + 0.5 and max-pycor + 0.5 are illegal x and ycor's in NetLogo but are guaranteed to
+                    // occur if you use `gis:set-world-envelope gis:envelope-of dataset` to set your world-envelope.
+                    // This isn't a problem if world wrapping is on, but if it isn't we need to nudge them back into
+                    // the legal area.
+                    if (! world.wrappingAllowedInX() && nlogoPosition.x == world.maxPxcorBoxed() + 0.5) {
+                        nlogoPosition.x = Math.nextDown(nlogoPosition.x);
+                    }
+                    if (! world.wrappingAllowedInY() && nlogoPosition.y == world.maxPycorBoxed() + 0.5) {
+                        nlogoPosition.y = Math.nextDown(nlogoPosition.y);
+                    }
+
+                    turtle.setTurtleOrLinkVariable("XCOR", nlogoPosition.x);
+                    turtle.setTurtleOrLinkVariable("YCOR", nlogoPosition.y);
 
                     for (Map.Entry<String, Integer> entry : propertyNameToTurtleVarIndex.entrySet()) {
-                        Geometry thisPoint = geom.getGeometryN(subPointIndex);
-                        Coordinate nlogoPosition = state.gisToNetLogo(thisPoint.getCoordinate(), null);
-
-                        // max-pxcor + 0.5 and max-pycor + 0.5 are illegal x and ycor's in NetLogo but are guaranteed to
-                        // occur if you use `gis:set-world-envelope gis:envelope-of dataset` to set your world-envelope.
-                        // This isn't a problem if world wrapping is on, but if it isn't we need to nudge them back into
-                        // the legal area.
-                        if (! world.wrappingAllowedInX() && nlogoPosition.x == world.maxPxcorBoxed() + 0.5) {
-                            nlogoPosition.x = Math.nextDown(nlogoPosition.x);
-                        }
-                        if (! world.wrappingAllowedInY() && nlogoPosition.y == world.maxPycorBoxed() + 0.5) {
-                            nlogoPosition.y = Math.nextDown(nlogoPosition.y);
-                        }
-
-                        turtle.setTurtleOrLinkVariable("XCOR", nlogoPosition.x);
-                        turtle.setTurtleOrLinkVariable("YCOR", nlogoPosition.y);
-
                         Integer variableIndex = entry.getValue();
                         String variableName = entry.getKey();
                         Object valueToSetTo = feature.getProperty(variableName);
@@ -136,7 +134,7 @@ public strictfp class CreateTurtlesFromPoints {
                         if ((valueToSetTo != null)
                                 && variableIndex != world.turtlesOwnIndexOf("BREED")
                                 && variableIndex != world.turtlesOwnIndexOf("XCOR")
-                                && variableIndex != world.turtlesOwnIndexOf("YCOR")){
+                                && variableIndex != world.turtlesOwnIndexOf("YCOR")) {
 
                             if ((variableIndex == world.turtlesOwnIndexOf("COLOR") || variableIndex == world.turtlesOwnIndexOf("LABEL-COLOR")) && valueToSetTo instanceof String) {
                                 String colorName = (String) valueToSetTo;
@@ -190,7 +188,7 @@ public strictfp class CreateTurtlesFromPoints {
     public static strictfp class TurtlesFromPointsAutomatic extends TurtlesFromPoints {
 
         public Syntax getSyntax() {
-            return turtleCreationCommandSyntaxHelper(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
+            return makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
         }
 
         public Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) {
@@ -200,27 +198,31 @@ public strictfp class CreateTurtlesFromPoints {
 
     public static strictfp class TurtlesFromPointsManual extends TurtlesFromPoints {
 
-        final ExtensionException improperSyntaxException = new ExtensionException("The variable mapping must be of the form: [[\"property-name\" \"turtle-variable-name\"] [\"property-name\" \"turtle-variable-name\"] (etc.)]");
+        static final String improperSyntaxExceptionMessage = "The variable mapping must be of the form: [[\"property-name\" \"turtle-variable-name\"] [\"property-name\" \"turtle-variable-name\"] (etc.)]";
 
         public Syntax getSyntax() {
-            return turtleCreationCommandSyntaxHelper(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
+            return makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
         }
 
         public Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) throws ExtensionException {
             Map<String, Integer> propertyNameToTurtleVarIndexMappings = getAutomaticPropertyNameToTurtleVarIndexMappings(variableNamesList, properties);
 
             LogoList manualList = args[2].getList();
-            for (Object pairing : manualList.javaIterable()){
-                if (!(pairing instanceof LogoList)){
-                    throw improperSyntaxException;
+            for (Object pairing : manualList.javaIterable()) {
+                if (!(pairing instanceof LogoList)) {
+                    throw new ExtensionException(improperSyntaxExceptionMessage);
                 }
 
                 LogoList pairingList = ((LogoList) pairing);
+                if (pairingList.length() != 2) {
+                    throw new ExtensionException(improperSyntaxExceptionMessage);
+                }
+
                 Object firstObj = pairingList.first();
                 Object secondObj = pairingList.butFirst().first();
 
                 if (!(firstObj instanceof String) || !(secondObj instanceof String)) {
-                    throw improperSyntaxException;
+                    throw new ExtensionException(improperSyntaxExceptionMessage);
                 }
 
                 String propertyName = ((String) firstObj).toUpperCase();
