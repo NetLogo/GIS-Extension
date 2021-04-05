@@ -77,7 +77,7 @@ public abstract strictfp class VectorDatasetSearch {
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
-                                                     Syntax.StringType() },
+                                                     Syntax.StringType() | Syntax.NumberType() },
                                          Syntax.ListType());
         }
 

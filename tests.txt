@@ -119,3 +119,17 @@ TestGeoJSONExport_Feature
 testGeoJSONExport_FeatureCollectionHomogenous
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-FeatureCollectionHomogenous
+
+testFindOneFeature
+  OPEN> extensions/gis/examples/find-features.nlogo
+  O> setup
+  O> test-find-one-feature-string
+  O> setup
+  O> test-find-one-feature-number
+
+testFindFeatures
+  OPEN> extensions/gis/examples/find-features.nlogo
+  O> setup
+  O> test-find-features-string
+  O> setup
+  O> test-find-features-number
