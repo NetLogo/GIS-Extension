@@ -19,6 +19,8 @@ import scala.collection.JavaConverters;
 
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 public strictfp class VectorFeaturesToTurtlesUtil {
     private static final Map<String, Double> COLOR_NAMES_TO_COLOR_NUMBERS;
     static { Map<String, Double> tmpMap = new HashMap<String, Double>();
@@ -107,12 +109,15 @@ public strictfp class VectorFeaturesToTurtlesUtil {
 
 
     public static Map<String, Integer> getAutomaticPropertyNameToTurtleVarIndexMappings(List<String> variableNamesList, VectorDataset.Property[] properties) {
+        return getAutomaticPropertyNameToTurtleVarIndexMappings(variableNamesList, Arrays.stream(properties).map(VectorDataset.Property::getName).collect(toList()));
+    }
+
+    public static Map<String, Integer> getAutomaticPropertyNameToTurtleVarIndexMappings(List<String> variableNamesList, List<String> propertyNamesList) {
         HashMap<String, Integer> propertyNameToTurtleVarIndex = new HashMap<String, Integer>();
-        for (VectorDataset.Property prop : properties) {
-            String propertyName = prop.getName();
+        for (String propertyName : propertyNamesList) {
             int index = variableNamesList.indexOf(propertyName.toUpperCase().replace(' ', '-'));
             if (index != -1) {
-                propertyNameToTurtleVarIndex.put(prop.getName().toUpperCase(), index);
+                propertyNameToTurtleVarIndex.put(propertyName.toUpperCase(), index);
             }
         }
         return propertyNameToTurtleVarIndex;

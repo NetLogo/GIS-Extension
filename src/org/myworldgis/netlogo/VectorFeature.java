@@ -283,6 +283,10 @@ public final strictfp class VectorFeature implements ExtensionObject {
         return _properties.get(name.toUpperCase());
     }
 
+    public String[] getPropertyNames () {
+        return _properties.keySet().toArray(new String[0]);
+    }
+
     private void setupTriangulation() throws ExtensionException {
         _triangulation = TriangulationUtil.triangulate(_geometry);
         int numTriangles = _triangulation.getNumGeometries();
