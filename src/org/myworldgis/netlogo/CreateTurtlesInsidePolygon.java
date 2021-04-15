@@ -26,7 +26,6 @@ public strictfp class CreateTurtlesInsidePolygon {
 
         public void performInternal (Argument args[],org.nlogo.api.Context context)
             throws ExtensionException, AgentException {
-
             ExtensionContext eContext = (ExtensionContext) context;
             org.nlogo.nvm.Context nvmContext = eContext.nvmContext();
             World world = (org.nlogo.agent.World) context.world();
@@ -64,6 +63,7 @@ public strictfp class CreateTurtlesInsidePolygon {
                 VectorFeaturesToTurtlesUtil.setTurtleVariablesToVectorFeatureProperties(turtle, vectorFeature, propertyNameToTurtleVarIndex);
             }
 
+            nvmContext.runExclusiveJob(breedAgentSet, nvmContext.ip + 1);
         }
 
         public void assemble (AssemblerAssistant assemblerAssistant){
