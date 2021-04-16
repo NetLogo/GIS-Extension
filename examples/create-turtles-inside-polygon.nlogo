@@ -13,7 +13,7 @@ to test-automatic
   gis:draw dataset 1
 
   foreach gis:feature-list-of dataset [ country ->
-    gis:create-turtles-inside-polygon country "citizens" 1 [
+    gis:create-turtles-inside-polygon country citizens 1 [
       set shape "person"
     ]
 
@@ -42,7 +42,7 @@ to test-manual
   gis:draw dataset 1
 
   foreach gis:feature-list-of dataset [ country ->
-    gis:create-turtles-inside-polygon-manual country "manual-citizens" 1 [["cntry_name" "country-name"] ["curr_type" "currency-type"]] [
+    gis:create-turtles-inside-polygon-manual country manual-citizens 1 [["cntry_name" "country-name"] ["curr_type" "currency-type"]] [
       set shape "person"
     ]
 
@@ -58,6 +58,21 @@ to test-manual
       ]
     ]
 
+    clear-turtles
+  ]
+end
+
+
+
+to test-turtles
+  clear-all
+  set dataset gis:load-dataset "./shared-datasets/countries.shp"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
+
+  foreach gis:feature-list-of dataset [ country ->
+    gis:create-turtles-inside-polygon country turtles 1
     clear-turtles
   ]
 end

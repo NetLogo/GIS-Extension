@@ -212,6 +212,10 @@ testCreateTurtlesFromPoints_manual
   OPEN> extensions/gis/examples/create-turtles-from-points/create-turtles-from-points-testing.nlogo
   O> test-manual
 
+testCreateTurtlesFromPoints_fail-on-non-breed-turtlesets
+  OPEN> extensions/gis/examples/create-turtles-from-points/create-turtles-from-points-testing.nlogo
+  test-fail-on-non-breed-turtlesets => true
+
 testCreateTurtlesInsidePolygon_automatic
   OPEN> extensions/gis/examples/create-turtles-inside-polygon.nlogo
   O> test-automatic
@@ -219,3 +223,7 @@ testCreateTurtlesInsidePolygon_automatic
 testCreateTurtlesInsidePolygon_manual
   OPEN> extensions/gis/examples/create-turtles-inside-polygon.nlogo
   O> test-manual
+
+testCreateTurtlesInsidePolygon_turtles_as_agentset
+  OPEN> extensions/gis/examples/create-turtles-inside-polygon.nlogo
+  O> test-turtles

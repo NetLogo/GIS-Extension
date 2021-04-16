@@ -979,7 +979,8 @@ gis:create-turtles-from-points *VectorDataset* *breed* *commands*
   (as defined in `<breeds>-own`), if there is a property with the same
   name in the dataset, set that variable's value to be the value of
   that property. Finally, execute any commands in the optional
-  command block.
+  command block. To use generic turtles as the chosen breed, simply
+  supply `turtles` as the breed argument.
 
   Property names and variable names are compared case-insensitively.
   Keep in mind that when importing shapefiles, property names may be
@@ -1012,7 +1013,7 @@ globals [cities-dataset]
 
 to setup
   set cities-dataset gis:load-dataset "cities.shp"
-  gis:create-turtles-from-points cities-dataset "cities" [
+  gis:create-turtles-from-points cities-dataset cities [
     set shape "circle"
   ]
 end
@@ -1055,7 +1056,7 @@ globals [cities-dataset]
 to setup
   set cities-dataset gis:load-dataset "cities.shp"
   ;; Since we only want to change how the "CAPITAL" property is mapped, we only need to specify that one change.
-  gis:create-turtles-from-points-manual cities-dataset "cities" [["CAPITAL" "is-capital?"]] [
+  gis:create-turtles-from-points-manual cities-dataset cities [["CAPITAL" "is-capital?"]] [
     set shape "circle"
   ]
   ;; Each city turtle still has a name, country, and population set just like the non-manual version.
@@ -1076,7 +1077,8 @@ the given VectorFeature and for each agent variable
 (as defined in <breeds>-own), if there is a property with the same
 name in the dataset, set that variable's value to be the value of
 that property. Finally, execute any commands in the optional
-command block.
+command block. To use generic turtles as the chosen breed, simply
+supply `turtles` as the breed argument.
 
 Property names and variable names are compared case-insensitively.
 Keep in mind that when importing shapefiles, property names may be
@@ -1112,7 +1114,7 @@ to setup
   gis:draw dataset 1
 
   foreach gis:feature-list-of dataset [ this-vector-feature ->
-    gis:create-turtles-inside this-vector-feature "turtles" 100 [
+    gis:create-turtles-inside this-vector-feature turtles 100 [
       set shape "person"
     ]
   ]

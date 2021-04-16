@@ -1,10 +1,13 @@
 extensions [gis]
-globals [dataset]
+globals [dataset heterogenous-agent-set]
 breed [cities city]
 turtles-own [name]
 cities-own [ population is-capital uid]
 
 breed [no-vars no-var]
+
+breed [wolves wolf]
+breed [sheeps sheep]
 
 to test
   clear-all
@@ -12,7 +15,7 @@ to test
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
-  gis:create-turtles-from-points dataset "cities" []
+  gis:create-turtles-from-points dataset cities []
 
 
   ask turtles [
@@ -31,7 +34,7 @@ to test-manual
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
-  gis:create-turtles-from-points-manual dataset "cities" [["name" "label"]] []
+  gis:create-turtles-from-points-manual dataset cities [["name" "label"]] []
 
 
   ask turtles [
@@ -52,7 +55,7 @@ to test-empty
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
-  gis:create-turtles-from-points dataset "no-vars" []
+  gis:create-turtles-from-points dataset no-vars []
 
   ask turtles [
     let associated_point item 0 gis:find-range dataset "UID" who (who + 2)
@@ -61,6 +64,28 @@ to test-empty
     if item 0 point_location != max-pxcor + 0.5 and item 0 point_location != xcor [error "xcor mismatch"]
     if item 1 point_location != max-pycor + 0.5 and item 1 point_location != ycor [error "ycor mismatch"]
   ]
+end
+
+to-report test-fail-on-non-breed-turtlesets
+  clear-all
+  set dataset gis:load-dataset "../shared-datasets/cities.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
+
+  create-wolves 1
+  create-sheeps 1
+
+  set heterogenous-agent-set (turtle-set wolves)
+
+  let out false
+
+  carefully [
+    gis:create-turtles-from-points dataset heterogenous-agent-set []
+  ] [
+    set out true
+  ]
+  report out
 end
 @#$#@#$#@
 GRAPHICS-WINDOW

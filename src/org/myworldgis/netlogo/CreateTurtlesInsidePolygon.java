@@ -2,6 +2,7 @@ package org.myworldgis.netlogo;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import org.myworldgis.util.VectorFeaturesToTurtlesUtil;
+import org.nlogo.agent.AgentSet;
 import org.nlogo.agent.TreeAgentSet;
 import org.nlogo.agent.Turtle;
 import org.nlogo.agent.World;
@@ -39,15 +40,16 @@ public strictfp class CreateTurtlesInsidePolygon {
                 throw new ExtensionException("Not a polygon feature");
             }
 
-            String breedName = args[1].getString().toUpperCase();
-            Map<String, TreeAgentSet> breeds = world.breeds();
+            org.nlogo.api.AgentSet agentSetCandidate = args[1].getAgentSet();
+            if (agentSetCandidate.printName() == null) {
+                throw new ExtensionException("Expected breed, received non-breed turtleset");
+            }
+
             TreeAgentSet breedAgentSet;
-            if (breedName.equalsIgnoreCase("turtles")) {
+            if (agentSetCandidate.printName().equalsIgnoreCase("turtles")) {
                 breedAgentSet = world.turtles();
-            } else if (breeds.containsKey(breedName)) {
-                breedAgentSet = breeds.get(breedName);
             } else {
-                throw new ExtensionException(breedName + " is not a defined breed");
+                breedAgentSet = world.getBreed(agentSetCandidate.printName());
             }
 
             int numToMake = args[2].getIntValue();
@@ -75,7 +77,7 @@ public strictfp class CreateTurtlesInsidePolygon {
     public static strictfp class TurtlesInsidePolygonAutomatic extends TurtlesInsidePolygon {
 
         public Syntax getSyntax() {
-            return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.NumberType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
+            return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.TurtlesetType(), Syntax.NumberType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
         }
 
         public Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, List<String> properties, Argument[] args) {
@@ -86,7 +88,7 @@ public strictfp class CreateTurtlesInsidePolygon {
     public static strictfp class TurtlesInsidePolygonManual extends TurtlesInsidePolygon {
 
         public Syntax getSyntax() {
-            return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.NumberType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
+            return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.TurtlesetType(), Syntax.NumberType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
         }
 
         public Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, List<String> properties, Argument[] args) throws ExtensionException {

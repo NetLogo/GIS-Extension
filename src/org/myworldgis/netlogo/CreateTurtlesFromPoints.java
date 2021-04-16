@@ -39,15 +39,16 @@ public strictfp class CreateTurtlesFromPoints {
                 throw new ExtensionException("Not a point dataset");
             }
 
-            String breedName = args[1].getString().toUpperCase();
-            Map<String, TreeAgentSet> breeds = world.breeds();
+            org.nlogo.api.AgentSet agentSetCandidate = args[1].getAgentSet();
+            if (agentSetCandidate.printName() == null) {
+                throw new ExtensionException("Expected breed, received non-breed turtleset");
+            }
+
             TreeAgentSet breedAgentSet;
-            if (breedName.equalsIgnoreCase("turtles")) {
+            if (agentSetCandidate.printName().equalsIgnoreCase("turtles")) {
                 breedAgentSet = world.turtles();
-            } else if (breeds.containsKey(breedName)) {
-                breedAgentSet = breeds.get(breedName);
             } else {
-                throw new ExtensionException(breedName + " is not a defined breed");
+                breedAgentSet = world.getBreed(agentSetCandidate.printName());
             }
 
             List<String> variableNamesList = VectorFeaturesToTurtlesUtil.getVariableNamesListForBreed(world, breedAgentSet);
@@ -78,7 +79,7 @@ public strictfp class CreateTurtlesFromPoints {
     public static strictfp class TurtlesFromPointsAutomatic extends TurtlesFromPoints {
 
         public Syntax getSyntax() {
-            return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
+            return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.TurtlesetType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
         }
 
         public Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) {
@@ -89,7 +90,7 @@ public strictfp class CreateTurtlesFromPoints {
     public static strictfp class TurtlesFromPointsManual extends TurtlesFromPoints {
 
         public Syntax getSyntax() {
-            return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.StringType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
+            return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.TurtlesetType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
         }
 
         public Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) throws ExtensionException {
