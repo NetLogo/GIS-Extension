@@ -17,60 +17,61 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 --------------------------------------------------------------------------------
 
-The following data files included with the GIS Extension contain proprietary 
-and confidential property of Environmental Systems Research Institute, Inc. 
+The following data files included with the GIS Extension contain proprietary
+and confidential property of Environmental Systems Research Institute, Inc.
 (ESRI), Redlands, CA, and its licensor(s).  These files are:
 
   cities.dbf, cities.shp, cities.shx, cities.txt,
   countries.dbf, countries.shp, countries.shx, countries.xml
   rivers.dbf, rivers.shp, rivers.shp, rivers.txt
-  
+
 These files are made available under the following license:
 
-Proprietary Rights and Copyright: Licensee acknowledges that the Data and 
-Related Materials contain proprietary and confidential property of ESRI and 
-its licensor(s). The Data and Related Materials are owned by ESRI and its 
-licensor(s) and are protected by United States copyright laws and applicable 
+Proprietary Rights and Copyright: Licensee acknowledges that the Data and
+Related Materials contain proprietary and confidential property of ESRI and
+its licensor(s). The Data and Related Materials are owned by ESRI and its
+licensor(s) and are protected by United States copyright laws and applicable
 international copyright treaties and/or conventions.
 
-THE LICENSEE EXPRESSLY ACKNOWLEDGES THAT THE DATA CONTAIN 
-SOME NONCONFORMITIES, DEFECTS, OR ERRORS. ESRI DOES NOT 
-WARRANT THAT THE DATA WILL MEET LICENSEE'S NEEDS OR 
-EXPECTATIONS, THAT THE USE OF THE DATA WILL BE UNINTERRUPTED, 
-OR THAT ALL NONCONFORMITIES, DEFECTS, OR ERRORS CAN OR WILL 
-BE CORRECTED. ESRI IS NOT INVITING RELIANCE ON THESE DATA, AND 
-THE LICENSEE SHOULD ALWAYS VERIFY ACTUAL DATA.   
+THE LICENSEE EXPRESSLY ACKNOWLEDGES THAT THE DATA CONTAIN
+SOME NONCONFORMITIES, DEFECTS, OR ERRORS. ESRI DOES NOT
+WARRANT THAT THE DATA WILL MEET LICENSEE'S NEEDS OR
+EXPECTATIONS, THAT THE USE OF THE DATA WILL BE UNINTERRUPTED,
+OR THAT ALL NONCONFORMITIES, DEFECTS, OR ERRORS CAN OR WILL
+BE CORRECTED. ESRI IS NOT INVITING RELIANCE ON THESE DATA, AND
+THE LICENSEE SHOULD ALWAYS VERIFY ACTUAL DATA.
 
-THE DATA AND RELATED MATERIALS CONTAINED THEREIN ARE PROVIDED 
-"AS-IS," WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
-INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
-MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. 
+THE DATA AND RELATED MATERIALS CONTAINED THEREIN ARE PROVIDED
+"AS-IS," WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-IN NO EVENT SHALL ESRI AND/OR ITS LICENSOR(S) BE LIABLE FOR COSTS 
-OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, LOST PROFITS, 
-LOST SALES OR BUSINESS EXPENDITURES, INVESTMENTS, OR 
-COMMITMENTS IN CONNECTION WITH ANY BUSINESS, LOSS OF ANY 
-GOODWILL, OR FOR ANY INDIRECT, SPECIAL,  INCIDENTAL, EXEMPLARY, OR 
-CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT OR USE OF 
-THE DATA AND RELATED MATERIALS, HOWEVER CAUSED, ON ANY THEORY 
-OF LIABILITY, AND WHETHER OR NOT ESRI AND/OR ITS LICENSOR(S) HAVE 
-BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. THESE LIMITATIONS 
-SHALL APPLY NOTWITHSTANDING ANY FAILURE OF ESSENTIAL PURPOSE 
+IN NO EVENT SHALL ESRI AND/OR ITS LICENSOR(S) BE LIABLE FOR COSTS
+OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, LOST PROFITS,
+LOST SALES OR BUSINESS EXPENDITURES, INVESTMENTS, OR
+COMMITMENTS IN CONNECTION WITH ANY BUSINESS, LOSS OF ANY
+GOODWILL, OR FOR ANY INDIRECT, SPECIAL,  INCIDENTAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT OR USE OF
+THE DATA AND RELATED MATERIALS, HOWEVER CAUSED, ON ANY THEORY
+OF LIABILITY, AND WHETHER OR NOT ESRI AND/OR ITS LICENSOR(S) HAVE
+BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. THESE LIMITATIONS
+SHALL APPLY NOTWITHSTANDING ANY FAILURE OF ESSENTIAL PURPOSE
 OF ANY EXCLUSIVE REMEDY.
 
-Third Party Beneficiary: ESRI's licensor(s) has (have) authorized ESRI to 
-(sub)distribute and (sub)license their data as incorporated into the Data and 
-Related Materials. As an intended third party beneficiary to this Agreement, 
-the ESRI licensor(s) is (are) entitled to directly enforce, in its own name, 
-the rights and obligations undertaken by the Licensee and to seek all legal 
+Third Party Beneficiary: ESRI's licensor(s) has (have) authorized ESRI to
+(sub)distribute and (sub)license their data as incorporated into the Data and
+Related Materials. As an intended third party beneficiary to this Agreement,
+the ESRI licensor(s) is (are) entitled to directly enforce, in its own name,
+the rights and obligations undertaken by the Licensee and to seek all legal
 and equitable remedies as are afforded to ESRI.
 
 ESRI is a trademark of Environmental Systems Research Institute, Inc.
 
 --------------------------------------------------------------------------------
 
-The Java Advanced Imaging libraries (the binary file jai_core-1.1.3.jar) are copyright
-(c) 2006 Sun Microsystems, and are made available under the following license:
+The Java Advanced Imaging libraries (the binary files jai_codec-1.1.3.jar and
+jai_core-1.1.3.jar) are copyright (c) 2006 Sun Microsystems, and are made
+available under the following license:
 
 Sun Microsystems, Inc.
 Binary Code License Agreement
@@ -85,26 +86,26 @@ YOUR ACCEPTANCE OF THESE TERMS BY SELECTING THE "ACCEPT" BUTTON AT THE END OF
 THIS AGREEMENT.  IF YOU DO NOT AGREE TO ALL THESE TERMS, PROMPTLY RETURN THE
 UNUSED SOFTWARE TO YOUR PLACE OF PURCHASE FOR A REFUND OR, IF THE SOFTWARE IS
 ACCESSED ELECTRONICALLY, SELECT THE "DECLINE" BUTTON AT THE END OF THIS
-AGREEMENT. 
+AGREEMENT.
 
 1.  LICENSE TO USE.  Sun grants you a non-exclusive and non-transferable
 license for the internal use only of the accompanying software and
 documentation and any error corrections provided by Sun (collectively
 "Software"), by the number of users and the class of computer hardware for
-which the corresponding fee has been paid. 
+which the corresponding fee has been paid.
 
 2.  RESTRICTIONS.  Software is confidential and copyrighted. Title to
 Software and all associated intellectual property rights is retained by Sun
 and/or its licensors.  Except as specifically authorized in any Supplemental
 License Terms, you may not make copies of Software, other than a single copy
 of Software for archival purposes.  Unless enforcement is prohibited by
-applicable law, you may not modify, decompile, or reverse engineer Software. 
+applicable law, you may not modify, decompile, or reverse engineer Software.
 Licensee acknowledges that Software is not designed or intended for use in
 the design, construction, operation or maintenance of any nuclear facility.
 Sun Microsystems, Inc. disclaims any express or implied warranty of fitness
 for such uses.   No right, title or interest in or to any trademark, service
 mark, logo or trade name of Sun or its licensors is granted under this
-Agreement. 
+Agreement.
 
 3.  LIMITED WARRANTY.  Sun warrants to you that for a period of ninety (90)
 days from the date of purchase, as evidenced by a copy of the receipt, the
@@ -112,13 +113,13 @@ media on which Software is furnished (if any) will be free of defects in
 materials and workmanship under normal use.  Except for the foregoing,
 Software is provided "AS IS".  Your exclusive remedy and Sun's entire
 liability under this limited warranty will be at Sun's option to replace
-Software media or refund the fee paid for Software. 
+Software media or refund the fee paid for Software.
 
 4.  DISCLAIMER OF WARRANTY.  UNLESS SPECIFIED IN THIS AGREEMENT, ALL EXPRESS
 OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING ANY IMPLIED
 WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
 NON-INFRINGEMENT ARE DISCLAIMED, EXCEPT TO THE EXTENT THAT THESE DISCLAIMERS
-ARE HELD TO BE LEGALLY INVALID. 
+ARE HELD TO BE LEGALLY INVALID.
 
 5.  LIMITATION OF LIABILITY.  TO THE EXTENT NOT PROHIBITED BY LAW, IN NO
 EVENT WILL SUN OR ITS LICENSORS BE LIABLE FOR ANY LOST REVENUE, PROFIT OR
@@ -129,20 +130,20 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.  In no event will Sun's liability
 to you, whether in contract, tort (including negligence), or otherwise,
 exceed the amount paid by you for Software under this Agreement.  The
 foregoing limitations will apply even if the above stated warranty fails of
-its essential purpose. 
+its essential purpose.
 
 6.  Termination.  This Agreement is effective until terminated.  You may
-terminate this Agreement at any time by destroying all copies of Software. 
+terminate this Agreement at any time by destroying all copies of Software.
 This Agreement will terminate immediately without notice from Sun if you fail
 to comply with any provision of this Agreement.  Upon Termination, you must
-destroy all copies of Software. 
+destroy all copies of Software.
 
 7.  Export Regulations. All Software and technical data delivered under this
 Agreement are subject to US export control laws and may be subject to export
 or import regulations in other countries.  You agree to comply strictly with
 all such laws and regulations and acknowledge that you have the
 responsibility to obtain such licenses to export, re-export, or import as may
-be required after delivery to you. 
+be required after delivery to you.
 
 8.  U.S. Government Restricted Rights.  If Software is being acquired by or
 on behalf of the U.S. Government or by a U.S. Government prime contractor or
@@ -150,16 +151,16 @@ subcontractor (at any tier), then the Government's rights in Software and
 accompanying documentation will be only as set forth in this Agreement; this
 is in accordance with 48 CFR 227.7201 through 227.7202-4 (for Department of
 Defense (DOD) acquisitions) and with 48 CFR 2.101 and 12.212 (for non-DOD
-acquisitions). 
+acquisitions).
 
 9.  Governing Law.  Any action related to this Agreement will be governed by
 California law and controlling U.S. federal law.  No choice of law rules of
-any jurisdiction will apply. 
+any jurisdiction will apply.
 
 10. Severability. If any provision of this Agreement is held to be
 unenforceable, this Agreement will remain in effect with the provision
 omitted, unless omission would frustrate the intent of the parties, in which
-case this Agreement will immediately terminate. 
+case this Agreement will immediately terminate.
 
 11. Integration.  This Agreement is the entire agreement between you and Sun
 relating to its subject matter.  It supersedes all prior or contemporaneous
@@ -168,7 +169,7 @@ prevails over any conflicting or additional terms of any quote, order,
 acknowledgment, or other communication between the parties relating to its
 subject matter during the term of this Agreement.  No modification of this
 Agreement will be binding, unless in writing and signed by an authorized
-representative of each party. 
+representative of each party.
 
                    JAVA ADVANCED IMAGING, VERSION 1.1.3
                         SUPPLEMENTAL LICENSE TERMS
@@ -178,7 +179,7 @@ terms of the Binary Code License Agreement (collectively, the "Agreement").
 Capitalized terms not defined in these Supplemental Terms shall have the same
 meanings ascribed to them in the Agreement. These Supplemental Terms shall
 supersede any inconsistent or conflicting terms in the Agreement, or in any
-license contained within the Software. 
+license contained within the Software.
 
 1. Software Internal Use and Development License Grant.  Subject to the terms
 and conditions of this Agreement, including, but not limited to Section 3
@@ -186,7 +187,7 @@ and conditions of this Agreement, including, but not limited to Section 3
 non-exclusive, non-transferable, limited license to reproduce internally and
 use internally the binary form of the Software, complete and unmodified, for
 the sole purpose of designing, developing and testing your Java applets and
-applications ("Programs"). 
+applications ("Programs").
 
 2. License to Distribute Software.  In addition to the license granted in
 Section 1 (Software Internal Use and Development License Grant) of these
@@ -204,7 +205,7 @@ Agreement, and (v) agree to defend and indemnify Sun and its licensors from
 and against any damages, costs, liabilities, settlement amounts and/or
 expenses (including attorneys' fees) incurred in connection with any claim,
 lawsuit or action by any third party that arises or results from the use or
-distribution of any and all Programs and/or Software. 
+distribution of any and all Programs and/or Software.
 
 3. Java Technology Restrictions. You may not modify the Java Platform
 Interface ("JPI", identified as classes contained within the "java" package
@@ -218,7 +219,7 @@ promptly publish broadly an accurate specification for such API for free use
 by all developers.  You may not create, or authorize your licensees to create
 additional classes, interfaces, or subpackages that are in any way identified
 as "java", "javax", "sun" or similar convention as specified by Sun in any
-naming convention designation. 
+naming convention designation.
 
 4.  Java Runtime Availability.  Refer to the appropriate version of the Java
 Runtime Environment binary code license (currently located at
@@ -231,11 +232,11 @@ all SUN, SOLARIS, JAVA, JINI, FORTE, and iPLANET-related trademarks, service
 marks, logos and other brand designations ("Sun Marks"), and you agree to
 comply with the Sun Trademark and Logo Usage Requirements currently located
 at http://www.sun.com/policies/trademarks. Any use you make of the Sun Marks
-inures to Sun's benefit. 
+inures to Sun's benefit.
 
 6. Source Code. Software may contain source code that is provided solely for
 reference purposes pursuant to the terms of this Agreement.  Source code may
-not be redistributed unless expressly provided for in this Agreement. 
+not be redistributed unless expressly provided for in this Agreement.
 
 7. Termination for Infringement.  Either party may terminate this Agreement
 immediately should any Software become, or in either party's opinion be
@@ -258,8 +259,8 @@ The source code of the Java Advanced Imaging library is available at:
   https://jai.dev.java.net/
 
 --------------------------------------------------------------------------------
- 
-The JTS library (the binary file "jts-1.9.jar") is copyright (c) Vivid 
+
+The JTS library (the binary file "jts-1.9.jar") is copyright (c) Vivid
 Solutions, and is made available under the following license:
 
                   GNU LESSER GENERAL PUBLIC LICENSE
@@ -274,7 +275,7 @@ Solutions, and is made available under the following license:
 the terms and conditions of version 3 of the GNU General Public
 License, supplemented by the additional permissions listed below.
 
-  0. Additional Definitions. 
+  0. Additional Definitions.
 
   As used herein, "this License" refers to version 3 of the GNU Lesser
 General Public License, and the "GNU GPL" refers to version 3 of the GNU
@@ -375,7 +376,7 @@ the following:
        a copy of the Library already present on the user's computer
        system, and (b) will operate properly with a modified version
        of the Library that is interface-compatible with the Linked
-       Version. 
+       Version.
 
    e) Provide Installation Information, but only if you would otherwise
    be required to provide such information under section 6 of the
@@ -436,7 +437,7 @@ The source code of the JTS library is available at:
 
 The NGUnits library (the binary file ngunits-1.0.jar) is copyright (C) 2010-2012
 National Geographic Society and is made available under the following license:
-    
+
     Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
         Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
@@ -451,9 +452,9 @@ The source code of the NGUnits library is available at:
 
 --------------------------------------------------------------------------------
 
-The Apache Commons codec, httpclient, and logging libraries (the binary 
-files commons-codec-1.3.jar, commons-httpclient-3.0.1.jar, and 
-commons-logging-1.1.jar) are copyrighted by The Apache Software Foundation, 
+The Apache Commons codec, httpclient, and logging libraries (the binary
+files commons-codec-1.3.jar, commons-httpclient-3.0.1.jar, and
+commons-logging-1.1.jar) are copyrighted by The Apache Software Foundation,
 and are made available under the following license:
 
                                  Apache License
