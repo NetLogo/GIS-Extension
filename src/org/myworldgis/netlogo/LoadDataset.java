@@ -15,9 +15,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.util.Arrays;
+
 import org.myworldgis.io.asciigrid.AsciiGridFileReader;
 import org.myworldgis.io.geojson.GeoJsonReader;
 import org.myworldgis.io.shapefile.DBaseFileReader;
+import org.myworldgis.io.shapefile.ESRIShapeBuffer;
 import org.myworldgis.io.shapefile.ESRIShapefileReader;
 import org.myworldgis.projection.Ellipsoid;
 import org.myworldgis.projection.Geographic;
@@ -45,6 +48,8 @@ import org.nlogo.api.World;
  * 
  */
 public final strictfp class LoadDataset extends GISExtension.Reporter {
+
+    private static final String ADDED_Z_FIELD = "_Z";
 
     private static Context _context;
     
@@ -84,10 +89,15 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             dbf = new DBaseFileReader(dbfFile.getInputStream());
             
             VectorDataset.ShapeType shapeType = null;
+            boolean shouldAddZField = false;
             switch (shp.getShapeType()) {
                 case ESRIShapefileReader.SHAPE_TYPE_POINT:
                 case ESRIShapefileReader.SHAPE_TYPE_MULTIPOINT:
                     shapeType = VectorDataset.ShapeType.POINT;
+                    break;
+                case ESRIShapefileReader.SHAPE_TYPE_POINTZ:
+                    shapeType = VectorDataset.ShapeType.POINT;
+                    shouldAddZField = true;
                     break;
                 case ESRIShapefileReader.SHAPE_TYPE_POLYLINE:
                     shapeType = VectorDataset.ShapeType.LINE;
@@ -98,7 +108,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                 default:
                     throw new IOException("unsupported shape type " + shp.getShapeType());
             }
-            String[] propertyNames = new String[dbf.getFieldCount()];
+            String[] propertyNames = new String[dbf.getFieldCount() + (shouldAddZField ? 1 : 0)];
             VectorDataset.PropertyType[] propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
             for (int i = 0; i < dbf.getFieldCount(); i += 1) {
                 propertyNames[i] = dbf.getFieldName(i);
@@ -108,15 +118,39 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                     propertyTypes[i] = VectorDataset.PropertyType.STRING;
                 }
             }
+            if (shouldAddZField) {
+                if (Arrays.asList(propertyNames).contains(ADDED_Z_FIELD)) {
+                    throw new ExtensionException("Tried to import PointZ data into the new field \"_Z\" but a field with that name already exists. Please rename it before continuing.");
+                }
+                propertyNames[propertyNames.length - 1] = ADDED_Z_FIELD;
+                propertyTypes[propertyTypes.length - 1] = VectorDataset.PropertyType.NUMBER;
+            }
+
             VectorDataset result = new VectorDataset(shapeType, propertyNames, propertyTypes);
             while (true) {
                 Geometry shape = shp.getNextShape();
                 if (shape == null) {
                     break;
-                } else if (reproject) {
+                }
+
+                double z = 0.0;
+                if (shape instanceof ESRIShapeBuffer.PointZWrapper) {
+                    z = ((ESRIShapeBuffer.PointZWrapper) shape).getZ();
+                    shape = ((ESRIShapeBuffer.PointZWrapper) shape).getPoint();
+                }
+
+                if (reproject) {
                     shape = forward.transform(inverse.transform(shape));
                 }
-                result.add(shape, dbf.getNextRecord());
+
+                if (shouldAddZField) {
+                    Object[] propertyValues = new Object[propertyNames.length];
+                    System.arraycopy(dbf.getNextRecord(), 0, propertyValues, 0, propertyValues.length - 1);
+                    propertyValues[propertyValues.length - 1] = z;
+                    result.add(shape, propertyValues);
+                } else {
+                    result.add(shape, dbf.getNextRecord());
+                }
             }
             
             return result;

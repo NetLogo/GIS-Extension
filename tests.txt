@@ -28,6 +28,10 @@ TestProjectLatLon-nad83-projected
   OPEN> extensions/gis/examples/project-lat-lon.nlogo
   O> run-test-nad83-projected
 
+TestImportPointZ-shapefile
+  OPEN> extensions/gis/examples/VectorDatasetZImporting/PointZ.nlogo
+  O> test-PointZ-shapefile
+
 TestGeoJSONImport_DC_Metro
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-metro

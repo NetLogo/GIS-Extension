@@ -38,6 +38,9 @@ public interface ESRIShapeConstants {
     /** The indicator for a point shape type. (1) */
     public static final int SHAPE_TYPE_POINT      = 1;
 
+    /** The indicator for a pointZ shape. Added on 4/23/21 */
+    public static final int SHAPE_TYPE_POINTZ     = 11;
+
     /** The indicator for an polyline shape type. (3) */
     public static final int SHAPE_TYPE_POLYLINE      = 3;
 

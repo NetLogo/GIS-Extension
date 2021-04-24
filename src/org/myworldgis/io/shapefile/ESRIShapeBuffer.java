@@ -26,6 +26,21 @@ import org.ngs.ngunits.UnitConverter;
  */
 public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants {
 
+    public strictfp class PointZWrapper extends Point {
+        public Point _point;
+        public double _z;
+
+        PointZWrapper(Point point, double z){
+            super(point.getCoordinate(), point.getPrecisionModel(), point.getSRID());
+            _point = point;
+            _z = z;
+        }
+
+        public Point getPoint(){ return _point; }
+
+        public double getZ(){ return _z; }
+    }
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
@@ -122,6 +137,8 @@ public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeC
         switch (shapeType) {
             case SHAPE_TYPE_POINT: 
                 return getESRIPointRecord(offset);
+            case SHAPE_TYPE_POINTZ:
+                return getESRIPointZRecord(offset);
             case SHAPE_TYPE_POLYGON:
                 return getESRIPolygonRecord(offset);
             case SHAPE_TYPE_POLYLINE:
@@ -140,6 +157,16 @@ public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeC
         double y = _converter.convert(getDouble(offset));
         offset += 8;
         return _factory.createPoint(new Coordinate(x, y));
+    }
+
+    public PointZWrapper getESRIPointZRecord(int offset) {
+        double x = _converter.convert(getDouble(offset));
+        offset += 8;
+        double y = _converter.convert(getDouble(offset));
+        offset += 8;
+        double z = _converter.convert(getDouble(offset));
+        offset += 16; // 8 for the z coordinate, 8 more for the unused M field. -James Hovet 4/23/21
+        return new PointZWrapper(_factory.createPoint(new Coordinate(x, y)), z);
     }
     
     /** */
