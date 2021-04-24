@@ -6,6 +6,7 @@ package org.myworldgis.netlogo;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.util.GeometryTransformer;
 import java.awt.image.BandedSampleModel;
 import java.awt.image.DataBuffer;
@@ -17,6 +18,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.Arrays;
 
+import org.myworldgis.io.PointZWrapper;
 import org.myworldgis.io.asciigrid.AsciiGridFileReader;
 import org.myworldgis.io.geojson.GeoJsonReader;
 import org.myworldgis.io.shapefile.DBaseFileReader;
@@ -158,9 +160,9 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                 }
 
                 double z = 0.0;
-                if (shape instanceof ESRIShapeBuffer.PointZWrapper) {
-                    z = ((ESRIShapeBuffer.PointZWrapper) shape).getZ();
-                    shape = ((ESRIShapeBuffer.PointZWrapper) shape).getPoint();
+                if (shape instanceof PointZWrapper) {
+                    z = ((PointZWrapper) shape).getZ();
+                    shape = ((PointZWrapper) shape).getPoint();
                 }
 
                 if (reproject) {
@@ -215,20 +217,55 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             } catch (org.json.simple.parser.ParseException e){
                 throw new ExtensionException("Error parsing " + geojsonFilePath);
             }
+
+            String[] propertyNames;
+            VectorDataset.PropertyType[] propertyTypes;
+
+            if (reader.getShouldAddZField()) {
+                propertyNames = new String[reader.getPropertyNames().length + (reader.getShouldAddZField() ? 1 : 0)];
+                propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
+                System.arraycopy(reader.getPropertyNames(), 0, propertyNames, 0, reader.getPropertyNames().length);
+                System.arraycopy(reader.getPropertyTypes(), 0, propertyTypes, 0, reader.getPropertyTypes().length);
+                propertyNames[propertyNames.length - 1] = ADDED_Z_FIELD;
+                propertyTypes[propertyTypes.length - 1] = VectorDataset.PropertyType.NUMBER;
+            } else {
+                propertyNames = reader.getPropertyNames();
+                propertyTypes = reader.getPropertyTypes();
+            }
+
             if (reader.getContainsDefaultValues()) {
                 outputWarning("Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
                         + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.");
             }
 
-            VectorDataset result = new VectorDataset(reader.getShapeType(), 
-                                                     reader.getPropertyNames(), 
-                                                     reader.getPropertyTypes());
+            if (reader.getShouldWarnUnusedZ() && !reader.getShouldAddZField()) {
+                outputWarning("The file " + geojsonFilePath + " contains non-single-point Z values in some features. "
+                        + "Upon import, the Z information from these features will be stripped out and they will be "
+                        + "treated as 2D features.");
+            }
+
+            VectorDataset result = new VectorDataset(reader.getShapeType(), propertyNames, propertyTypes);
 
             Geometry[] geometries = reader.getGeometries();
             Object[][] propertyValues = reader.getPropertyValues();
             for (int i = 0; i < reader.size(); i++) {
+                double z = 0.0;
+                boolean shouldAddZ = false;
+                if (geometries[i] instanceof PointZWrapper) {
+                    shouldAddZ = true;
+                    z = ((PointZWrapper) geometries[i]).getZ();
+                    geometries[i] = ((PointZWrapper) geometries[i]).getPoint();
+                }
+
                 if (reproject) {
                     geometries[i] = forward.transform(inverse.transform(geometries[i]));
+                }
+
+                if (shouldAddZ) {
+                    Object[] newValues = new Object[propertyTypes.length];
+                    System.arraycopy(propertyValues[i], 0, newValues, 0, propertyValues[i].length);
+                    newValues[newValues.length - 1] = z;
+                    propertyValues[i] = newValues;
                 }
                 result.add(geometries[i], propertyValues[i]);
             }
@@ -289,7 +326,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
     }
     
     /** */
-    public Object reportInternal (Argument args[], Context context) 
+    public Object reportInternal (Argument[] args, Context context)
             throws ExtensionException, IOException, LogoException, ParseException {
         _context = context;
         String dataFilePath = args[0].getString();

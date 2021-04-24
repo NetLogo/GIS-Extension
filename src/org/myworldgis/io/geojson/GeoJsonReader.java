@@ -7,13 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.geom.*;
 
+import org.myworldgis.io.PointZWrapper;
 import org.myworldgis.netlogo.VectorDataset.PropertyType;
 import org.myworldgis.netlogo.VectorDataset.ShapeType;
 import org.nlogo.api.ExtensionException;
@@ -48,6 +44,8 @@ public class GeoJsonReader implements GeoJsonConstants {
     String[]                  propertyNames;
     PropertyType[]            propertyTypes;
     Geometry[]                geometries;
+    boolean                   shouldAddZField = false;
+    boolean                   shouldWarnUnusedZ = false;
     Object[][]                propertyValues;
     boolean                   containsDefaultValues;
     
@@ -246,11 +244,24 @@ public class GeoJsonReader implements GeoJsonConstants {
         return containsDefaultValues;
     }
 
+    public boolean getShouldAddZField() {
+        return shouldAddZField;
+    }
+
+    public boolean getShouldWarnUnusedZ() {
+        return shouldWarnUnusedZ;
+    }
+
     private Geometry parseCoordinates(JSONArray coordinates, String geojsonShapeType) throws ExtensionException {
         switch (geojsonShapeType) {
             case "Point":
-                Geometry point = factory.createPoint(JSONPairToCoordinate(coordinates));
-                return point;
+                Point p = factory.createPoint(JSONPairToCoordinate(coordinates));
+                if (coordinates.size() == 3) {
+                    this.shouldAddZField = true;
+                    return new PointZWrapper(p, ((Number) coordinates.get(2)).doubleValue());
+                } else {
+                    return p;
+                }
             case "MultiPoint":
                 Coordinate[] pointCoords = new Coordinate[coordinates.size()];
                 for (int i = 0; i < coordinates.size(); i++) {
@@ -320,7 +331,10 @@ public class GeoJsonReader implements GeoJsonConstants {
         return polygon;
     }
 
-    private static Coordinate JSONPairToCoordinate(JSONArray arr) {
+    private Coordinate JSONPairToCoordinate(JSONArray arr) {
+        if (arr.size() > 2) {
+            this.shouldWarnUnusedZ = true;
+        }
         return new Coordinate(((Number) arr.get(0)).doubleValue(), ((Number) arr.get(1)).doubleValue());
     }
 

@@ -20,6 +20,26 @@ to test-PointZ-shapefile
     ]
   ]
 end
+
+to test-PointZ-geojson
+  clear-all
+  set dataset gis:load-dataset "./pointZ.geojson"
+  gis:set-world-envelope gis:envelope-of dataset
+
+  gis:set-drawing-color red
+
+  let expected (list 100 400 300 200 500)
+
+  foreach gis:feature-list-of dataset [vf ->
+    let z gis:property-value vf "_Z"
+    let fid gis:property-value vf "FID"
+    gis:draw vf z / 100
+    show (word fid " - " z)
+    if z != item fid expected [
+      error "Z import produced unexpected results"
+    ]
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -49,12 +69,29 @@ ticks
 30.0
 
 BUTTON
-86
-265
-249
-298
+35
+237
+198
+270
 NIL
 test-PointZ-shapefile
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+46
+146
+203
+179
+NIL
+test-PointZ-geojson
 NIL
 1
 T

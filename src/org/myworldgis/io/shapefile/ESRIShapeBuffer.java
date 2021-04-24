@@ -19,6 +19,7 @@ import java.io.IOException;
 import org.myworldgis.util.Buffer;
 import org.myworldgis.util.JTSUtils;
 import org.ngs.ngunits.UnitConverter;
+import org.myworldgis.io.PointZWrapper;
 
 
 /**
@@ -26,20 +27,6 @@ import org.ngs.ngunits.UnitConverter;
  */
 public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants {
 
-    public strictfp class PointZWrapper extends Point {
-        public Point _point;
-        public double _z;
-
-        PointZWrapper(Point point, double z){
-            super(point.getCoordinateSequence(), point.getFactory());
-            _point = point;
-            _z = z;
-        }
-
-        public Point getPoint(){ return _point; }
-
-        public double getZ(){ return _z; }
-    }
 
     //--------------------------------------------------------------------------
     // Instance variables
