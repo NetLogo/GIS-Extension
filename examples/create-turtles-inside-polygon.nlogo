@@ -1,98 +1,87 @@
 extensions [gis]
-globals [dataset heterogenous-agent-set]
-breed [cities city]
-turtles-own [name]
-cities-own [ population is-capital uid]
+globals [dataset]
+breed [citizens citizen]
+citizens-own [cntry_name curr_type]
+breed [manual-citizens manual-citizen]
+manual-citizens-own [country-name currency-type]
 
-breed [no-vars no-var]
-
-breed [wolves wolf]
-breed [sheeps sheep]
-
-to test
+to test-automatic
   clear-all
-  set dataset gis:load-dataset "../shared-datasets/cities.geojson"
+  set dataset gis:load-dataset "./shared-datasets/countries.shp"
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
-  gis:create-turtles-from-points dataset cities []
 
+  foreach gis:feature-list-of dataset [ country ->
+    gis:create-turtles-inside-polygon country citizens 1 [
+      set shape "person"
+    ]
 
-  ask turtles [
-    let associated_point item 0 gis:find-range dataset "UID" who (who + 2)
-    let point_location gis:location-of gis:centroid-of associated_point
+    ask one-of citizens [
+     if cntry_name != gis:property-value country "cntry_name" [
+        error "mismatch country name"
+      ]
+      if curr_type != gis:property-value country "curr_type" [
+        error "mismatch currency type"
+      ]
+      if shape != "person" [
+        error "command block error"
+      ]
+    ]
 
-    if item 0 point_location != max-pxcor + 0.5 and item 0 point_location != xcor [error "xcor mismatch"]
-    if item 1 point_location != max-pycor + 0.5 and item 1 point_location != ycor [error "ycor mismatch"]
+    clear-turtles
   ]
 end
 
 
 to test-manual
   clear-all
-  set dataset gis:load-dataset "../shared-datasets/cities.geojson"
+  set dataset gis:load-dataset "./shared-datasets/countries.shp"
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
-  gis:create-turtles-from-points-manual dataset cities [["name" "label"]] []
 
+  foreach gis:feature-list-of dataset [ country ->
+    gis:create-turtles-inside-polygon-manual country manual-citizens 1 [["cntry_name" "country-name"] ["curr_type" "currency-type"]] [
+      set shape "person"
+    ]
 
-  ask turtles [
-    let associated_point item 0 gis:find-range dataset "UID" who (who + 2)
-    let point_location gis:location-of gis:centroid-of associated_point
+    ask one-of manual-citizens [
+     if country-name != gis:property-value country "cntry_name" [
+        error "mismatch country name"
+      ]
+      if currency-type != gis:property-value country "curr_type" [
+        error "mismatch currency type"
+      ]
+      if shape != "person" [
+        error "command block error"
+      ]
+    ]
 
-    if item 0 point_location != max-pxcor + 0.5 and item 0 point_location != xcor [error "xcor mismatch"]
-    if item 1 point_location != max-pycor + 0.5 and item 1 point_location != ycor [error "ycor mismatch"]
-
-    if label != gis:property-value associated_point "name" [error "name mismatch"]
-    if name != 0 [error "match not properly overriden"]
+    clear-turtles
   ]
 end
 
-to test-empty
+
+
+to test-turtles
   clear-all
-  set dataset gis:load-dataset "../shared-datasets/cities.geojson"
-  gis:set-world-envelope gis:envelope-of dataset
-  gis:set-drawing-color red
-  gis:draw dataset 1
-  gis:create-turtles-from-points dataset no-vars []
-
-  ask turtles [
-    let associated_point item 0 gis:find-range dataset "UID" who (who + 2)
-    let point_location gis:location-of gis:centroid-of associated_point
-
-    if item 0 point_location != max-pxcor + 0.5 and item 0 point_location != xcor [error "xcor mismatch"]
-    if item 1 point_location != max-pycor + 0.5 and item 1 point_location != ycor [error "ycor mismatch"]
-  ]
-end
-
-to-report test-fail-on-non-breed-turtlesets
-  clear-all
-  set dataset gis:load-dataset "../shared-datasets/cities.geojson"
+  set dataset gis:load-dataset "./shared-datasets/countries.shp"
   gis:set-world-envelope gis:envelope-of dataset
   gis:set-drawing-color red
   gis:draw dataset 1
 
-  create-wolves 1
-  create-sheeps 1
-
-  set heterogenous-agent-set (turtle-set wolves)
-
-  let out false
-
-  carefully [
-    gis:create-turtles-from-points dataset heterogenous-agent-set []
-  ] [
-    set out true
+  foreach gis:feature-list-of dataset [ country ->
+    gis:create-turtles-inside-polygon country turtles 1
+    clear-turtles
   ]
-  report out
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
 10
 647
-240
+448
 -1
 -1
 13.0
@@ -102,52 +91,18 @@ GRAPHICS-WINDOW
 1
 1
 0
-0
-0
+1
+1
 1
 -16
 16
--8
-8
+-16
+16
 0
 0
 1
 ticks
 30.0
-
-BUTTON
-72
-68
-138
-101
-NIL
-test
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-67
-143
-173
-176
-NIL
-test-manual
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
 
 @#$#@#$#@
 ## WHAT IS IT?

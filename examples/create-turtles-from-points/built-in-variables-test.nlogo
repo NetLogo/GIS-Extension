@@ -11,51 +11,51 @@ to setup
 end
 
 to test-color
-  gis:create-turtles-from-points-manual dataset "turtles" [["colornum" "color"]] []
+  gis:create-turtles-from-points-manual dataset turtles [["colornum" "color"]] []
 end
 
 to test-color-str
-  gis:create-turtles-from-points-manual dataset "turtles" [["colorstr" "color"]] []
+  gis:create-turtles-from-points-manual dataset turtles [["colorstr" "color"]] []
 end
 
 to test-heading
-  gis:create-turtles-from-points-manual dataset "turtles" [["numfield" "heading"]] []
+  gis:create-turtles-from-points-manual dataset turtles [["numfield" "heading"]] []
 end
 
 to test-shape
-  gis:create-turtles-from-points-manual dataset "turtles" [["shapestr" "shape"]] []
+  gis:create-turtles-from-points-manual dataset turtles [["shapestr" "shape"]] []
 end
 
 to test-label
-  gis:create-turtles-from-points-manual dataset "turtles" [["shapestr" "label"]] []
+  gis:create-turtles-from-points-manual dataset turtles [["shapestr" "label"]] []
 end
 
 to test-label-color
-  gis:create-turtles-from-points-manual dataset "turtles" [["colornum" "label-color"]] [set label "foo"]
+  gis:create-turtles-from-points-manual dataset turtles [["colornum" "label-color"]] [set label "foo"]
 end
 
 to test-label-color-str
-  gis:create-turtles-from-points-manual dataset "turtles" [["colorstr" "label-color"]] [set label "foo"]
+  gis:create-turtles-from-points-manual dataset turtles [["colorstr" "label-color"]] [set label "foo"]
 end
 
 to test-hidden-str
-  gis:create-turtles-from-points-manual dataset "turtles" [["boolstr" "hidden?"]] []
+  gis:create-turtles-from-points-manual dataset turtles [["boolstr" "hidden?"]] []
 end
 
 to test-hidden-num
-  gis:create-turtles-from-points-manual dataset "turtles" [["boolnum" "hidden?"]] []
+  gis:create-turtles-from-points-manual dataset turtles [["boolnum" "hidden?"]] []
 end
 
 to test-size
-  gis:create-turtles-from-points-manual dataset "turtles" [["numfield" "size"]] []
+  gis:create-turtles-from-points-manual dataset turtles [["numfield" "size"]] []
 end
 
 to test-pen-mode
-  gis:create-turtles-from-points-manual dataset "turtles" [["textfield" "pen-mode"]] [fd 100]
+  gis:create-turtles-from-points-manual dataset turtles [["textfield" "pen-mode"]] [fd 100]
 end
 
 to test-pen-color
-  gis:create-turtles-from-points-manual dataset "turtles" [["colorstr" "pen-color"]] [fd 100]
+  gis:create-turtles-from-points-manual dataset turtles [["colorstr" "pen-color"]] [fd 100]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW

@@ -169,6 +169,8 @@ and comments at the
 [`gis:apply-coverage`](#gisapply-coverage)
 [`gis:create-turtles-from-points`](#giscreate-turtles-from-points)
 [`gis:create-turtles-from-points-manual`](#giscreate-turtles-from-points-manual)
+[`gis:create-turtles-inside-polygon`](#giscreate-turtles-inside-polygon)
+[`gis:create-turtles-inside-polygon-manual`](#giscreate-turtles-inside-polygon-manual)
 [`gis:coverage-minimum-threshold`](#giscoverage-minimum-threshold)
 [`gis:set-coverage-minimum-threshold`](#gisset-coverage-minimum-threshold)
 [`gis:coverage-maximum-threshold`](#giscoverage-maximum-threshold)
@@ -977,7 +979,8 @@ gis:create-turtles-from-points *VectorDataset* *breed* *commands*
   (as defined in `<breeds>-own`), if there is a property with the same
   name in the dataset, set that variable's value to be the value of
   that property. Finally, execute any commands in the optional
-  command block.
+  command block. To use generic turtles as the chosen breed, simply
+  supply `turtles` as the breed argument.
 
   Property names and variable names are compared case-insensitively.
   Keep in mind that when importing shapefiles, property names may be
@@ -1010,7 +1013,7 @@ globals [cities-dataset]
 
 to setup
   set cities-dataset gis:load-dataset "cities.shp"
-  gis:create-turtles-from-points cities-dataset "cities" [
+  gis:create-turtles-from-points cities-dataset cities [
     set shape "circle"
   ]
 end
@@ -1053,13 +1056,96 @@ globals [cities-dataset]
 to setup
   set cities-dataset gis:load-dataset "cities.shp"
   ;; Since we only want to change how the "CAPITAL" property is mapped, we only need to specify that one change.
-  gis:create-turtles-from-points-manual cities-dataset "cities" [["CAPITAL" "is-capital?"]] [
+  gis:create-turtles-from-points-manual cities-dataset cities [["CAPITAL" "is-capital?"]] [
     set shape "circle"
   ]
   ;; Each city turtle still has a name, country, and population set just like the non-manual version.
 end
 ```
     
+
+
+### `gis:create-turtles-inside-polygon`
+
+```NetLogo
+gis:create-turtles-inside-polygon *VectorFeature* *breed* *n* *commands*
+```
+
+
+Randomly create "n" turtles of the given breed within
+the given VectorFeature and for each agent variable
+(as defined in <breeds>-own), if there is a property with the same
+name in the dataset, set that variable's value to be the value of
+that property. Finally, execute any commands in the optional
+command block. To use generic turtles as the chosen breed, simply
+supply `turtles` as the breed argument.
+
+Property names and variable names are compared case-insensitively.
+Keep in mind that when importing shapefiles, property names may be
+modified for backwards compatibility reasons. The names given by
+`gis:property-names` can always be trusted as authoritative. For
+manually specifying a mapping between property names and variable
+names, see the `create-turtles-inside-polygon-manual` primitive.
+
+Built-in variables such as "label" and "heading" are supported.
+NetLogo color numeric representations are supported for setting
+"color" and "label-color", as well as the 15 default color string
+representations ("red", "blue", "black", etc.).
+
+As an example: say you had a VectorDataset of polygons representing
+different zip codes within a state and you want to create 100
+different turtles within each zip code and have each turtle
+know which zip code it originated in. The VectorDataset
+has a field named "zip", so you should add a variable
+named "zip" to the turtles with `turtles-own`. Then,
+loop through each VectorFeature in the VectorDataset and use
+the `create-turtles-inside-polygon` primitive to create 100
+new turtles.
+
+```
+extensions [gis]
+globals [dataset]
+turtles-own [zip]
+
+to setup
+  set dataset gis:load-dataset "dataset.shp"
+  gis:set-world-envelope envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
+
+  foreach gis:feature-list-of dataset [ this-vector-feature ->
+    gis:create-turtles-inside this-vector-feature turtles 100 [
+      set shape "person"
+    ]
+  ]
+end
+```
+        
+
+
+### `gis:create-turtles-inside-polygon-manual`
+
+```NetLogo
+gis:create-turtles-inside-polygon-manual *VectorFeature* *breed* *n* *property-mapping* *commands*
+```
+
+
+Like `create-turtles-inside-polygon`, creates "n" different turtles within the given VectorFeature and populates their
+agent variables with values corresponding to the property values of the VectorFeature.
+
+This primitive can be used to specify
+additional mappings between gis property names and NetLogo variable names.
+These mappings are specified as a list of lists of strings like so:
+`[["property-name" "turtle-variable-name"] ["property-name" "turtle-variable-name"] (etc.)]`
+
+These manual mappings modify the automatic mapping process that takes
+place in the `create-turtles-inside-polygon` primitive, so you only need
+to specify the changes you want to make to the default mappings, and
+the rest of the mappings will be untouched.
+
+See the `create-turtles-from-points-manual` entry for an example of
+how to override default mappings with manual ones.
+      
 
 
 ### `gis:coverage-minimum-threshold`
