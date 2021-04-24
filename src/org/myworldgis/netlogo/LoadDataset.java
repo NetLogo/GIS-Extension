@@ -56,7 +56,14 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
+    private static void outputWarning(String warning) throws LogoException{
+        Workspace ws = ((ExtensionContext)_context).workspace();
+        try {
+            ws.outputObject(warning, _context.getAgent(), true, false, OutputDestinationJ.NORMAL());
+        } catch (LogoException e) { }
+    }
+
     /** */
     private static Dataset loadShapefile (String shpFilePath,
                                           Projection srcProj,
@@ -90,6 +97,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             
             VectorDataset.ShapeType shapeType = null;
             boolean shouldAddZField = false;
+            boolean shouldWarnPartiallySupportedZ = false;
             switch (shp.getShapeType()) {
                 case ESRIShapefileReader.SHAPE_TYPE_POINT:
                 case ESRIShapefileReader.SHAPE_TYPE_MULTIPOINT:
@@ -99,15 +107,34 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                     shapeType = VectorDataset.ShapeType.POINT;
                     shouldAddZField = true;
                     break;
+                case ESRIShapefileReader.SHAPE_TYPE_MULTIPOINTZ:
+                    shouldWarnPartiallySupportedZ = true;
+                    shapeType = VectorDataset.ShapeType.POINT;
+                    break;
                 case ESRIShapefileReader.SHAPE_TYPE_POLYLINE:
+                    shapeType = VectorDataset.ShapeType.LINE;
+                    break;
+                case ESRIShapefileReader.SHAPE_TYPE_POLYLINEZ:
+                    shouldWarnPartiallySupportedZ = true;
                     shapeType = VectorDataset.ShapeType.LINE;
                     break;
                 case ESRIShapefileReader.SHAPE_TYPE_POLYGON:
                     shapeType = VectorDataset.ShapeType.POLYGON;
                     break;
+                case ESRIShapefileReader.SHAPE_TYPE_POLYGONZ:
+                    shouldWarnPartiallySupportedZ = true;
+                    shapeType = VectorDataset.ShapeType.POLYGON;
+                    break;
                 default:
                     throw new IOException("unsupported shape type " + shp.getShapeType());
             }
+
+            if (shouldWarnPartiallySupportedZ) {
+                outputWarning("The shapefile " + shpFilePath + " contains MultiPointZ, PolyLineZ, or PolygonZ features. "
+                        + "Upon import, the Z information from these features will be stripped out and they will be "
+                        + "treated as 2D Point, Line, and Polygon features.");
+            }
+
             String[] propertyNames = new String[dbf.getFieldCount() + (shouldAddZField ? 1 : 0)];
             VectorDataset.PropertyType[] propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
             for (int i = 0; i < dbf.getFieldCount(); i += 1) {
@@ -119,9 +146,6 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                 }
             }
             if (shouldAddZField) {
-                if (Arrays.asList(propertyNames).contains(ADDED_Z_FIELD)) {
-                    throw new ExtensionException("Tried to import PointZ data into the new field \"_Z\" but a field with that name already exists. Please rename it before continuing.");
-                }
                 propertyNames[propertyNames.length - 1] = ADDED_Z_FIELD;
                 propertyTypes[propertyTypes.length - 1] = VectorDataset.PropertyType.NUMBER;
             }
@@ -192,12 +216,8 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                 throw new ExtensionException("Error parsing " + geojsonFilePath);
             }
             if (reader.getContainsDefaultValues()) {
-                String errorString = "Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
-                        + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.";
-                Workspace ws = ((ExtensionContext)_context).workspace();
-                try {
-                    ws.outputObject(errorString, _context.getAgent(), true, false, OutputDestinationJ.NORMAL());
-                } catch (LogoException e) { }
+                outputWarning("Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
+                        + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.");
             }
 
             VectorDataset result = new VectorDataset(reader.getShapeType(), 

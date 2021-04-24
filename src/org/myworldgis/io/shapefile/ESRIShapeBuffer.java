@@ -31,7 +31,7 @@ public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeC
         public double _z;
 
         PointZWrapper(Point point, double z){
-            super(point.getCoordinate(), point.getPrecisionModel(), point.getSRID());
+            super(point.getCoordinateSequence(), point.getFactory());
             _point = point;
             _z = z;
         }
@@ -141,10 +141,16 @@ public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeC
                 return getESRIPointZRecord(offset);
             case SHAPE_TYPE_POLYGON:
                 return getESRIPolygonRecord(offset);
+            case SHAPE_TYPE_POLYGONZ:
+                return getESRIPolygonZRecord(offset);
             case SHAPE_TYPE_POLYLINE:
                 return getESRIPolyLineRecord(offset);
+            case SHAPE_TYPE_POLYLINEZ:
+                return getESRIPolyLineZRecord(offset);
             case SHAPE_TYPE_MULTIPOINT:
                 return getESRIMultiPointRecord(offset);
+            case SHAPE_TYPE_MULTIPOINTZ:
+                return getESRIMultiPointZRecord(offset);
             default:
                 throw new IOException("unsupported shape type");
         }
@@ -185,6 +191,26 @@ public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeC
         }
         return _factory.createMultiPoint(coords);
     }
+
+    public MultiPoint getESRIMultiPointZRecord(int offset) {
+        offset += 32;
+        int nPoints = getInt(offset);
+        offset += 4;
+        Coordinate[] coords = new Coordinate[nPoints];
+        for (int i = 0; i < nPoints; i += 1) {
+            double x = _converter.convert(getDouble(offset));
+            offset += 8;
+            double y = _converter.convert(getDouble(offset));
+            offset += 8;
+            coords[i] = new Coordinate(x, y);
+        }
+        offset += 16; // Zmin and Zmax fields
+        offset += 8 * nPoints; // Each Z value
+        offset += 16; // Mmin and Mmax fields
+        offset += 8 * nPoints; // Each M value
+
+        return _factory.createMultiPoint(coords);
+    }
     
     /** */
     public MultiLineString getESRIPolyLineRecord (int offset) {
@@ -220,6 +246,47 @@ public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeC
             parts[i] = _factory.createLineString(coords);
             startIndex = endIndex;
         }
+        return _factory.createMultiLineString(parts);
+    }
+
+    public MultiLineString getESRIPolyLineZRecord(int offset) {
+        offset += 32;
+        int nParts = getInt(offset);
+        offset += 4;
+        int nPoints = getInt(offset);
+        offset += 4;
+        if ((nParts == 0) || (nPoints < 2)) {
+            return _factory.createMultiLineString(null);
+        }
+        int[] offsets = new int[nParts];
+        for (int i = 0; i < nParts; i += 1) {
+            offsets[i] = getInt(offset);
+            offset += 4;
+        }
+        LineString[] parts = new LineString[nParts];
+        int startIndex = offsets[0];
+        for (int i = 0; i < nParts; i += 1) {
+            int currentIndex = startIndex;
+            int endIndex = (i == (nParts - 1)) ? nPoints : offsets[i+1];
+            Coordinate[] coords = new Coordinate[endIndex-startIndex];
+            int coordIndex = 0;
+            while (currentIndex < endIndex) {
+                double x = _converter.convert(getDouble(offset));
+                offset += 8;
+                double y = _converter.convert(getDouble(offset));
+                offset += 8;
+                coords[coordIndex++] = new Coordinate(x, y);
+                currentIndex += 1;
+            }
+            parts[i] = _factory.createLineString(coords);
+            startIndex = endIndex;
+        }
+
+        offset += 16; // Zmin and Zmax fields
+        offset += 8 * nPoints; // Each Z value
+        offset += 16; // Mmin and Mmax fields
+        offset += 8 * nPoints; // Each M value
+
         return _factory.createMultiLineString(parts);
     }
     
@@ -260,7 +327,49 @@ public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeC
         }
         return JTSUtils.buildPolygonGeometry(parts, _factory, true);
     }
-    
+
+    public MultiPolygon getESRIPolygonZRecord (int offset) {
+        offset += 32;
+        int nParts = getInt(offset);
+        offset += 4;
+        int nPoints = getInt(offset);
+        offset += 4;
+        if ((nParts == 0) || (nPoints < 3)) {
+            return _factory.createMultiPolygon(null);
+        }
+        int[] offsets = new int[nParts];
+        for (int i = 0; i < nParts; i += 1) {
+            offsets[i] = getInt(offset);
+            offset += 4;
+
+        }
+        LinearRing[] parts = new LinearRing[nParts];
+        int startIndex = offsets[0];
+        for (int i = 0; i < nParts; i += 1) {
+            int currentIndex = startIndex;
+            int endIndex = (i == (nParts - 1)) ? nPoints : offsets[i+1];
+            Coordinate[] coords = new Coordinate[endIndex-startIndex];
+            int coordIndex = 0;
+            while (currentIndex < endIndex) {
+                double x = _converter.convert(getDouble(offset));
+                offset += 8;
+                double y = _converter.convert(getDouble(offset));
+                offset += 8;
+                coords[coordIndex++] = new Coordinate(x, y);
+                currentIndex += 1;
+            }
+            parts[i] = _factory.createLinearRing(coords);
+            startIndex = endIndex;
+        }
+
+        offset += 16; // Zmin and Zmax fields
+        offset += 8 * nPoints; // Each Z value
+        offset += 16; // Mmin and Mmax fields
+        offset += 8 * nPoints; // Each M value
+
+        return JTSUtils.buildPolygonGeometry(parts, _factory, true);
+    }
+
     /** */
     public int putESRIRecord (int offset, Geometry shape, int shapeType, int index) {
         switch (shapeType) {

@@ -44,12 +44,21 @@ public interface ESRIShapeConstants {
     /** The indicator for an polyline shape type. (3) */
     public static final int SHAPE_TYPE_POLYLINE      = 3;
 
+    /** The indicator for a polylineZ shape. Added on 4/23/21 */
+    public static final int SHAPE_TYPE_POLYLINEZ     = 13;
+
     /** The indicator for a polygon shape type. (5) */
     public static final int SHAPE_TYPE_POLYGON      = 5;
 
+    /** The indicator for a polygonZ shape. Added on 4/23/21 */
+    public static final int SHAPE_TYPE_POLYGONZ     = 15;
+
     /** The indicator for a multipoint shape type. (8) */
     public static final int SHAPE_TYPE_MULTIPOINT = 8;
-    
+
+    /** The indicator for a mutlipointZ shape. Added on 4/23/21 */
+    public static final int SHAPE_TYPE_MULTIPOINTZ     = 18;
+
     /** Size of a shape file record header. (8 bytes) */
     public final static int SHAPE_RECORD_HEADER_LENGTH = 8;
 

@@ -32,6 +32,12 @@ TestImportPointZ-shapefile
   OPEN> extensions/gis/examples/VectorDatasetZImporting/PointZ.nlogo
   O> test-PointZ-shapefile
 
+TestImportIgnoredZ-shapefile
+  OPEN> extensions/gis/examples/VectorDatasetZImporting/NonPointZFeatures.nlogo
+  O> test-MultiPointZ
+  O> test-PolyLineZ
+  O> test-PolygonZ
+  
 TestGeoJSONImport_DC_Metro
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-metro
