@@ -288,13 +288,24 @@ public final strictfp class VectorFeature implements ExtensionObject {
     }
 
     private void setupTriangulation() throws ExtensionException {
-        _triangulation = TriangulationUtil.triangulate(_geometry);
-        int numTriangles = _triangulation.getNumGeometries();
-        _triangulation_areas_cumulative = new double[numTriangles];
-        for (int i = 0; i < numTriangles; i++) {
-            double thisTriangleArea = _triangulation.getGeometryN(i).getArea();
-            _total_area += thisTriangleArea;
-            _triangulation_areas_cumulative[i] = _total_area;
+        try {
+            _triangulation = TriangulationUtil.triangulate(_geometry);
+            int numTriangles = _triangulation.getNumGeometries();
+            _triangulation_areas_cumulative = new double[numTriangles];
+            for (int i = 0; i < numTriangles; i++) {
+                double thisTriangleArea = _triangulation.getGeometryN(i).getArea();
+                _total_area += thisTriangleArea;
+                _triangulation_areas_cumulative[i] = _total_area;
+            }
+        } catch (Exception e) {
+            if (e instanceof ExtensionException) { // if we threw the exception, pass it along
+                throw e;
+            } else {
+                throw new ExtensionException("There was an error trying to generate a point inside the following polygon. "
+                        + "Points can only be generated inside polygons with non-zero area. "
+                        + "Did all of your data import and project how you expected it to?\n"
+                        + this.dump(true, false, false) + "\n");
+            }
         }
     }
 
