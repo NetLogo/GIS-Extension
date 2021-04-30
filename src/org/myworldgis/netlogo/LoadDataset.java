@@ -59,7 +59,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
     // Class methods
     //--------------------------------------------------------------------------
 
-    private static void outputWarning(String warning) throws LogoException{
+    private static void outputWarning(String warning) throws LogoException {
         Workspace ws = ((ExtensionContext)_context).workspace();
         try {
             ws.outputObject(warning, _context.getAgent(), true, false, OutputDestinationJ.NORMAL());
@@ -222,7 +222,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             VectorDataset.PropertyType[] propertyTypes;
 
             if (reader.getShouldAddZField()) {
-                propertyNames = new String[reader.getPropertyNames().length + (reader.getShouldAddZField() ? 1 : 0)];
+                propertyNames = new String[reader.getPropertyNames().length + 1];
                 propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
                 System.arraycopy(reader.getPropertyNames(), 0, propertyNames, 0, reader.getPropertyNames().length);
                 System.arraycopy(reader.getPropertyTypes(), 0, propertyTypes, 0, reader.getPropertyTypes().length);
