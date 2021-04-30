@@ -76,6 +76,11 @@ public strictfp class VectorFeaturesToTurtlesUtil {
         Turtle turtle = world.createTurtle(agentSet, nvmContext.job.random.nextInt(14), 0);
 
         Coordinate nlogoPosition = GISExtension.getState().gisToNetLogo(coordinate, null);
+
+        if (nlogoPosition == null) { // we tried to create a turtle outside of the GIS envelope
+            return null;
+        }
+
         // max-pxcor + 0.5 and max-pycor + 0.5 are illegal x and ycor's in NetLogo but can come up when
         // working from GIS to NetLogo. This isn't a problem if world wrapping is on, but if it isn't
         // we need to nudge them back into the legal area.

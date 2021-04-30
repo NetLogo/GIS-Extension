@@ -22,8 +22,11 @@ import org.nlogo.api.LogoException;
 import org.nlogo.api.OutputDestinationJ;
 import org.nlogo.api.Patch;
 import org.nlogo.api.Turtle;
+import org.nlogo.headless.HeadlessWorkspace;
 import org.nlogo.nvm.ExtensionContext;
 import org.nlogo.nvm.Workspace;
+import org.nlogo.workspace.AbstractWorkspace;
+import org.nlogo.workspace.ExtendableWorkspace;
 import org.nlogo.workspace.ExtensionManager;
 
 
@@ -62,6 +65,8 @@ public final strictfp class GISExtensionState implements ExtensionObject {
     
     /** */
     private double _coverageMultipleCellThreshold;
+
+    private static ExtendableWorkspace _workspace;
     
     //--------------------------------------------------------------------------
     // Constructors
@@ -77,12 +82,35 @@ public final strictfp class GISExtensionState implements ExtensionObject {
         setNetLogoColor(org.nlogo.api.Color.BoxedBlack());
         _coverageSingleCellThreshold = 0.1;
         _coverageMultipleCellThreshold = 0.33;
+        _workspace = _em.workspace();
     }
     
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
+    public void displayWarning(String warning) {
+        if (_workspace instanceof HeadlessWorkspace) {
+            _workspace.warningMessage(warning);
+        } else if (_workspace instanceof AbstractWorkspace) {
+            AbstractWorkspace ws = (AbstractWorkspace) _workspace;
+            ws.outputObject(warning, null, true, false, OutputDestinationJ.NORMAL());
+        }
+    }
+
+    public void displayWarning(String warning, Object owner) {
+        if (_workspace instanceof HeadlessWorkspace) {
+            _workspace.warningMessage(warning);
+        } else if (_workspace instanceof AbstractWorkspace) {
+            AbstractWorkspace ws = (AbstractWorkspace) _workspace;
+            try {
+                ws.outputObject(warning, owner, true, false, OutputDestinationJ.NORMAL());
+            } catch (LogoException e) {
+                displayWarning(warning);
+            }
+        }
+    }
+
     /** */
     public File getFile (String path) {
         try {

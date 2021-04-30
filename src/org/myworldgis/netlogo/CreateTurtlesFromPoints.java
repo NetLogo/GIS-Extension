@@ -62,6 +62,12 @@ public strictfp class CreateTurtlesFromPoints {
                 for (int subPointIndex = 0; subPointIndex < geom.getNumGeometries(); subPointIndex++) {
                     Geometry thisPoint = geom.getGeometryN(subPointIndex);
                     Turtle turtle = VectorFeaturesToTurtlesUtil.CreateTurtleAtGISCoordinate(breedAgentSet, thisPoint.getCoordinate(), world, nvmContext);
+                    if (turtle == null) {
+                        GISExtension.getState().displayWarning("Tried to create turtle outside GIS envelope at: " + thisPoint.getCoordinate().toString()
+                                + ". Try setting your GIS world envelope with gis:set-world-envelope (gis:envelope-union-of "
+                                + "(gis:envelope-of your-first-dataset) (gis:envelope-of your-second-dataset) etc.))");
+                        continue;
+                    }
                     VectorFeaturesToTurtlesUtil.setTurtleVariablesToVectorFeatureProperties(turtle, feature, propertyNameToTurtleVarIndex);
                 }
             }

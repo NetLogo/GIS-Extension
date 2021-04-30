@@ -62,6 +62,12 @@ public strictfp class CreateTurtlesInsidePolygon {
             for (int i = 0; i < numToMake; i++){
                 Coordinate coord = vectorFeature.getRandomPointInsidePolygon(context.getRNG());
                 Turtle turtle = VectorFeaturesToTurtlesUtil.CreateTurtleAtGISCoordinate(breedAgentSet, coord, world, nvmContext);
+                if (turtle == null) {
+                    GISExtension.getState().displayWarning("Tried to create turtle outside GIS envelope at: " + coord.toString()
+                            + ". Try setting your GIS world envelope with gis:set-world-envelope (gis:envelope-union-of "
+                            + "(gis:envelope-of your-first-dataset) (gis:envelope-of your-second-dataset) etc.))");
+                    continue;
+                }
                 VectorFeaturesToTurtlesUtil.setTurtleVariablesToVectorFeatureProperties(turtle, vectorFeature, propertyNameToTurtleVarIndex);
             }
 

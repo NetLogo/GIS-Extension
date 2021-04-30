@@ -59,13 +59,6 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
     // Class methods
     //--------------------------------------------------------------------------
 
-    private static void outputWarning(String warning) throws LogoException {
-        Workspace ws = ((ExtensionContext)_context).workspace();
-        try {
-            ws.outputObject(warning, _context.getAgent(), true, false, OutputDestinationJ.NORMAL());
-        } catch (LogoException e) { }
-    }
-
     /** */
     private static Dataset loadShapefile (String shpFilePath,
                                           Projection srcProj,
@@ -132,7 +125,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             }
 
             if (shouldWarnPartiallySupportedZ) {
-                outputWarning("The shapefile " + shpFilePath + " contains MultiPointZ, PolyLineZ, or PolygonZ features. "
+                GISExtension.getState().displayWarning("The shapefile " + shpFilePath + " contains MultiPointZ, PolyLineZ, or PolygonZ features. "
                         + "Upon import, the Z information from these features will be stripped out and they will be "
                         + "treated as 2D Point, Line, and Polygon features.");
             }
@@ -234,12 +227,12 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             }
 
             if (reader.getContainsDefaultValues()) {
-                outputWarning("Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
+                GISExtension.getState().displayWarning("Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
                         + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.");
             }
 
             if (reader.getShouldWarnUnusedZ() && !reader.getShouldAddZField()) {
-                outputWarning("The file " + geojsonFilePath + " contains non-single-point Z values in some features. "
+                GISExtension.getState().displayWarning("The file " + geojsonFilePath + " contains non-single-point Z values in some features. "
                         + "Upon import, the Z information from these features will be stripped out and they will be "
                         + "treated as 2D features.");
             }
