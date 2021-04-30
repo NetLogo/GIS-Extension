@@ -302,8 +302,9 @@ public final strictfp class VectorFeature implements ExtensionObject {
                 throw e;
             } else {
                 throw new ExtensionException("There was an error trying to generate a point inside the following polygon. "
-                        + "Points can only be generated inside polygons with non-zero area. "
-                        + "Did all of your data import and project how you expected it to?\n"
+                        + "Points can only be generated inside polygons with non-zero "
+                        + "area *after* being projected into the current coordinate system. "
+                        + "Did all of your data import and project how you expected it to?"
                         + this.dump(true, false, false) + "\n");
             }
         }

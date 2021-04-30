@@ -1,5 +1,6 @@
 package org.myworldgis.netlogo;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import org.myworldgis.util.VectorFeaturesToTurtlesUtil;
 import org.nlogo.agent.TreeAgentSet;
@@ -61,6 +62,13 @@ public strictfp class CreateTurtlesFromPoints {
                 Geometry geom = feature.getGeometry();
                 for (int subPointIndex = 0; subPointIndex < geom.getNumGeometries(); subPointIndex++) {
                     Geometry thisPoint = geom.getGeometryN(subPointIndex);
+                    Coordinate coord = thisPoint.getCoordinate();
+                    if (coord == null) {
+                        GISExtension.getState().displayWarning("Tried to create turtle at a position that doesn't exist. "
+                                + "This can happen if you are, say, using an orthographic projection and the point at which "
+                                + "you are trying to create a turtle is on the other side of the globe.");
+                        continue;
+                    }
                     Turtle turtle = VectorFeaturesToTurtlesUtil.CreateTurtleAtGISCoordinate(breedAgentSet, thisPoint.getCoordinate(), world, nvmContext);
                     if (turtle == null) {
                         GISExtension.getState().displayWarning("Tried to create turtle outside GIS envelope at: " + thisPoint.getCoordinate().toString()
