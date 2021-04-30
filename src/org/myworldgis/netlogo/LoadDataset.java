@@ -6,6 +6,7 @@ package org.myworldgis.netlogo;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.util.GeometryTransformer;
 import java.awt.image.BandedSampleModel;
 import java.awt.image.DataBuffer;
@@ -15,9 +16,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.util.Arrays;
+
+import org.myworldgis.io.PointZWrapper;
 import org.myworldgis.io.asciigrid.AsciiGridFileReader;
 import org.myworldgis.io.geojson.GeoJsonReader;
 import org.myworldgis.io.shapefile.DBaseFileReader;
+import org.myworldgis.io.shapefile.ESRIShapeBuffer;
 import org.myworldgis.io.shapefile.ESRIShapefileReader;
 import org.myworldgis.projection.Ellipsoid;
 import org.myworldgis.projection.Geographic;
@@ -46,12 +51,21 @@ import org.nlogo.api.World;
  */
 public final strictfp class LoadDataset extends GISExtension.Reporter {
 
+    private static final String ADDED_Z_FIELD = "_Z";
+
     private static Context _context;
     
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
+    private static void outputWarning(String warning) throws LogoException {
+        Workspace ws = ((ExtensionContext)_context).workspace();
+        try {
+            ws.outputObject(warning, _context.getAgent(), true, false, OutputDestinationJ.NORMAL());
+        } catch (LogoException e) { }
+    }
+
     /** */
     private static Dataset loadShapefile (String shpFilePath,
                                           Projection srcProj,
@@ -84,21 +98,46 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             dbf = new DBaseFileReader(dbfFile.getInputStream());
             
             VectorDataset.ShapeType shapeType = null;
+            boolean shouldAddZField = false;
+            boolean shouldWarnPartiallySupportedZ = false;
             switch (shp.getShapeType()) {
                 case ESRIShapefileReader.SHAPE_TYPE_POINT:
                 case ESRIShapefileReader.SHAPE_TYPE_MULTIPOINT:
                     shapeType = VectorDataset.ShapeType.POINT;
                     break;
+                case ESRIShapefileReader.SHAPE_TYPE_POINTZ:
+                    shapeType = VectorDataset.ShapeType.POINT;
+                    shouldAddZField = true;
+                    break;
+                case ESRIShapefileReader.SHAPE_TYPE_MULTIPOINTZ:
+                    shouldWarnPartiallySupportedZ = true;
+                    shapeType = VectorDataset.ShapeType.POINT;
+                    break;
                 case ESRIShapefileReader.SHAPE_TYPE_POLYLINE:
+                    shapeType = VectorDataset.ShapeType.LINE;
+                    break;
+                case ESRIShapefileReader.SHAPE_TYPE_POLYLINEZ:
+                    shouldWarnPartiallySupportedZ = true;
                     shapeType = VectorDataset.ShapeType.LINE;
                     break;
                 case ESRIShapefileReader.SHAPE_TYPE_POLYGON:
                     shapeType = VectorDataset.ShapeType.POLYGON;
                     break;
+                case ESRIShapefileReader.SHAPE_TYPE_POLYGONZ:
+                    shouldWarnPartiallySupportedZ = true;
+                    shapeType = VectorDataset.ShapeType.POLYGON;
+                    break;
                 default:
                     throw new IOException("unsupported shape type " + shp.getShapeType());
             }
-            String[] propertyNames = new String[dbf.getFieldCount()];
+
+            if (shouldWarnPartiallySupportedZ) {
+                outputWarning("The shapefile " + shpFilePath + " contains MultiPointZ, PolyLineZ, or PolygonZ features. "
+                        + "Upon import, the Z information from these features will be stripped out and they will be "
+                        + "treated as 2D Point, Line, and Polygon features.");
+            }
+
+            String[] propertyNames = new String[dbf.getFieldCount() + (shouldAddZField ? 1 : 0)];
             VectorDataset.PropertyType[] propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
             for (int i = 0; i < dbf.getFieldCount(); i += 1) {
                 propertyNames[i] = dbf.getFieldName(i);
@@ -108,15 +147,36 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
                     propertyTypes[i] = VectorDataset.PropertyType.STRING;
                 }
             }
+            if (shouldAddZField) {
+                propertyNames[propertyNames.length - 1] = ADDED_Z_FIELD;
+                propertyTypes[propertyTypes.length - 1] = VectorDataset.PropertyType.NUMBER;
+            }
+
             VectorDataset result = new VectorDataset(shapeType, propertyNames, propertyTypes);
             while (true) {
                 Geometry shape = shp.getNextShape();
                 if (shape == null) {
                     break;
-                } else if (reproject) {
+                }
+
+                double z = 0.0;
+                if (shape instanceof PointZWrapper) {
+                    z = ((PointZWrapper) shape).getZ();
+                    shape = ((PointZWrapper) shape).getPoint();
+                }
+
+                if (reproject) {
                     shape = forward.transform(inverse.transform(shape));
                 }
-                result.add(shape, dbf.getNextRecord());
+
+                if (shouldAddZField) {
+                    Object[] propertyValues = new Object[propertyNames.length];
+                    System.arraycopy(dbf.getNextRecord(), 0, propertyValues, 0, propertyValues.length - 1);
+                    propertyValues[propertyValues.length - 1] = z;
+                    result.add(shape, propertyValues);
+                } else {
+                    result.add(shape, dbf.getNextRecord());
+                }
             }
             
             return result;
@@ -157,24 +217,55 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
             } catch (org.json.simple.parser.ParseException e){
                 throw new ExtensionException("Error parsing " + geojsonFilePath);
             }
-            if (reader.getContainsDefaultValues()) {
-                String errorString = "Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
-                        + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.";
-                Workspace ws = ((ExtensionContext)_context).workspace();
-                try {
-                    ws.outputObject(errorString, _context.getAgent(), true, false, OutputDestinationJ.NORMAL());
-                } catch (LogoException e) { }
+
+            String[] propertyNames;
+            VectorDataset.PropertyType[] propertyTypes;
+
+            if (reader.getShouldAddZField()) {
+                propertyNames = new String[reader.getPropertyNames().length + 1];
+                propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
+                System.arraycopy(reader.getPropertyNames(), 0, propertyNames, 0, reader.getPropertyNames().length);
+                System.arraycopy(reader.getPropertyTypes(), 0, propertyTypes, 0, reader.getPropertyTypes().length);
+                propertyNames[propertyNames.length - 1] = ADDED_Z_FIELD;
+                propertyTypes[propertyTypes.length - 1] = VectorDataset.PropertyType.NUMBER;
+            } else {
+                propertyNames = reader.getPropertyNames();
+                propertyTypes = reader.getPropertyTypes();
             }
 
-            VectorDataset result = new VectorDataset(reader.getShapeType(), 
-                                                     reader.getPropertyNames(), 
-                                                     reader.getPropertyTypes());
+            if (reader.getContainsDefaultValues()) {
+                outputWarning("Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
+                        + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.");
+            }
+
+            if (reader.getShouldWarnUnusedZ() && !reader.getShouldAddZField()) {
+                outputWarning("The file " + geojsonFilePath + " contains non-single-point Z values in some features. "
+                        + "Upon import, the Z information from these features will be stripped out and they will be "
+                        + "treated as 2D features.");
+            }
+
+            VectorDataset result = new VectorDataset(reader.getShapeType(), propertyNames, propertyTypes);
 
             Geometry[] geometries = reader.getGeometries();
             Object[][] propertyValues = reader.getPropertyValues();
             for (int i = 0; i < reader.size(); i++) {
+                double z = 0.0;
+                boolean shouldAddZ = false;
+                if (geometries[i] instanceof PointZWrapper) {
+                    shouldAddZ = true;
+                    z = ((PointZWrapper) geometries[i]).getZ();
+                    geometries[i] = ((PointZWrapper) geometries[i]).getPoint();
+                }
+
                 if (reproject) {
                     geometries[i] = forward.transform(inverse.transform(geometries[i]));
+                }
+
+                if (shouldAddZ) {
+                    Object[] newValues = new Object[propertyTypes.length];
+                    System.arraycopy(propertyValues[i], 0, newValues, 0, propertyValues[i].length);
+                    newValues[newValues.length - 1] = z;
+                    propertyValues[i] = newValues;
                 }
                 result.add(geometries[i], propertyValues[i]);
             }
@@ -235,7 +326,7 @@ public final strictfp class LoadDataset extends GISExtension.Reporter {
     }
     
     /** */
-    public Object reportInternal (Argument args[], Context context) 
+    public Object reportInternal (Argument[] args, Context context)
             throws ExtensionException, IOException, LogoException, ParseException {
         _context = context;
         String dataFilePath = args[0].getString();
