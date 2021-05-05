@@ -4,7 +4,7 @@ javaSource in Compile := baseDirectory.value / "src"
 
 name := "gis"
 
-version := "1.2.0"
+version := "1.3.0"
 
 netLogoClassManager := "org.myworldgis.netlogo.GISExtension"
 
