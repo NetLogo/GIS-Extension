@@ -5,9 +5,9 @@ This package contains the NetLogo GIS extension.
 
 ## Building
 
-Use the netlogo.jar.url environment variable to tell sbt which NetLogo.jar to compile against (defaults to NetLogo 5.3). For example:
-
-    sbt -Dnetlogo.jar.url=file:///path/to/NetLogo/target/NetLogo.jar package
+```
+sbt package
+```
 
 If compilation succeeds, `gis.jar` will be created.
 
@@ -17,12 +17,13 @@ This extension adds GIS (Geographic Information Systems) support to
 NetLogo. It provides the ability to load vector GIS data (points,
 lines, and polygons), and raster GIS data (grids) into your model.
 
-The extension supports vector data in the form of ESRI shapefiles.
-The shapefile (.shp) format is the most common format for storing and
-exchanging vector GIS data. The extension supports raster data in the
-form of ESRI ASCII Grid files. The ASCII grid file (.asc or .grd) is
-not as common as the shapefile, but is supported as an interchange
-format by most GIS platforms.
+The extension supports vector data in the form of ESRI shapefiles and
+GeoJSON files.  The shapefile (.shp) and GeoJSON (.geojson) formats
+are the most common format for storing and exchanging vector GIS data.
+The extension supports raster data in the form of ESRI ASCII Grid
+files.  The ASCII grid file (.asc or .grd) is not as common as the
+shapefile, but is supported as an interchange format by most GIS
+platforms.
 
 ### How to use
 
@@ -90,7 +91,6 @@ arbitrary convolution matrix.
 
 ### Known Issues
 
-
 Values of type RasterDataset, VectorDataset, VectorFeature, and
 Vertex are not handled properly by `export-world` and
 `import-world`. To save datasets, you must use the
@@ -104,6 +104,8 @@ shells.
 ### Credits
 
 The primary developer of the GIS extension was Eric Russell.
+
+Significant updates, features, and fixes were added by James Hovet in 2020 and 2021.
 
 The GIS extension makes use of several open-source software
 libraries. For copyright and license information on those, see the
