@@ -4,7 +4,7 @@ See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/hexy/READ
 
 - Add `gis:create-turtles-from-points` to quickly make turtles from a point dataset.
 - Add `gis:random-point-inside` to get a random point from inside a polygon shape.
-- Add ``gis:create-turtles-inside-polygon` to create a turtle at a random point inside a polygon shape.
+- Add `gis:create-turtles-inside-polygon` to create a turtle at a random point inside a polygon shape.
 - Allow `gis:find-one-feature` and `gis-find-features` to search with numbers.
 - General improvements in error/warning messages to better indicate probable issues with data.
 - Allow importing elevation with other data as the `_Z` field.
