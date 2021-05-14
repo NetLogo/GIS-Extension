@@ -1,6 +1,6 @@
 //
 // Copyright (c)2008 by the National Geographic Society. All Rights Reserved.
-// 
+//
 
 package org.myworldgis.util;
 
@@ -23,18 +23,18 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 
 /** */
 public final class HttpClientManager {
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private static HttpClientManager _instance = null;
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static HttpClientManager getInstance () {
         if (_instance == null) {
@@ -42,7 +42,7 @@ public final class HttpClientManager {
         }
         return _instance;
     }
-    
+
     /** */
     public static String errorMsg (int statusCode, String url) {
         StringBuilder result = new StringBuilder();
@@ -58,37 +58,37 @@ public final class HttpClientManager {
         }
         return result.toString();
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private HttpConnectionManager _connectionManager;
-    
+
     /** */
     private HttpClient _client;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     private HttpClientManager (String userAgent) {
         _connectionManager = new MultiThreadedHttpConnectionManager();
         _client = new HttpClient(_connectionManager);
         HttpClientParams params = _client.getParams();
-        params.setParameter(HttpMethodParams.SO_TIMEOUT, new Integer(30000));
+        params.setParameter(HttpMethodParams.SO_TIMEOUT, Integer.valueOf(30000));
         params.setParameter(HttpClientParams.ALLOW_CIRCULAR_REDIRECTS, Boolean.TRUE);
         params.setParameter(HttpClientParams.COOKIE_POLICY, CookiePolicy.RFC_2109);
         params.setParameter(HttpMethodParams.USER_AGENT, userAgent + "/HttpClientManager");
         _client.setParams(params);
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public int execute (HttpMethod method) throws IOException {
         try {
@@ -119,6 +119,6 @@ public final class HttpClientManager {
             IOException ex = new IOException("error parsing uri: " + method.getURI().getURI());
             ex.initCause(e);
             throw ex;
-        }   
+        }
     }
 }

@@ -57,7 +57,7 @@ public abstract strictfp class ApplyCoverage {
                            new Reference[] { ((org.nlogo.nvm.Argument)args[2]).getReference() });
         }
     }
-    
+
     /** */
     @SuppressWarnings("unchecked")
     public static final strictfp class MultiplePolygonFields extends GISExtension.Command {
@@ -65,28 +65,28 @@ public abstract strictfp class ApplyCoverage {
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
-            
+
             // This doesn't work because NetLogo keeps trying to evaluate
-            // my references to patch variables in the Observer context 
-            // rather than passing them along without evaluating them. 
-            // Removing the RepeatableType() from the third argument will 
-            // fix that problem, but then you can no longer pass the 
-            // command a variable number of patch variable references, 
-            // which kind of defeats the whole purpose. Since I don't know 
-            // anything about how the NetLogo compiler works, debugging this 
-            // problem would take way more time than I have available, but 
-            // if someone else were willing to take a look, I'd really 
+            // my references to patch variables in the Observer context
+            // rather than passing them along without evaluating them.
+            // Removing the RepeatableType() from the third argument will
+            // fix that problem, but then you can no longer pass the
+            // command a variable number of patch variable references,
+            // which kind of defeats the whole purpose. Since I don't know
+            // anything about how the NetLogo compiler works, debugging this
+            // problem would take way more time than I have available, but
+            // if someone else were willing to take a look, I'd really
             // appreciate it. - ER 12/13/07
-            
-            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), 
-                                                    Syntax.ListType(), 
+
+            return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
+                                                    Syntax.ListType(),
                                                     Syntax.ReferenceType() | Syntax.RepeatableType() },
                                         3);
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, LogoException {
             Object arg0 = args[0].get();
             if (!(arg0 instanceof VectorDataset)) {
@@ -112,99 +112,99 @@ public abstract strictfp class ApplyCoverage {
                            variables);
         }
     }
-    
+
     /** */
     public static final strictfp class GetCoverageMinimumThreshold extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { }, Syntax.NumberType());
         }
-        
-        public Object reportInternal (Argument args[], Context context) 
+
+        public Object reportInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, LogoException {
-            return new Double(GISExtension.getState().getCoverageSingleCellThreshold());
+            return Double.valueOf(GISExtension.getState().getCoverageSingleCellThreshold());
         }
     }
-    
+
     /** */
     public static final strictfp class SetCoverageMinimumThreshold extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.NumberType() });
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, LogoException {
             GISExtension.getState().setCoverageSingleCellThreshold(args[0].getDoubleValue());
         }
     }
-    
+
     /** */
     public static final strictfp class GetCoverageMaximumThreshold extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { }, Syntax.NumberType());
         }
-        
-        public Object reportInternal (Argument args[], Context context) 
+
+        public Object reportInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, LogoException {
-            return new Double(GISExtension.getState().getCoverageMultipleCellThreshold());
+            return Double.valueOf(GISExtension.getState().getCoverageMultipleCellThreshold());
         }
     }
-    
+
     /** */
     public static final strictfp class SetCoverageMaximumThreshold extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.NumberType() });
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, LogoException {
             GISExtension.getState().setCoverageMultipleCellThreshold(args[0].getDoubleValue());
         }
     }
-    
+
     /** */
     private static final strictfp class ValueRecord {
-        
+
         private Object _value;
         private double _areaRatio;
-        
+
         public ValueRecord (Object value, double areaRatio) {
             _value = value;
             _areaRatio = areaRatio;
         }
-        
+
         public Object getValue () {
             return _value;
         }
-        
+
         public double getWeight () {
             return _areaRatio;
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     static void applyCoverages (World world,
                                 VectorDataset dataset,
@@ -240,10 +240,10 @@ public abstract strictfp class ApplyCoverage {
             }
         }
     }
-    
+
     /** */
     static Object[] aggregatePropertyValues (Geometry patchGeometry,
-                                             String[] propertyNames, 
+                                             String[] propertyNames,
                                              List<VectorFeature> features) {
         int maxAreaIndex = -1;
         double maxAreaRatio = 0.0;
@@ -304,8 +304,8 @@ public abstract strictfp class ApplyCoverage {
         }
         return result;
     }
-    
-    
+
+
     /** */
     static Object majority (ValueRecord[] records) {
         HashMap<Object,Double> map = new HashMap<Object,Double>();
@@ -329,7 +329,7 @@ public abstract strictfp class ApplyCoverage {
         }
         return maxWeightValue;
     }
-    
+
     /** */
     static Object weightedAverage (ValueRecord[] records) {
         double totalValue = 0.0;
