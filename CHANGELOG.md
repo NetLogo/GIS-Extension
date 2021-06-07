@@ -15,7 +15,7 @@ See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/hexy/READ
 
 See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/hexy/README.md) for more information on using the new and updated primitives.
 
-- Add the ability to use GeoJSON with `gis:store-dataset`
+- Add the ability to use GeoJSON with `gis:load-dataset` and `gis:store-dataset`
 - Add `gis:set-property-value` to change values in a dataset.
 - Add `gis:project-lat-lon` and `gis:project-lat-lon-ellipsoid` primitives to give the NetLogo coordinates of a latitude and longitude pair.
 - Scientific notation in gridfiles is now correctly parsed.
