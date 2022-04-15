@@ -52,6 +52,11 @@ characters). If the VectorFeatures are polygons, you can also apply
 the values of a particular property of the dataset's features to
 a given patch variable.
 
+For the common use case of converting a VectorDataset of points into 
+a corresponding set of turtles with the same attributes, the 
+[gis:create-turtles-from-points](#giscreate-turtles-from-points) 
+primitive should be used.
+
 There are also several things you can do with a VectorFeature from a
 VectorDataset: ask it for a list of vertex lists, ask it for a
 property value by name, ask it for its centroid (center of gravity),
@@ -63,6 +68,14 @@ vertex list will represent one "ring" of the polygon, and
 the first and last vertex of the list will be the same. The vertex
 lists are made up of values of type Vertex, and the centroid will be
 a value of type Vertex as well.
+
+For the common use case of spawning a number of turtles inside the 
+bounds of a Polygon VectorFeature, the 
+[gis:create-turtles-inside-polygon](#giscreate-turtles-inside-polygon) 
+primitive should be used. Though the 
+[gis:random-point-inside](#gisrandom-point-inside) primitive can 
+also be used if you don't want the spawned turtles to take on 
+the attributes of the Polygon.
 
 There are a number of operations defined for RasterDatasets as well.
 Mostly these involve sampling the values in the dataset, or

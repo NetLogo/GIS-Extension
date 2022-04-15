@@ -65,6 +65,11 @@ characters). If the VectorFeatures are polygons, you can also apply
 the values of a particular property of the dataset's features to
 a given patch variable.
 
+For the common use case of converting a VectorDataset of points into 
+a corresponding set of turtles with the same attributes, the 
+[gis:create-turtles-from-points](#giscreate-turtles-from-points) 
+primitive should be used.
+
 There are also several things you can do with a VectorFeature from a
 VectorDataset: ask it for a list of vertex lists, ask it for a
 property value by name, ask it for its centroid (center of gravity),
@@ -76,6 +81,14 @@ vertex list will represent one "ring" of the polygon, and
 the first and last vertex of the list will be the same. The vertex
 lists are made up of values of type Vertex, and the centroid will be
 a value of type Vertex as well.
+
+For the common use case of spawning a number of turtles inside the 
+bounds of a Polygon VectorFeature, the 
+[gis:create-turtles-inside-polygon](#giscreate-turtles-inside-polygon) 
+primitive should be used. Though the 
+[gis:random-point-inside](#gisrandom-point-inside) primitive can 
+also be used if you don't want the spawned turtles to take on 
+the attributes of the Polygon.
 
 There are a number of operations defined for RasterDatasets as well.
 Mostly these involve sampling the values in the dataset, or
@@ -456,32 +469,32 @@ gis:project-lat-lon *latitude* *longitude*
 ```
 
 
-    Report the position, in NetLogo space, of the given latitude
-    and longitude pair according to the current map projection and
-    transformation. 
+Report the position, in NetLogo space, of the given latitude
+and longitude pair according to the current map projection and
+transformation.
 
-    Like the `location-of` primitive, the reported xcor and ycor
-    values are reported in a two-item list of `[xcor ycor]` 
-    and an empty list if the specified point is outside of 
-    the bounds of the netlogo world. 
-    For instance:
-    ```
-    let location-of-abbey-road-studios gis:project-lat-lon 51.5320787 -0.1802646
-    let abbey-road-xcor item 0 location-of-abbey-road-studios
-    let abbey-road-ycor item 1 location-of-abbey-road-studios
-    ```
+Like the `location-of` primitive, the reported xcor and ycor
+values are reported in a two-item list of `[xcor ycor]`
+and an empty list if the specified point is outside of
+the bounds of the netlogo world.
+For instance:
+```
+let location-of-abbey-road-studios gis:project-lat-lon 51.5320787 -0.1802646
+let abbey-road-xcor item 0 location-of-abbey-road-studios
+let abbey-road-ycor item 1 location-of-abbey-road-studios
+```
 
-    Note that this primitive assumes that the given lat/lon pair 
-    are relative to the WGS84 datum/ellipsoid. If your
-    data is based on GPS observations or GeoJson files, then your 
-    data is already relative to WGS84. If you are unsure about 
-    what datum your data is, then you should probably just assume
-    it is WGS84 and use this primitive. However, if you do know
-    that your data is relative to a different datum and that
-    extra degree of precision is important to you (if you are,
-    say, comparing values from location-of and project-lat-lon)
-    then you should use `project-lat-lon-from-ellipsoid` and 
-    specify the desired datum's ellipsoid. 
+Note that this primitive assumes that the given lat/lon pair
+are relative to the WGS84 datum/ellipsoid. If your
+data is based on GPS observations or GeoJson files, then your
+data is already relative to WGS84. If you are unsure about
+what datum your data is, then you should probably just assume
+it is WGS84 and use this primitive. However, if you do know
+that your data is relative to a different datum and that
+extra degree of precision is important to you (if you are,
+say, comparing values from location-of and project-lat-lon)
+then you should use `project-lat-lon-from-ellipsoid` and
+specify the desired datum's ellipsoid.
 
 
 
@@ -492,35 +505,35 @@ gis:project-lat-lon-from-ellipsoid *latitude* *longitude* *ellipsoid-radius* *el
 ```
 
 
-    Report the position, in NetLogo space, of the given latitude
-    and longitude pair according to the current map projection and
-    transformation and the given ellipsoid parameters. 
+Report the position, in NetLogo space, of the given latitude
+and longitude pair according to the current map projection and
+transformation and the given ellipsoid parameters.
 
-    Like the `location-of` primitive, the reported xcor and ycor
-    values are reported in a two-item list of `[xcor ycor]`
-    and an empty list if the specified point is outside of 
-    the bounds of the netlogo world. 
+Like the `location-of` primitive, the reported xcor and ycor
+values are reported in a two-item list of `[xcor ycor]`
+and an empty list if the specified point is outside of
+the bounds of the netlogo world.
 
-    The two defining parameters of a  ellipsoid for 
-    the purposes of this primitive are the radius and the 
-    inverse flattening metric. These parameters can be 
-    easily found by examining either the WKT definition
-    of a given projection/datum pair or the .prj file for 
-    the desired datum. For example, if you open the .prj file
-    for a shapefile exported with the WGS66 datum in a text editor, 
-    you will see, somewhere in the file, this bit of text:
-    `DATUM["D_WGS_1966",SPHEROID["NWL_9D",6378145,298.25]]`. 
-    If you look at the `SPHEROID` section of that text, the
-    first number is the radius of that ellipoid and the 
-    second is the inverse flattening. 
+The two defining parameters of a  ellipsoid for
+the purposes of this primitive are the radius and the
+inverse flattening metric. These parameters can be
+easily found by examining either the WKT definition
+of a given projection/datum pair or the .prj file for
+the desired datum. For example, if you open the .prj file
+for a shapefile exported with the WGS66 datum in a text editor,
+you will see, somewhere in the file, this bit of text:
+`DATUM["D_WGS_1966",SPHEROID["NWL_9D",6378145,298.25]]`.
+If you look at the `SPHEROID` section of that text, the
+first number is the radius of that ellipoid and the
+second is the inverse flattening.
 
-    Once we have these numbers, we can project data that is 
-    relative to WGS66 like so:
-    ```
-    let location gis:project-lat-lon my-lat my-lon 6378145 298.25
-    ```
+Once we have these numbers, we can project data that is
+relative to WGS66 like so:
+```
+let location gis:project-lat-lon my-lat my-lon 6378145 298.25
+```
 
-    For more on earth ellipoids, see: https://en.wikipedia.org/wiki/Earth_ellipsoid
+For more on earth ellipoids, see: https://en.wikipedia.org/wiki/Earth_ellipsoid
 
 
 
