@@ -1,9 +1,8 @@
-/*.jar
-/*.jar.pack.gz
-/classes
-/gis.zip
-target/
-/project/project
 .bundledFiles
+target/
+extensions/
+/*.jar
+/*.zip
+
 # the output for the geojson exporting tests found in examples/geojson/geojson_export_test.nlogo -James Hovet 2/2/21
 examples/geojson/out.geojson

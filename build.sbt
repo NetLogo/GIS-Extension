@@ -1,18 +1,20 @@
 enablePlugins(org.nlogo.build.NetLogoExtension, org.nlogo.build.ExtensionDocumentationPlugin)
 
-javaSource in Compile := baseDirectory.value / "src"
 
 name := "gis"
-
 version := "1.3.1"
+isSnapshot := true
 
+javaSource in Compile := baseDirectory.value / "src" / "org"
+javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xlint:-path", "-encoding", "us-ascii")
+
+scalaVersion := "2.12.12"
+scalaSource in Test := baseDirectory.value / "src" / "test"
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-feature", "-encoding", "us-ascii")
+
+netLogoVersion := "6.2.2"
 netLogoClassManager := "org.myworldgis.netlogo.GISExtension"
-
-netLogoTarget :=
-  org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
-
-javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xlint:-path",
-  "-encoding", "us-ascii")
+netLogoTestExtras += (baseDirectory.value / "examples")
 
 libraryDependencies ++= Seq(
   "com.vividsolutions"         % "jts"                % "1.13",
@@ -24,7 +26,3 @@ libraryDependencies ++= Seq(
   "com.sun.media"              % "jai_codec"          % "1.1.3" from "https://s3.amazonaws.com/ccl-artifacts/jai_codec-1.1.3.jar",
   "org.tinfour"                % "TinfourCore"        % "2.1.5",
   "com.googlecode.json-simple" % "json-simple"        % "1.1.1")
-
-resolvers      += "netlogo" at "https://dl.cloudsmith.io/public/netlogo/netlogo/maven/"
-netLogoVersion := "6.2.0-d27b502"
-isSnapshot := true
