@@ -8,7 +8,7 @@ package org.myworldgis.io.shapefile;
 /**
  *
  */
-public final strictfp class ESRIShapeIndexRecord {
+public final class ESRIShapeIndexRecord {
     
     //--------------------------------------------------------------------------
     // Instance variables

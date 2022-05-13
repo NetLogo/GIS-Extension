@@ -26,7 +26,7 @@ import org.nlogo.prim._reference;
 /**
  * 
  */
-public final strictfp class PatchDataset extends GISExtension.Reporter {
+public final class PatchDataset extends GISExtension.Reporter {
     
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation

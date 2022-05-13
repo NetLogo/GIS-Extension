@@ -22,7 +22,7 @@ import org.ngs.ngunits.quantity.Length;
  * that make it appear that the "/n" at the end is supposed to be part of the
  * exponent. It is not. I unfortunately had to figure this out the hard way.
  */
-public final strictfp class AlbersEqualAreaConic extends Conic {
+public final class AlbersEqualAreaConic extends Conic {
 
     //--------------------------------------------------------------------------
     // Class variables

@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 76-85
  */
-public final strictfp class CylindricalEqualArea extends Cylindrical {
+public final class CylindricalEqualArea extends Cylindrical {
 
     //--------------------------------------------------------------------------
     // Class variables

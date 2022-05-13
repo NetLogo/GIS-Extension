@@ -12,7 +12,7 @@ import org.myworldgis.util.StringUtils;
 /**
  * Class representing a field in a dBase file.
  */
-public final strictfp class DBaseFieldDescriptor implements DBaseConstants {
+public final class DBaseFieldDescriptor implements DBaseConstants {
     
     //--------------------------------------------------------------------------
     // Class methods

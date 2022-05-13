@@ -20,14 +20,14 @@ import org.nlogo.api.PrimitiveManager;
 /**
  * 
  */
-public final strictfp class GISExtension extends DefaultClassManager {
+public final class GISExtension extends DefaultClassManager {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
     
     /** */
-    public static abstract strictfp class Reporter implements org.nlogo.api.Reporter {
+    public static abstract class Reporter implements org.nlogo.api.Reporter {
         
         public abstract Object reportInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, IOException, LogoException, ParseException;
@@ -50,7 +50,7 @@ public final strictfp class GISExtension extends DefaultClassManager {
     }
     
     /** */
-    public static abstract strictfp class Command implements org.nlogo.api.Command {
+    public static abstract class Command implements org.nlogo.api.Command {
         
         public abstract void performInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, IOException, LogoException, ParseException;

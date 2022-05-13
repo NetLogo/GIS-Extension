@@ -24,7 +24,7 @@ import org.nlogo.api.World;
 /**
  * 
  */
-public final strictfp class LinkDataset extends GISExtension.Reporter {
+public final class LinkDataset extends GISExtension.Reporter {
     
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation

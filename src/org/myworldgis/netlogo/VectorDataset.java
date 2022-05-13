@@ -28,14 +28,14 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public final strictfp class VectorDataset extends Dataset {
+public final class VectorDataset extends Dataset {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class GetFeatures extends GISExtension.Reporter {
+    public static final class GetFeatures extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "OTPL";
@@ -61,7 +61,7 @@ public final strictfp class VectorDataset extends Dataset {
     }
     
     /** */
-    public static final strictfp class GetPropertyNames extends GISExtension.Reporter {
+    public static final class GetPropertyNames extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "OTPL";

@@ -16,7 +16,7 @@ import org.ngs.ngunits.quantity.Length;
 
 
 /** */
-public final strictfp class ProjectionParameters {
+public final class ProjectionParameters {
     
     //-------------------------------------------------------------------------
     // Instance variables

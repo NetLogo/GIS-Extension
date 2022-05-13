@@ -19,7 +19,7 @@ import org.ngs.ngunits.quantity.Length;
  * 
  * All parameters, unless otherwise noted, are in RADIANS
  */
-public abstract strictfp class AbstractProjectedProjection extends AbstractProjection {
+public abstract class AbstractProjectedProjection extends AbstractProjection {
 
     //--------------------------------------------------------------------------
     // Class variables

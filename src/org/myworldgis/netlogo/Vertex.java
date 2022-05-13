@@ -18,7 +18,7 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public final strictfp class Vertex implements ExtensionObject {
+public final class Vertex implements ExtensionObject {
 
     //--------------------------------------------------------------------------
     // Inner classes
@@ -26,7 +26,7 @@ public final strictfp class Vertex implements ExtensionObject {
     
     /** */
     @SuppressWarnings("unchecked")
-    public static final strictfp class GetLocation extends GISExtension.Reporter {
+    public static final class GetLocation extends GISExtension.Reporter {
         
         private final Coordinate _temp = new Coordinate();
         

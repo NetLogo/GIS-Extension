@@ -18,7 +18,7 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public final strictfp class SetCoordinateSystem extends GISExtension.Command {
+public final class SetCoordinateSystem extends GISExtension.Command {
     
     //--------------------------------------------------------------------------
     // GISExtension.Command implementation

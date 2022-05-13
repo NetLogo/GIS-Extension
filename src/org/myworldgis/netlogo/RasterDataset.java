@@ -55,7 +55,7 @@ public class RasterDataset extends Dataset {
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class New extends GISExtension.Reporter {
+    public static final class New extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "OTPL";
@@ -82,7 +82,7 @@ public class RasterDataset extends Dataset {
     }
     
     /** */
-    public static final strictfp class GetHeight extends GISExtension.Reporter {
+    public static final class GetHeight extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -100,7 +100,7 @@ public class RasterDataset extends Dataset {
     }
     
     /** */
-    public static final strictfp class GetWidth extends GISExtension.Reporter {
+    public static final class GetWidth extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -118,7 +118,7 @@ public class RasterDataset extends Dataset {
     }
     
     /** */
-    public static final strictfp class GetValue extends GISExtension.Reporter {
+    public static final class GetValue extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -141,7 +141,7 @@ public class RasterDataset extends Dataset {
     }
     
     /** */
-    public static final strictfp class SetValue extends GISExtension.Command {
+    public static final class SetValue extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -165,7 +165,7 @@ public class RasterDataset extends Dataset {
     }
     
     /** */
-    public static final strictfp class GetMinimum extends GISExtension.Reporter {
+    public static final class GetMinimum extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -191,7 +191,7 @@ public class RasterDataset extends Dataset {
     }
 
     /** */
-    public static final strictfp class GetMaximum extends GISExtension.Reporter {
+    public static final class GetMaximum extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -217,7 +217,7 @@ public class RasterDataset extends Dataset {
     }
     
     /** */
-    public static final strictfp class GetInterpolation extends GISExtension.Reporter {
+    public static final class GetInterpolation extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -246,7 +246,7 @@ public class RasterDataset extends Dataset {
     }
     
     /** */
-    public static final strictfp class SetInterpolation extends GISExtension.Command {
+    public static final class SetInterpolation extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "OTPL";

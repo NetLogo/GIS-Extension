@@ -22,7 +22,7 @@ import org.ngs.ngunits.quantity.Length;
  * polylines & polygons to that restricted domain before projecting.
  * Superclass of both Azimuthal and Conic projection families.
  */
-public abstract strictfp class HemisphericalProjection extends AbstractProjectedProjection {
+public abstract class HemisphericalProjection extends AbstractProjectedProjection {
     
     //-------------------------------------------------------------------------
     // Instance variables

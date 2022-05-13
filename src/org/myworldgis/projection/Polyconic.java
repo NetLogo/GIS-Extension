@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 129-130
  */
-public final strictfp class Polyconic extends HemisphericalProjection {
+public final class Polyconic extends HemisphericalProjection {
     
     //--------------------------------------------------------------------------
     // Class variables

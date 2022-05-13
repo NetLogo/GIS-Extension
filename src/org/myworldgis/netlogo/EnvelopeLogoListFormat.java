@@ -14,7 +14,7 @@ import org.nlogo.api.LogoListBuilder;
 /**
  * 
  */
-public final strictfp class EnvelopeLogoListFormat {
+public final class EnvelopeLogoListFormat {
 
     //--------------------------------------------------------------------------
     // Class variables

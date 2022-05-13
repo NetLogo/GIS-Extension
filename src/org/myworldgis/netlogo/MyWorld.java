@@ -40,7 +40,7 @@ import org.nlogo.core.SyntaxJ;
 /** 
  * 
  */
-public abstract strictfp class MyWorld {
+public abstract class MyWorld {
     
     //-------------------------------------------------------------------------
     // Class variables
@@ -57,7 +57,7 @@ public abstract strictfp class MyWorld {
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class GetLayers extends GISExtension.Reporter {
+    public static final class GetLayers extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "O";
@@ -111,7 +111,7 @@ public abstract strictfp class MyWorld {
     }
     
     /** */
-    public static final strictfp class GetDataset extends GISExtension.Reporter {
+    public static final class GetDataset extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "O";
@@ -158,7 +158,7 @@ public abstract strictfp class MyWorld {
     
     
     /** */
-    public static final strictfp class PutDataset extends GISExtension.Command {
+    public static final class PutDataset extends GISExtension.Command {
         
         public String getAgentClassString() {
             return "O";

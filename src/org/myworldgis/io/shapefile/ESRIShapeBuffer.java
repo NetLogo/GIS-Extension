@@ -25,7 +25,7 @@ import org.myworldgis.io.PointZWrapper;
 /**
  * Utilities for reading & writing ESRI shapefiles
  */
-public final strictfp class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants {
+public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants {
 
 
     //--------------------------------------------------------------------------

@@ -34,14 +34,14 @@ import org.nlogo.api.World;
 /**
  * 
  */
-public abstract strictfp class Painting extends GISExtension.Command {
+public abstract class Painting extends GISExtension.Command {
     
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class GetColor extends GISExtension.Reporter {
+    public static final class GetColor extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "OTPL";
@@ -58,7 +58,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
     }
     
     /** */
-    public static final strictfp class SetColor extends GISExtension.Command {
+    public static final class SetColor extends GISExtension.Command {
         
         public String getAgentClassString() {
             return "OTLP";
@@ -75,7 +75,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
     }
     
     /** */
-    private static abstract strictfp class VectorCommand extends GISExtension.Command {
+    private static abstract class VectorCommand extends GISExtension.Command {
         
         public String getAgentClassString() {
             return "OTLP";
@@ -115,7 +115,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
     }
     
     /** */
-    public static final strictfp class DrawVector extends VectorCommand {
+    public static final class DrawVector extends VectorCommand {
         
         protected void paint (Geometry geom, Graphics2D g, double thickness) {
             AffineTransform t = g.getTransform();
@@ -129,7 +129,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
     }
     
     /** */
-    public static final strictfp class FillVector extends VectorCommand {
+    public static final class FillVector extends VectorCommand {
 
         protected void paint (Geometry geom, Graphics2D g, double thickness) {
             AffineTransform t = g.getTransform();
@@ -143,7 +143,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
     }
     
     /** */
-    public static final strictfp class PaintRaster extends GISExtension.Command {
+    public static final class PaintRaster extends GISExtension.Command {
 
         /** */
         public String getAgentClassString() {
@@ -232,7 +232,7 @@ public abstract strictfp class Painting extends GISExtension.Command {
     }
     
     /** */
-    private static final strictfp class LineStringPathIterator implements PathIterator {
+    private static final class LineStringPathIterator implements PathIterator {
         
         private LineString _line;
         private int _position;

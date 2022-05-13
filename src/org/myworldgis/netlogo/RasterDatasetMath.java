@@ -25,14 +25,14 @@ import org.nlogo.api.World;
 /** 
  * 
  */
-public abstract strictfp class RasterDatasetMath {
+public abstract class RasterDatasetMath {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class GetSample extends GISExtension.Reporter {
+    public static final class GetSample extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "OTPL";
@@ -89,7 +89,7 @@ public abstract strictfp class RasterDatasetMath {
     }
 
     /** */
-    public static final strictfp class Resample extends GISExtension.Reporter {
+    public static final class Resample extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -114,7 +114,7 @@ public abstract strictfp class RasterDatasetMath {
     }
     
     /** */
-    public static final strictfp class GetWorldEnvelope extends GISExtension.Reporter {
+    public static final class GetWorldEnvelope extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -144,7 +144,7 @@ public abstract strictfp class RasterDatasetMath {
     }
     
     /** */
-    public static final strictfp class Convolve extends GISExtension.Reporter {
+    public static final class Convolve extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "OTPL";

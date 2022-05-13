@@ -20,7 +20,7 @@ import java.awt.image.SampleModel;
  * This color model is to be used ONLY for DRAWING. Do not use this color
  * model for images passed to JAI for transformation.
  */
-public final strictfp class RangeColorModel extends ColorModel {
+public final class RangeColorModel extends ColorModel {
     
     //--------------------------------------------------------------------------
     // Instance variables

@@ -15,7 +15,7 @@ import java.util.List;
 /** 
  * 
  */
-public final strictfp class WKTElement {
+public final class WKTElement {
     
     //--------------------------------------------------------------------------
     // Inner classes

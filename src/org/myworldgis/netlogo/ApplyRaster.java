@@ -23,7 +23,7 @@ import org.nlogo.prim._reference;
 /**
  * 
  */
-public strictfp class ApplyRaster extends GISExtension.Command {
+public class ApplyRaster extends GISExtension.Command {
     
     //--------------------------------------------------------------------------
     // GISExtension.Command implementation

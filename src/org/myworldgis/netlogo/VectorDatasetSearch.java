@@ -19,14 +19,14 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public abstract strictfp class VectorDatasetSearch {
+public abstract class VectorDatasetSearch {
     
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class FindOne extends GISExtension.Reporter {
+    public static final class FindOne extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "OTPL";
@@ -68,7 +68,7 @@ public abstract strictfp class VectorDatasetSearch {
     }
     
     /** */
-    public static final strictfp class FindAll extends GISExtension.Reporter {
+    public static final class FindAll extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -111,7 +111,7 @@ public abstract strictfp class VectorDatasetSearch {
     }
         
     /** */
-    public static final strictfp class FindLessThan extends GISExtension.Reporter {
+    public static final class FindLessThan extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -143,7 +143,7 @@ public abstract strictfp class VectorDatasetSearch {
     }
         
     /** */
-    public static final strictfp class FindGreaterThan extends GISExtension.Reporter {
+    public static final class FindGreaterThan extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -175,7 +175,7 @@ public abstract strictfp class VectorDatasetSearch {
     }
         
     /** */
-    public static final strictfp class FindInRange extends GISExtension.Reporter {
+    public static final class FindInRange extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -209,7 +209,7 @@ public abstract strictfp class VectorDatasetSearch {
     }
         
     /** */
-    public static final strictfp class GetMinimum extends GISExtension.Reporter {
+    public static final class GetMinimum extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -243,7 +243,7 @@ public abstract strictfp class VectorDatasetSearch {
     }
         
     /** */
-    public static final strictfp class GetMaximum extends GISExtension.Reporter {
+    public static final class GetMaximum extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";

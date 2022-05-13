@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 154-163
  */
-public final strictfp class Stereographic extends Azimuthal {
+public final class Stereographic extends Azimuthal {
     
     //--------------------------------------------------------------------------
     // Class variables

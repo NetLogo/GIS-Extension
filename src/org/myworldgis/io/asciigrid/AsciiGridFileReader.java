@@ -18,7 +18,7 @@ import org.myworldgis.util.StringUtils;
 /**
  *
  */
-public final strictfp class AsciiGridFileReader implements AsciiGridConstants {
+public final class AsciiGridFileReader implements AsciiGridConstants {
     
     //--------------------------------------------------------------------------
     // Instance variables

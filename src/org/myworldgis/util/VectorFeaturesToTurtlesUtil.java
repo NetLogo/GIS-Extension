@@ -21,7 +21,7 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
-public strictfp class VectorFeaturesToTurtlesUtil {
+public class VectorFeaturesToTurtlesUtil {
     private static final Map<String, Double> COLOR_NAMES_TO_COLOR_NUMBERS;
     static { Map<String, Double> tmpMap = new HashMap<String, Double>();
         for (int i = 0; i < Color.ColorNames().length; i ++) {

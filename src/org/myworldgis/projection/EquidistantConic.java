@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 112-115
  */
-public final strictfp class EquidistantConic extends Conic {
+public final class EquidistantConic extends Conic {
 
     //--------------------------------------------------------------------------
     // Class variables

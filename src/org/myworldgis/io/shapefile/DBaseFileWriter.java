@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Class for writing a dBASE file.
  */
-public final strictfp class DBaseFileWriter implements DBaseConstants {
+public final class DBaseFileWriter implements DBaseConstants {
     
     //--------------------------------------------------------------------------
     // Instance variables

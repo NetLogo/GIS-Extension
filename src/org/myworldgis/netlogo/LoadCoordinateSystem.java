@@ -22,7 +22,7 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public final strictfp class LoadCoordinateSystem extends GISExtension.Command {
+public final class LoadCoordinateSystem extends GISExtension.Command {
     
     //--------------------------------------------------------------------------
     // GISExtension.Command implementation

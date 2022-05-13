@@ -33,7 +33,7 @@ import org.nlogo.workspace.ExtensionManager;
 /**
  * 
  */
-public final strictfp class GISExtensionState implements ExtensionObject {
+public final class GISExtensionState implements ExtensionObject {
     
     //--------------------------------------------------------------------------
     // Instance variables

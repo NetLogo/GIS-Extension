@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 48-65
  */
-public final strictfp class TransverseMercator extends HemisphericalProjection {
+public final class TransverseMercator extends HemisphericalProjection {
     
     //--------------------------------------------------------------------------
     // Class variables

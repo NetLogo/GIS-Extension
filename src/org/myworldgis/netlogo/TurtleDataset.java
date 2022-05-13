@@ -22,7 +22,7 @@ import org.nlogo.api.World;
 /**
  * 
  */
-public final strictfp class TurtleDataset extends GISExtension.Reporter {
+public final class TurtleDataset extends GISExtension.Reporter {
     
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation

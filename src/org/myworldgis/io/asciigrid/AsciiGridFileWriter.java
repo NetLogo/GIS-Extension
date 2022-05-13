@@ -15,7 +15,7 @@ import java.io.Writer;
 /**
  *
  */
-public final strictfp class AsciiGridFileWriter implements AsciiGridConstants {
+public final class AsciiGridFileWriter implements AsciiGridConstants {
     
     //--------------------------------------------------------------------------
     // Instance variables

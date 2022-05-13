@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 38-47
  */
-public final strictfp class Miller extends Cylindrical {
+public final class Miller extends Cylindrical {
     
     //--------------------------------------------------------------------------
     // Class variables

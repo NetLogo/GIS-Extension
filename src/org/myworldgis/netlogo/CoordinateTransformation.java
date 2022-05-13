@@ -13,7 +13,7 @@ import org.nlogo.core.ExtensionObject;
 /**
  * 
  */
-public final strictfp class CoordinateTransformation implements ExtensionObject {
+public final class CoordinateTransformation implements ExtensionObject {
     
     //--------------------------------------------------------------------------
     // Instance variables

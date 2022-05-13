@@ -19,7 +19,7 @@ import java.util.Locale;
 /** 
  * 
  */
-public final strictfp class WKTFormat extends Format {
+public final class WKTFormat extends Format {
 
     //--------------------------------------------------------------------------
     // Class variables

@@ -48,7 +48,7 @@ import org.myworldgis.projection.ProjectionFormat;
 /** 
  * 
  */
-public final strictfp class GISDataView extends JComponent {
+public final class GISDataView extends JComponent {
 
     //--------------------------------------------------------------------------
     // Inner classes

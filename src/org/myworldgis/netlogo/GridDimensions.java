@@ -13,7 +13,7 @@ import org.nlogo.core.ExtensionObject;
 /**
  * 
  */
-public final strictfp class GridDimensions implements Cloneable, ExtensionObject {
+public final class GridDimensions implements Cloneable, ExtensionObject {
     
     //--------------------------------------------------------------------------
     // Instance variables

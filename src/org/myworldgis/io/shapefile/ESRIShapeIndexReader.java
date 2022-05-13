@@ -13,7 +13,7 @@ import org.ngs.ngunits.UnitConverter;
 /**
  *
  */
-public final strictfp class ESRIShapeIndexReader implements ESRIShapeConstants {
+public final class ESRIShapeIndexReader implements ESRIShapeConstants {
 
     //--------------------------------------------------------------------------
     // Instance variables

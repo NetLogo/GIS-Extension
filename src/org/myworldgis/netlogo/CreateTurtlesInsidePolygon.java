@@ -19,9 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public strictfp class CreateTurtlesInsidePolygon {
+public class CreateTurtlesInsidePolygon {
 
-    private static abstract strictfp class TurtlesInsidePolygon extends GISExtension.Command implements CustomAssembled {
+    private static abstract class TurtlesInsidePolygon extends GISExtension.Command implements CustomAssembled {
 
         protected abstract Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, List<String> properties, Argument[] args) throws ExtensionException;
 
@@ -80,7 +80,7 @@ public strictfp class CreateTurtlesInsidePolygon {
         }
     }
 
-    public static strictfp class TurtlesInsidePolygonAutomatic extends TurtlesInsidePolygon {
+    public static class TurtlesInsidePolygonAutomatic extends TurtlesInsidePolygon {
 
         public Syntax getSyntax() {
             return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.TurtlesetType(), Syntax.NumberType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
@@ -91,7 +91,7 @@ public strictfp class CreateTurtlesInsidePolygon {
         }
     }
 
-    public static strictfp class TurtlesInsidePolygonManual extends TurtlesInsidePolygon {
+    public static class TurtlesInsidePolygonManual extends TurtlesInsidePolygon {
 
         public Syntax getSyntax() {
             return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.TurtlesetType(), Syntax.NumberType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});

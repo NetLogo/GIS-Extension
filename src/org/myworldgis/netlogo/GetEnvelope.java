@@ -20,7 +20,7 @@ import org.nlogo.api.World;
 /**
  * 
  */
-public abstract strictfp class GetEnvelope {
+public abstract class GetEnvelope {
     
 
     //--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ public abstract strictfp class GetEnvelope {
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class OfObject extends GISExtension.Reporter {
+    public static final class OfObject extends GISExtension.Reporter {
     
         /** */
         public String getAgentClassString() {
@@ -66,7 +66,7 @@ public abstract strictfp class GetEnvelope {
     
 
     /** */
-    public static final strictfp class OfWorld extends GISExtension.Reporter {
+    public static final class OfWorld extends GISExtension.Reporter {
     
         /** */
         public String getAgentClassString() {

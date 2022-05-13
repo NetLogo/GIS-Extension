@@ -35,7 +35,7 @@ import java.util.List;
 /** 
  * 
  */
-public final strictfp class JTSUtils {
+public final class JTSUtils {
     
     //--------------------------------------------------------------------------
     // Class variables

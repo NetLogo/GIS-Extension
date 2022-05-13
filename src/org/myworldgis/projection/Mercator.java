@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 38-47
  */
-public final strictfp class Mercator extends Cylindrical {
+public final class Mercator extends Cylindrical {
     
     //--------------------------------------------------------------------------
     // Class variables

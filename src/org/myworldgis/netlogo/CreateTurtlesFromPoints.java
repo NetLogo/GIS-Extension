@@ -19,9 +19,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public strictfp class CreateTurtlesFromPoints {
+public class CreateTurtlesFromPoints {
 
-    private static abstract strictfp class TurtlesFromPoints extends GISExtension.Command implements CustomAssembled {
+    private static abstract class TurtlesFromPoints extends GISExtension.Command implements CustomAssembled {
 
         protected abstract Map<String, Integer> getPropertyNameToTurtleVarIndex(List<String> variableNamesList, VectorDataset.Property[] properties, Argument[] args) throws ExtensionException;
 
@@ -90,7 +90,7 @@ public strictfp class CreateTurtlesFromPoints {
 
     }
 
-    public static strictfp class TurtlesFromPointsAutomatic extends TurtlesFromPoints {
+    public static class TurtlesFromPointsAutomatic extends TurtlesFromPoints {
 
         public Syntax getSyntax() {
             return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.TurtlesetType(), Syntax.CommandBlockType() | Syntax.OptionalType()});
@@ -101,7 +101,7 @@ public strictfp class CreateTurtlesFromPoints {
         }
     }
 
-    public static strictfp class TurtlesFromPointsManual extends TurtlesFromPoints {
+    public static class TurtlesFromPointsManual extends TurtlesFromPoints {
 
         public Syntax getSyntax() {
             return VectorFeaturesToTurtlesUtil.makeTurtleCreationCommandSyntax(new Object[]{Syntax.WildcardType(), Syntax.TurtlesetType(), Syntax.ListType(), Syntax.CommandBlockType() | Syntax.OptionalType()});

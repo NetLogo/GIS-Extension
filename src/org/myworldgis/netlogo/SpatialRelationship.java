@@ -26,7 +26,7 @@ import org.nlogo.core.SyntaxJ;
 /**
  *
  */
-public abstract strictfp class SpatialRelationship {
+public abstract class SpatialRelationship {
 
 
     //--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ public abstract strictfp class SpatialRelationship {
     //--------------------------------------------------------------------------
 
     /** */
-    private static abstract strictfp class DefaultTest extends GISExtension.Reporter {
+    private static abstract class DefaultTest extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -60,28 +60,28 @@ public abstract strictfp class SpatialRelationship {
     }
 
     /** */
-    public static final strictfp class IntersectionTest extends DefaultTest {
+    public static final class IntersectionTest extends DefaultTest {
         protected boolean relates (Geometry geom0, Geometry geom1) {
             return geom0.intersects(geom1);
         }
     }
 
     /** */
-    public static final strictfp class ContainsTest extends DefaultTest {
+    public static final class ContainsTest extends DefaultTest {
         protected boolean relates (Geometry geom0, Geometry geom1) {
             return geom0.covers(geom1);
         }
     }
 
     /** */
-    public static final strictfp class ContainedByTest extends DefaultTest {
+    public static final class ContainedByTest extends DefaultTest {
         protected boolean relates (Geometry geom0, Geometry geom1) {
             return geom0.coveredBy(geom1);
         }
     }
 
     /** */
-    public static final strictfp class GeneralTest extends GISExtension.Reporter {
+    public static final class GeneralTest extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -108,7 +108,7 @@ public abstract strictfp class SpatialRelationship {
     }
 
     /** */
-    public static final strictfp class GetRelationship extends GISExtension.Reporter {
+    public static final class GetRelationship extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -129,7 +129,7 @@ public abstract strictfp class SpatialRelationship {
     }
 
     /** */
-    public static final strictfp class Intersecting extends GISExtension.Reporter {
+    public static final class Intersecting extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";

@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 195-196
  */
-public final strictfp class AzimuthalEquidistant extends Azimuthal {
+public final class AzimuthalEquidistant extends Azimuthal {
 
     //--------------------------------------------------------------------------
     // Class variables

@@ -49,7 +49,7 @@ import org.nlogo.api.World;
 /**
  * 
  */
-public final strictfp class LoadDataset extends GISExtension.Reporter {
+public final class LoadDataset extends GISExtension.Reporter {
 
     private static final String ADDED_Z_FIELD = "_Z";
 

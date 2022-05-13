@@ -17,7 +17,7 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public final strictfp class EnvelopeUnion extends GISExtension.Reporter {
+public final class EnvelopeUnion extends GISExtension.Reporter {
     
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation

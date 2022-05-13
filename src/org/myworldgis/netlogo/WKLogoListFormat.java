@@ -16,7 +16,7 @@ import org.nlogo.api.LogoListBuilder;
 /**
  * 
  */
-public final strictfp class WKLogoListFormat {
+public final class WKLogoListFormat {
 
     //--------------------------------------------------------------------------
     // Class variables

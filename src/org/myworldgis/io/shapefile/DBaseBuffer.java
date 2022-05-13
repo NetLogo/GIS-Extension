@@ -18,7 +18,7 @@ import org.myworldgis.util.Buffer;
 /**
  * Utilities for reading & writing dBase files
  */
-public final strictfp class DBaseBuffer extends Buffer implements DBaseConstants {
+public final class DBaseBuffer extends Buffer implements DBaseConstants {
     
     //--------------------------------------------------------------------------
     // Class variables

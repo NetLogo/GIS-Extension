@@ -33,7 +33,7 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public final strictfp class StoreDataset extends GISExtension.Command {
+public final class StoreDataset extends GISExtension.Command {
     
     //--------------------------------------------------------------------------
     // Class methods

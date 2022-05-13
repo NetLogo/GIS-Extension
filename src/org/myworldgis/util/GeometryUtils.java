@@ -19,7 +19,7 @@ import java.awt.geom.Rectangle2D;
  * library (see the <a href="http://openmap.bbn.com">OpenMap web page</a> 
  * for details).
  */
-public final strictfp class GeometryUtils {
+public final class GeometryUtils {
 
     //--------------------------------------------------------------------------
     // Class variables

@@ -22,7 +22,7 @@ import org.ngs.ngunits.quantity.Length;
 /**
  * Base class of all conic projections.
  */
-public abstract strictfp class Conic extends HemisphericalProjection {
+public abstract class Conic extends HemisphericalProjection {
     
     //-------------------------------------------------------------------------
     // Class variables

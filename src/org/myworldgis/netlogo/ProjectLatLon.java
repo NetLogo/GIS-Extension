@@ -16,9 +16,9 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.util.GeometryTransformer;
 
 
-public abstract strictfp class ProjectLatLon {
+public abstract class ProjectLatLon {
 
-    public static final strictfp class ProjectFromEllipsoid extends GISExtension.Reporter {
+    public static final class ProjectFromEllipsoid extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -43,7 +43,7 @@ public abstract strictfp class ProjectLatLon {
         }
     }
 
-    public static final strictfp class ProjectWGS84 extends GISExtension.Reporter {
+    public static final class ProjectWGS84 extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";

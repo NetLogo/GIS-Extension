@@ -17,7 +17,7 @@ import org.ngs.ngunits.quantity.Length;
  * Formulas from the source code of the USGS computer program "gctpc2", 
  * available <a href="http://mapping.usgs.gov/ftp/software/current_software/gctpc2/">Here</a>
  */
-public final strictfp class Robinson extends Cylindrical {
+public final class Robinson extends Cylindrical {
     
     //-------------------------------------------------------------------------
     // Class variables

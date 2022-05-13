@@ -28,7 +28,7 @@ import org.myworldgis.util.JTSUtils;
  * 
  * All parameters, unless otherwise noted, are in RADIANS
  */
-public abstract strictfp class AbstractProjection implements Projection {
+public abstract class AbstractProjection implements Projection {
 
     //--------------------------------------------------------------------------
     // Inner classes

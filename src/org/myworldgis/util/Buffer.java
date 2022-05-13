@@ -19,7 +19,7 @@ import javax.swing.SwingConstants;
  * and forth between big-endian and little-endian that we need for reading
  * shapefiles.
  */
-public strictfp class Buffer {
+public class Buffer {
     
     //--------------------------------------------------------------------------
     // Inner classes

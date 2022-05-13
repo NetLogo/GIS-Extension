@@ -26,14 +26,14 @@ import org.nlogo.api.World;
 /**
  *
  */
-public abstract strictfp class ApplyCoverage {
+public abstract class ApplyCoverage {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
 
     /** */
-    public static final strictfp class SinglePolygonField extends GISExtension.Command {
+    public static final class SinglePolygonField extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "O";
@@ -60,7 +60,7 @@ public abstract strictfp class ApplyCoverage {
 
     /** */
     @SuppressWarnings("unchecked")
-    public static final strictfp class MultiplePolygonFields extends GISExtension.Command {
+    public static final class MultiplePolygonFields extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "O";
@@ -114,7 +114,7 @@ public abstract strictfp class ApplyCoverage {
     }
 
     /** */
-    public static final strictfp class GetCoverageMinimumThreshold extends GISExtension.Reporter {
+    public static final class GetCoverageMinimumThreshold extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "O";
@@ -131,7 +131,7 @@ public abstract strictfp class ApplyCoverage {
     }
 
     /** */
-    public static final strictfp class SetCoverageMinimumThreshold extends GISExtension.Command {
+    public static final class SetCoverageMinimumThreshold extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "O";
@@ -148,7 +148,7 @@ public abstract strictfp class ApplyCoverage {
     }
 
     /** */
-    public static final strictfp class GetCoverageMaximumThreshold extends GISExtension.Reporter {
+    public static final class GetCoverageMaximumThreshold extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "O";
@@ -165,7 +165,7 @@ public abstract strictfp class ApplyCoverage {
     }
 
     /** */
-    public static final strictfp class SetCoverageMaximumThreshold extends GISExtension.Command {
+    public static final class SetCoverageMaximumThreshold extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "O";
@@ -182,7 +182,7 @@ public abstract strictfp class ApplyCoverage {
     }
 
     /** */
-    private static final strictfp class ValueRecord {
+    private static final class ValueRecord {
 
         private Object _value;
         private double _areaRatio;

@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 187-189
  */
-public final strictfp class AzimuthalEqualArea extends Azimuthal {
+public final class AzimuthalEqualArea extends Azimuthal {
 
     //--------------------------------------------------------------------------
     // Class variables

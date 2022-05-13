@@ -15,7 +15,7 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public final strictfp class GetShapeType extends GISExtension.Reporter {
+public final class GetShapeType extends GISExtension.Reporter {
     
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation

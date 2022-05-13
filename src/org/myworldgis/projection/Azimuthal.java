@@ -12,7 +12,7 @@ import org.ngs.ngunits.quantity.Length;
 /**
  * Base class of all azimuthal projections.
  */
-public abstract strictfp class Azimuthal extends HemisphericalProjection {
+public abstract class Azimuthal extends HemisphericalProjection {
     
     //-------------------------------------------------------------------------
     // Instance variables

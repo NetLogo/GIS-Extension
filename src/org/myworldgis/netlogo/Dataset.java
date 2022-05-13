@@ -17,14 +17,14 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public abstract strictfp class Dataset implements ExtensionObject {
+public abstract class Dataset implements ExtensionObject {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class GetDatasetType extends GISExtension.Reporter {
+    public static final class GetDatasetType extends GISExtension.Reporter {
         
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },

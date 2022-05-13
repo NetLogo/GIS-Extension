@@ -22,7 +22,7 @@ import org.myworldgis.util.JTSUtils;
 /**
  *
  */
-public final strictfp class ProjectionUtils {
+public final class ProjectionUtils {
     
     //-------------------------------------------------------------------------
     // Making Rhumb and Great Circle polygons

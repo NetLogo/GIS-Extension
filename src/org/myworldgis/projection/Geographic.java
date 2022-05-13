@@ -20,7 +20,7 @@ import org.ngs.ngunits.quantity.Angle;
 /**
  * Geographic projection. Treats lat and lon as y and x values.
  */
-public final strictfp class Geographic extends AbstractProjection {
+public final class Geographic extends AbstractProjection {
     
     //-------------------------------------------------------------------------
     // Instance variables

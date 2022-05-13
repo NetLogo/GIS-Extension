@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
  * US Geological Survey Professional Paper 1395, US Government Printing Office,
  * Washington, DC. pp. 104-110
  */
-public final strictfp class LambertConformalConic extends Conic {
+public final class LambertConformalConic extends Conic {
 
     //--------------------------------------------------------------------------
     // Class variables

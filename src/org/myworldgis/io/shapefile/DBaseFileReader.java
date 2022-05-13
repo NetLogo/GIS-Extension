@@ -15,7 +15,7 @@ import org.nlogo.core.Syntax;
 /**
  * Class for reading a dBASE file.
  */
-public final strictfp class DBaseFileReader implements DBaseConstants {
+public final class DBaseFileReader implements DBaseConstants {
         
     //--------------------------------------------------------------------------
     // Instance variables

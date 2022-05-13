@@ -26,7 +26,7 @@ import org.myworldgis.projection.Projection;
 /**
  * 
  */
-public final strictfp class RasterUtils {
+public final class RasterUtils {
 
     //--------------------------------------------------------------------------
     // Class methods

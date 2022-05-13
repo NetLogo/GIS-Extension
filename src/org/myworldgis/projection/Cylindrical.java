@@ -18,7 +18,7 @@ import org.ngs.ngunits.quantity.Length;
 /**
  * Base class of all cylindrical projections.
  */
-public abstract strictfp class Cylindrical extends AbstractProjectedProjection {
+public abstract class Cylindrical extends AbstractProjectedProjection {
     
     //-------------------------------------------------------------------------
     // Constructors

@@ -25,7 +25,7 @@ import org.ngs.ngunits.quantity.Length;
 /**
  * 
  */
-public final strictfp class ProjectionFormat extends Format {
+public final class ProjectionFormat extends Format {
 
     //--------------------------------------------------------------------------
     // Class variables

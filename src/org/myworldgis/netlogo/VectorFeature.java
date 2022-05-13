@@ -34,14 +34,14 @@ import org.nlogo.core.SyntaxJ;
 /**
  * 
  */
-public final strictfp class VectorFeature implements ExtensionObject {
+public final class VectorFeature implements ExtensionObject {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class GetProperty extends GISExtension.Reporter {
+    public static final class GetProperty extends GISExtension.Reporter {
         
         public String getAgentClassString() {
             return "OTPL";
@@ -70,7 +70,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
     }
     
-    public static final strictfp class SetProperty extends GISExtension.Command {
+    public static final class SetProperty extends GISExtension.Command {
         
         public String getAgentClassString() {
             return "OTPL";
@@ -108,7 +108,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
     }
 
     /** */
-    public static final strictfp class GetVertexLists extends GISExtension.Reporter {
+    public static final class GetVertexLists extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -145,7 +145,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
     }
     
     /** */
-    public static final strictfp class GetCentroid extends GISExtension.Reporter {
+    public static final class GetCentroid extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
@@ -179,7 +179,7 @@ public final strictfp class VectorFeature implements ExtensionObject {
         }
     }
 
-    public static final strictfp class GetRandomPointInside extends GISExtension.Reporter {
+    public static final class GetRandomPointInside extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";

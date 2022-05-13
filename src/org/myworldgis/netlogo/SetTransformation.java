@@ -18,7 +18,7 @@ import org.nlogo.api.World;
 /**
  * 
  */
-public abstract strictfp class SetTransformation {
+public abstract class SetTransformation {
     
 
     //--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ public abstract strictfp class SetTransformation {
     //--------------------------------------------------------------------------
     
     /** */
-    public static final strictfp class Linked extends GISExtension.Command {
+    public static final class Linked extends GISExtension.Command {
         
         public String getAgentClassString() {
             return "O";
@@ -46,7 +46,7 @@ public abstract strictfp class SetTransformation {
     }
     
     /** */
-    public static final strictfp class Independent extends GISExtension.Command {
+    public static final class Independent extends GISExtension.Command {
         
         public String getAgentClassString() {
             return "O";
@@ -66,7 +66,7 @@ public abstract strictfp class SetTransformation {
     }
     
     /** */
-    public static final strictfp class WorldLinked extends GISExtension.Command {
+    public static final class WorldLinked extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "O";
@@ -87,7 +87,7 @@ public abstract strictfp class SetTransformation {
     }
     
     /** */
-    public static final strictfp class WorldIndependent extends GISExtension.Command {
+    public static final class WorldIndependent extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "O";

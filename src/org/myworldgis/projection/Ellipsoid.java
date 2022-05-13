@@ -13,7 +13,7 @@ import org.ngs.ngunits.quantity.Length;
 /**
  * A class representing a reference ellipsoid for projection. 
  */
-public final strictfp class Ellipsoid {
+public final class Ellipsoid {
     
     //--------------------------------------------------------------------------
     // Class variables
