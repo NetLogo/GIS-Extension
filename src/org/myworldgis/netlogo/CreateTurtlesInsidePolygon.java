@@ -2,7 +2,10 @@ package org.myworldgis.netlogo;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import org.myworldgis.util.VectorFeaturesToTurtlesUtil;
-import org.nlogo.agent.*;
+import org.nlogo.agent.AgentSet;
+import org.nlogo.agent.TreeAgentSet;
+import org.nlogo.agent.Turtle;
+import org.nlogo.agent.World;
 import org.nlogo.api.AgentException;
 import org.nlogo.api.Argument;
 import org.nlogo.api.ExtensionException;
