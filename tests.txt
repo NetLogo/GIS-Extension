@@ -241,3 +241,7 @@ testCreateTurtlesInsidePolygon_manual
 testCreateTurtlesInsidePolygon_turtles_as_agentset
   OPEN> extensions/gis/examples/create-turtles-inside-polygon.nlogo
   O> test-turtles
+
+testCreateTurtlesInsidePolygon_num_turtles_created
+  OPEN> extensions/gis/examples/create-turtles-inside-polygon.nlogo
+  O> test-num-agents-created
