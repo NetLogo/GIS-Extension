@@ -76,6 +76,27 @@ to test-turtles
     clear-turtles
   ]
 end
+
+
+to test-num-agents-created
+  clear-all
+  set dataset gis:load-dataset "./shared-datasets/countries.shp"
+  gis:set-world-envelope gis:envelope-of dataset
+  gis:set-drawing-color red
+  gis:draw dataset 1
+
+  let num-to-create 5
+
+  foreach gis:feature-list-of dataset [ country ->
+    let cnt 0
+    gis:create-turtles-inside-polygon country turtles num-to-create [
+     set cnt cnt + 1
+    ]
+    if cnt != num-to-create [
+      error "wrong number of agents created"
+    ]
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -446,7 +467,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.1
+NetLogo 6.2.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
