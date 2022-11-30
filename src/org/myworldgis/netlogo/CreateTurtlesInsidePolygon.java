@@ -15,6 +15,7 @@ import org.nlogo.nvm.AssemblerAssistant;
 import org.nlogo.nvm.CustomAssembled;
 import org.nlogo.nvm.ExtensionContext;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,7 @@ public class CreateTurtlesInsidePolygon {
 
             Map<String, Integer> propertyNameToTurtleVarIndex = getPropertyNameToTurtleVarIndex(variableNamesList, propertyNamesList, args);
 
+            TreeAgentSet createdAgentSet = new TreeAgentSet(breedAgentSet.kind(), "temp_agentset_for_create_turtles_inside_polygon");
             for (int i = 0; i < numToMake; i++){
                 Coordinate coord = vectorFeature.getRandomPointInsidePolygon(context.getRNG());
                 Turtle turtle = VectorFeaturesToTurtlesUtil.CreateTurtleAtGISCoordinate(breedAgentSet, coord, world, nvmContext);
@@ -69,9 +71,10 @@ public class CreateTurtlesInsidePolygon {
                     continue;
                 }
                 VectorFeaturesToTurtlesUtil.setTurtleVariablesToVectorFeatureProperties(turtle, vectorFeature, propertyNameToTurtleVarIndex);
+                createdAgentSet.add(turtle);
             }
 
-            nvmContext.runExclusiveJob(breedAgentSet, nvmContext.ip + 1);
+            nvmContext.runExclusiveJob(createdAgentSet, nvmContext.ip + 1);
         }
 
         public void assemble (AssemblerAssistant assemblerAssistant){
