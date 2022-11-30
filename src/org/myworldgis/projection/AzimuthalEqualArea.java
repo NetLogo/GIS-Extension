@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -23,28 +23,28 @@ public final class AzimuthalEqualArea extends Azimuthal {
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Lambert_Azimuthal_Equal_Area";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "longitude_of_center";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_center";
-    
+
     //-------------------------------------------------------------------------
     // Instance variables
     //-------------------------------------------------------------------------
-    
+
     /** Pre-compute these values for the given ellipsoid & projection center
         to save time when projecting. */
     private double _e, _qp, _Rq, _D, _sinBeta1, _cosBeta1, _subPhi[];
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct an AzimuthalEqualArea projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -53,8 +53,8 @@ public final class AzimuthalEqualArea extends Azimuthal {
      * @param falseEasting value to add to x coordinate of each projected point, in METERS
      * @param falseNorthing value to add to y coordinate of each projected point, in METERS
      */
-    public AzimuthalEqualArea (Ellipsoid ellipsoid, 
-                               Coordinate center, 
+    public AzimuthalEqualArea (Ellipsoid ellipsoid,
+                               Coordinate center,
                                Unit<Length> units,
                                double falseEasting,
                                double falseNorthing) {
@@ -63,35 +63,35 @@ public final class AzimuthalEqualArea extends Azimuthal {
         _subPhi = new double[3];
         computeParameters();
     }
-    
+
     /** */
-    public AzimuthalEqualArea (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public AzimuthalEqualArea (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
         _subPhi = new double[3];
         computeParameters();
     }
-    
+
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Returns the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are clipped.
-     * The radius of our clipping hemisphere is pi/3 
+     * The radius of our clipping hemisphere is pi/3
      * @return the radius of our clipping hemisphere
      */
     protected double getMaxC () {
         return GeometryUtils.HALF_PI;
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lambda the longitude of the point to project, in RADIANS
      * @param phi the latitude of the point to project, in RADIANS
@@ -107,8 +107,8 @@ public final class AzimuthalEqualArea extends Azimuthal {
         storage.y = (B / _D) * ((_cosBeta1 * StrictMath.sin(beta)) - (_sinBeta1 * StrictMath.cos(beta) *  StrictMath.cos(GeometryUtils.wrap_longitude(lambda - _lambda0))));
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -128,9 +128,9 @@ public final class AzimuthalEqualArea extends Azimuthal {
         }
         return storage;
     }
-    
-    /** 
-     * Initialize parameters, and recompute them whenever the ellipsoid or 
+
+    /**
+     * Initialize parameters, and recompute them whenever the ellipsoid or
      * projection center changes.
      */
     protected void computeParameters () {
@@ -154,7 +154,7 @@ public final class AzimuthalEqualArea extends Azimuthal {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();
@@ -166,7 +166,7 @@ public final class AzimuthalEqualArea extends Azimuthal {
     //--------------------------------------------------------------------------
     // Cloneable implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Object clone () {
         AzimuthalEqualArea clone = (AzimuthalEqualArea)super.clone();

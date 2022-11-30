@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -27,20 +27,20 @@ public final class AlbersEqualAreaConic extends Conic {
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Albers_Conic_Equal_Area";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "longitude_of_center";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_center";
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /**
      * Compute q for the given latitude (see equation 3-12 on page 101).
      */
@@ -48,19 +48,19 @@ public final class AlbersEqualAreaConic extends Conic {
         double sinPhi = StrictMath.sin(phi);
         return((1-_e2)*((sinPhi/(1.0-_e2*sinPhi*sinPhi)) - ((1.0/(2.0*_e))*StrictMath.log((1.0-_e*sinPhi)/(1.0+_e*sinPhi)))));
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** Pre-compute these values for the given ellipsoid & projection center
         to save time when projecting. */
     private double _e, _n, _C, _rho0, _subBeta, _subPhi[];
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /**
      * Construct an AlbersEqualAreaConic projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -75,14 +75,14 @@ public final class AlbersEqualAreaConic extends Conic {
                                  Unit<Length> units,
                                  double falseEasting,
                                  double falseNorthing,
-                                 double phi1, 
+                                 double phi1,
                                  double phi2) {
         super(ellipsoid, center, units, falseEasting, falseNorthing, phi1, phi2);
         _name = WKT_NAME;
         _subPhi = new double[3];
         computeParameters();
     }
-    
+
     /** */
     public AlbersEqualAreaConic (Ellipsoid ellipsoid, ProjectionParameters parameters) throws ParseException {
         super(ellipsoid, parameters);
@@ -90,12 +90,12 @@ public final class AlbersEqualAreaConic extends Conic {
         _subPhi = new double[3];
         computeParameters();
     }
-    
+
     //--------------------------------------------------------------------------
     // AbstractProjection implementation
     //--------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -110,8 +110,8 @@ public final class AlbersEqualAreaConic extends Conic {
         storage.y = _rho0 - rho*StrictMath.cos(theta);
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -124,7 +124,7 @@ public final class AlbersEqualAreaConic extends Conic {
         double theta = (_n < 0.0) ?  StrictMath.atan2(-x, -rho0minusY) : StrictMath.atan2(x, rho0minusY);
         double q = (_C - ((rho*rho)*(_n*_n))/(_a*_a)) / _n;
         double beta = StrictMath.asin(q / _subBeta);
-        storage.y = beta + 
+        storage.y = beta +
                      _subPhi[0] * StrictMath.sin(2.0 * beta) +
                      _subPhi[1] * StrictMath.sin(4.0 * beta) +
                      _subPhi[2] * StrictMath.sin(6.0 * beta);
@@ -136,9 +136,9 @@ public final class AlbersEqualAreaConic extends Conic {
         }
         return storage;
     }
-    
-    /** 
-     * Initialize parameters, and recompute them whenever the ellipsoid or 
+
+    /**
+     * Initialize parameters, and recompute them whenever the ellipsoid or
      * projection center changes.
      */
     protected void computeParameters () {
@@ -161,7 +161,7 @@ public final class AlbersEqualAreaConic extends Conic {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();
@@ -173,7 +173,7 @@ public final class AlbersEqualAreaConic extends Conic {
     //--------------------------------------------------------------------------
     // Cloneable implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Object clone () {
         AlbersEqualAreaConic clone = (AlbersEqualAreaConic)super.clone();

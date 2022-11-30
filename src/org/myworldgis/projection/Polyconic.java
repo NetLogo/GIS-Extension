@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -19,41 +19,41 @@ import org.ngs.ngunits.quantity.Length;
  * Washington, DC. pp. 129-130
  */
 public final class Polyconic extends HemisphericalProjection {
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Polyconic";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "central_meridian";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_origin";
-    
+
     /** */
     private static final double EPSILON = 0.000001;
-    
+
     /** */
     private static final int MAX_ITERATIONS = 75;
-    
+
     //-------------------------------------------------------------------------
     // Instance variables
     //-------------------------------------------------------------------------
-    
+
     /** Pre-compute these values for the given ellipsoid & projection center
         to save time when projecting. */
     private double _subM[], _M0;
-    
+
     /** */
     protected Coordinate _hemisphereCenter;
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct an AzimuthalEqualArea projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -62,8 +62,8 @@ public final class Polyconic extends HemisphericalProjection {
      * @param falseEasting value to add to x coordinate of each projected point, in projected units
      * @param falseNorthing value to add to y coordinate of each projected point, in projected units
      */
-    public Polyconic (Ellipsoid ellipsoid, 
-                      Coordinate center, 
+    public Polyconic (Ellipsoid ellipsoid,
+                      Coordinate center,
                       Unit<Length> units,
                       double falseEasting,
                       double falseNorthing) {
@@ -72,30 +72,30 @@ public final class Polyconic extends HemisphericalProjection {
         _subM = new double[4];
         computeParameters();
     }
-    
+
     /** */
-    public Polyconic (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public Polyconic (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
         _subM = new double[4];
         computeParameters();
     }
-    
+
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Returns the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are clipped.
-     * The radius of our clipping hemisphere is pi/3 
+     * The radius of our clipping hemisphere is pi/3
      * @return the radius of our clipping hemisphere
      */
     protected double getMaxC () {
         return GeometryUtils.HALF_PI;
     }
-    
+
     /**
      * Returns the center of the clipping hemisphere.
      * The center of the clipping hemisphere for an azimuthal projection is the
@@ -105,12 +105,12 @@ public final class Polyconic extends HemisphericalProjection {
     protected Coordinate getHemisphereCenter () {
         return _hemisphereCenter;
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -132,8 +132,8 @@ public final class Polyconic extends HemisphericalProjection {
         }
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -156,9 +156,9 @@ public final class Polyconic extends HemisphericalProjection {
         storage.x = _lambda0 + StrictMath.asin((x*C)/_a)/StrictMath.sin(storage.y);
         return storage;
     }
-    
-    /** 
-     * Initialize parameters, and recompute them whenever the ellipsoid or 
+
+    /**
+     * Initialize parameters, and recompute them whenever the ellipsoid or
      * projection center changes.
      */
     protected void computeParameters () {
@@ -174,7 +174,7 @@ public final class Polyconic extends HemisphericalProjection {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();
@@ -186,7 +186,7 @@ public final class Polyconic extends HemisphericalProjection {
     //--------------------------------------------------------------------------
     // Cloneable implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Object clone () {
         Polyconic clone = (Polyconic)super.clone();

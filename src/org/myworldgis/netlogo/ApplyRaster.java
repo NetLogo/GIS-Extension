@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import java.awt.Dimension;
 import java.awt.image.WritableRaster;
 import org.nlogo.api.AgentException;
@@ -21,14 +21,14 @@ import org.nlogo.prim._reference;
 
 
 /**
- * 
+ *
  */
 public class ApplyRaster extends GISExtension.Command {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Command implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "O";
@@ -36,12 +36,12 @@ public class ApplyRaster extends GISExtension.Command {
 
     /** */
     public Syntax getSyntax() {
-        return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), 
+        return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
                                                 Syntax.ReferenceType() });
     }
 
     /** */
-    public void performInternal (Argument args[], Context context) 
+    public void performInternal (Argument args[], Context context)
             throws AgentException, ExtensionException, LogoException {
         RasterDataset dataset = RasterDataset.getDataset(args[0]);
         World world = context.getAgent().world();

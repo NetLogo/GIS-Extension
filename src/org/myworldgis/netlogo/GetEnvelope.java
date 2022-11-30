@@ -4,8 +4,8 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 import java.util.Iterator;
 import org.nlogo.api.Agent;
 import org.nlogo.api.AgentSet;
@@ -18,31 +18,31 @@ import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
 
 /**
- * 
+ *
  */
 public abstract class GetEnvelope {
-    
+
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class OfObject extends GISExtension.Reporter {
-    
+
         /** */
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         /** */
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.ListType());
         }
-    
+
         /** */
-        public Object reportInternal (Argument args[], Context context) 
+        public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException , LogoException {
             Object arg = args[0].get();
             if (arg instanceof Dataset) {
@@ -63,23 +63,23 @@ public abstract class GetEnvelope {
             }
         }
     }
-    
+
 
     /** */
     public static final class OfWorld extends GISExtension.Reporter {
-    
+
         /** */
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         /** */
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { }, Syntax.ListType());
         }
-    
+
         /** */
-        public Object reportInternal (Argument args[], Context context) 
+        public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException , LogoException {
             World world = context.getAgent().world();
             Envelope envelope = GISExtension.getState().getTransformation().getEnvelope(world);

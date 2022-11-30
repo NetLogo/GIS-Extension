@@ -4,11 +4,11 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.PrecisionModel;
 import java.awt.Color;
 import java.io.IOException;
 import org.myworldgis.projection.Projection;
@@ -31,47 +31,47 @@ import org.nlogo.workspace.ExtensionManager;
 
 
 /**
- * 
+ *
  */
 public final class GISExtensionState implements ExtensionObject {
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private final ExtensionManager _em;
-    
+
     /** */
     private final GeometryFactory _factory;
-    
+
     /** */
     private Projection _projection;
-    
+
     /** */
     private int _datasetCount;
-    
+
     /** */
     private CoordinateTransformation _transformation;
-    
+
     /** */
     private Color _color;
-    
+
     /** */
     private Object _nlColor;
-    
+
     /** */
     private double _coverageSingleCellThreshold;
-    
+
     /** */
     private double _coverageMultipleCellThreshold;
 
     private static ExtendableWorkspace _workspace;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public GISExtensionState (org.nlogo.api.ExtensionManager em) {
         _em = (ExtensionManager)em;
@@ -84,7 +84,7 @@ public final class GISExtensionState implements ExtensionObject {
         _coverageMultipleCellThreshold = 0.33;
         _workspace = _em.workspace();
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
@@ -117,38 +117,38 @@ public final class GISExtensionState implements ExtensionObject {
             String fullPath = _em.workspace().fileManager().attachPrefix(path);
             if (_em.workspace().fileManager().fileExists(fullPath)) {
                 return _em.workspace().fileManager().getFile(fullPath);
-            } 
+            }
         } catch (IOException e) { }
         return null;
     }
-    
+
     /** */
     public GeometryFactory factory () {
         return _factory;
     }
-    
+
     /** */
-    public Projection getProjection () { 
+    public Projection getProjection () {
         return _projection;
     }
-    
+
     /** */
     public void setProjection (Projection newProjection, Context c) {
         if ((_datasetCount > 0) && (c != null)) {
             Workspace ws = ((ExtensionContext)c).workspace();
             try {
                 ws.outputObject("GIS Extension Warning: datasets previously loaded will not be re-projected to match the new projection.",
-                                c.getAgent(), 
-                                true, 
+                                c.getAgent(),
+                                true,
                                 false,
                                 OutputDestinationJ.NORMAL()) ;
             } catch (LogoException e) { }
         }
         _projection = newProjection;
         _datasetCount = 0;
-        
+
     }
-    
+
     /** */
     public void datasetLoadNotify () {
         _datasetCount += 1;
@@ -157,7 +157,7 @@ public final class GISExtensionState implements ExtensionObject {
     private static final ExtensionException noCoordinateTransformationSetException = new ExtensionException("you must define a coordinate transformation before using any other GIS features. You can use gis:set-transformation directly, or use `gis:set-world-envelope gis:envelope-of dataset` to automatically frame up a given dataset.");
 
     /** */
-    public Coordinate netLogoToGIS (Coordinate pt, Coordinate storage) 
+    public Coordinate netLogoToGIS (Coordinate pt, Coordinate storage)
             throws ExtensionException {
         if (_transformation == null) {
             throw noCoordinateTransformationSetException;
@@ -165,7 +165,7 @@ public final class GISExtensionState implements ExtensionObject {
             return _transformation.netLogoToGIS(pt, storage);
         }
     }
-    
+
     /** */
     public Coordinate gisToNetLogo (Coordinate pt, Coordinate storage)
             throws ExtensionException {
@@ -175,7 +175,7 @@ public final class GISExtensionState implements ExtensionObject {
             return _transformation.gisToNetLogo(pt, storage);
         }
     }
-    
+
     /** */
     public CoordinateTransformation getTransformation ()
             throws ExtensionException  {
@@ -185,17 +185,17 @@ public final class GISExtensionState implements ExtensionObject {
             return _transformation;
         }
     }
-    
+
     /** */
     public boolean isTransformationSet () {
         return (_transformation != null);
     }
-    
+
     /** */
     public void setTransformation (CoordinateTransformation newTransformation) {
         _transformation = newTransformation;
     }
-    
+
     /** */
     public Geometry agentGeometry (org.nlogo.api.Agent agent) throws ExtensionException {
         if (agent instanceof Turtle) {
@@ -216,17 +216,17 @@ public final class GISExtensionState implements ExtensionObject {
             throw new ExtensionException("unrecognized agent type: " + Dump.logoObject(agent));
         }
     }
-    
+
     /** */
     public Color getColor () {
         return _color;
     }
-    
+
     /** */
     public Object getNetLogoColor () {
         return _nlColor;
     }
-    
+
     /** */
     public void setColor (Color newColor) {
         _color = newColor;
@@ -235,28 +235,28 @@ public final class GISExtensionState implements ExtensionObject {
                                                         (newColor.getGreen() << 8) +
                                                         (newColor.getBlue()));
     }
-    
+
     /** */
     public void setNetLogoColor (Object newColor) {
         _nlColor = newColor;
         _color = org.nlogo.api.Color.getColor(newColor);
     }
-    
+
     /** */
     public double getCoverageSingleCellThreshold () {
         return _coverageSingleCellThreshold;
     }
-    
+
     /** */
     public void setCoverageSingleCellThreshold (double newThreshold) {
         _coverageSingleCellThreshold = newThreshold;
     }
-    
+
     /** */
     public double getCoverageMultipleCellThreshold () {
         return _coverageMultipleCellThreshold;
     }
-    
+
     /** */
     public void setCoverageMultipleCellThreshold (double newThreshold) {
         _coverageMultipleCellThreshold = newThreshold;
@@ -265,7 +265,7 @@ public final class GISExtensionState implements ExtensionObject {
     //--------------------------------------------------------------------------
     // ExtensionObject implementation
     //--------------------------------------------------------------------------
-    
+
     /**
      * Returns a string representation of the object.  If readable is
      * true, it should be possible read it as NL code.

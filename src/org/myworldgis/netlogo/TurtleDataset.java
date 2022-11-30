@@ -4,8 +4,8 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 import java.util.Arrays;
 import java.util.Iterator;
 import org.nlogo.api.Agent;
@@ -20,14 +20,14 @@ import org.nlogo.api.Turtle;
 import org.nlogo.api.World;
 
 /**
- * 
+ *
  */
 public final class TurtleDataset extends GISExtension.Reporter {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "OTPL";
@@ -38,14 +38,14 @@ public final class TurtleDataset extends GISExtension.Reporter {
         return SyntaxJ.reporterSyntax(new int[] { Syntax.TurtlesetType() },
                                      Syntax.WildcardType());
     }
-    
+
     /** */
-    public Object reportInternal (Argument args[], Context context) 
+    public Object reportInternal (Argument args[], Context context)
             throws ExtensionException, LogoException {
         World world = context.getAgent().world() ;
         AgentSet turtles = args[0].getAgentSet() ;
         AgentSet breed = null;
-        for (Iterator<Agent> i = turtles.agents().iterator(); i.hasNext();) 
+        for (Iterator<Agent> i = turtles.agents().iterator(); i.hasNext();)
         {
             Turtle t = (Turtle) i.next() ;
             if (breed == null) {
@@ -75,7 +75,7 @@ public final class TurtleDataset extends GISExtension.Reporter {
                 }
             }
         }
-        VectorDataset result = new VectorDataset(VectorDataset.ShapeType.POINT, 
+        VectorDataset result = new VectorDataset(VectorDataset.ShapeType.POINT,
                                                  variableNames,
                                                  variableTypes);
         for (Iterator<Agent> i = turtles.agents().iterator(); i.hasNext();) {

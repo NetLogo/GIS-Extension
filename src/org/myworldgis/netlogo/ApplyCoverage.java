@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;

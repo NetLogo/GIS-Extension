@@ -4,9 +4,9 @@
 
 package org.myworldgis.io.shapefile;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import org.ngs.ngunits.UnitConverter;
@@ -20,29 +20,29 @@ public final class ESRIShapefileWriter implements ESRIShapeConstants {
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private RandomAccessFile _raf;
-    
+
     /** */
     private ESRIShapeBuffer _buffer;
-    
+
     /** */
     private Envelope _envelope;
-    
+
     /** */
     private int _esriShapeType;
-    
+
     /** */
     private int _fileSizeBytes;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
-    public ESRIShapefileWriter (RandomAccessFile file, 
-                                Envelope envelope, 
+    public ESRIShapefileWriter (RandomAccessFile file,
+                                Envelope envelope,
                                 int esriShapeType,
                                 UnitConverter outputConverter,
                                 GeometryFactory factory) throws IOException {
@@ -54,11 +54,11 @@ public final class ESRIShapefileWriter implements ESRIShapeConstants {
         writeHeader();
         _raf.seek(SHAPE_FILE_HEADER_LENGTH);
     }
-    
+
     //--------------------------------------------------------------------------
     // instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     private void writeHeader () throws IOException {
         _buffer.clear(0, SHAPE_FILE_HEADER_LENGTH);
@@ -71,7 +71,7 @@ public final class ESRIShapefileWriter implements ESRIShapeConstants {
         _buffer.putBoundingBox(36, _envelope);
         _buffer.write(_raf, 0, SHAPE_FILE_HEADER_LENGTH);
     }
-    
+
     /** */
     public ESRIShapeIndexRecord writeShape (int index, Geometry feature) throws IOException {
         int recordSizeBytes = _buffer.putESRIRecord(0, feature, _esriShapeType, index);
@@ -80,12 +80,12 @@ public final class ESRIShapefileWriter implements ESRIShapeConstants {
         _fileSizeBytes += recordSizeBytes;
         return(indexRecord);
     }
-    
+
     /** */
     public void close () throws IOException {
         _raf.seek(0);
         writeHeader();
         _raf.setLength(_fileSizeBytes);
         _raf.close();
-    }        
+    }
 }

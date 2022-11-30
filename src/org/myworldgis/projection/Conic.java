@@ -4,12 +4,12 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Polygon;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,37 +23,37 @@ import org.ngs.ngunits.quantity.Length;
  * Base class of all conic projections.
  */
 public abstract class Conic extends HemisphericalProjection {
-    
+
     //-------------------------------------------------------------------------
     // Class variables
     //-------------------------------------------------------------------------
-    
+
     /** */
     public static final String STANDARD_PARALLEL_1_PROPERTY = "standard_parallel_1";
-        
+
     /** */
     public static final String STANDARD_PARALLEL_2_PROPERTY = "standard_parallel_2";
-    
+
     /** North pole constant for our clipping hemisphere center */
     protected static final transient Coordinate NORTH_POLE = new Coordinate(0.0f, GeometryUtils.HALF_PI);
-    
+
     /** South pole constant for our clipping hemisphere center */
     protected static final transient Coordinate SOUTH_POLE = new Coordinate(0.0f, -GeometryUtils.HALF_PI);
-    
+
     //-------------------------------------------------------------------------
     // Instance variables
     //-------------------------------------------------------------------------
-    
+
     /** Latitude of the first standard parallel, in RADIANS */
     protected double _phi1;
-    
+
     /** Latitude of the second standard parallel, in RADIANS */
     protected double _phi2;
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct a Conic projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -63,7 +63,7 @@ public abstract class Conic extends HemisphericalProjection {
      * @param phi1 latitude of the first standard parallel of the projection, in RADIANS
      * @param phi2 latitude of the second standard parallel of the projection, in RADIANS
      */
-    public Conic (Ellipsoid ellipsoid, 
+    public Conic (Ellipsoid ellipsoid,
                   Coordinate center,
                   Unit<Length> units,
                   double falseEasting,
@@ -74,34 +74,34 @@ public abstract class Conic extends HemisphericalProjection {
         _phi1 = phi1;
         _phi2 = phi2;
         if (StrictMath.abs(_phi2) == StrictMath.abs(_phi1)) {
-            // all kinds of mathematical problems result when 
+            // all kinds of mathematical problems result when
             // abs(phi1) == abs(phi2)
             _phi2 += (_phi2 * 0.01);
         }
     }
-    
+
     /** */
-    public Conic (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public Conic (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _phi1 = parameters.getAngularParameter(STANDARD_PARALLEL_1_PROPERTY);
         _phi2 = parameters.getAngularParameter(STANDARD_PARALLEL_2_PROPERTY);
         if (StrictMath.abs(_phi2) == StrictMath.abs(_phi1)) {
-            // all kinds of mathematical problems result when 
+            // all kinds of mathematical problems result when
             // abs(phi1) == abs(phi2)
             _phi2 += (_phi2 * 0.01);
         }
     }
-    
+
     //-------------------------------------------------------------------------
     // Instance methods
     //-------------------------------------------------------------------------
-    
+
     /** */
     public double getStandardParallel1 () {
         return _phi1;
     }
-    
+
     /** */
     public void setStandardParallel1 (double newPhi1) {
         if (newPhi1 != _phi1) {
@@ -112,12 +112,12 @@ public abstract class Conic extends HemisphericalProjection {
             computeParameters();
         }
     }
-    
+
     /** */
     public double getStandardParallel2 () {
         return _phi2;
     }
-    
+
     /** */
     public void setStandardParallel2 (double newPhi2) {
         if (newPhi2 != _phi2) {
@@ -128,7 +128,7 @@ public abstract class Conic extends HemisphericalProjection {
             computeParameters();
         }
     }
-    
+
     /** */
     public boolean equals (Object obj) {
         if (super.equals(obj)) {
@@ -139,12 +139,12 @@ public abstract class Conic extends HemisphericalProjection {
             return(false);
         }
     }
-    
+
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Returns the center of the clipping hemisphere.
      * The center of the clipping hemisphere is the North Pole if the first
      * standard parallel is below the second, the South Pole if the first is
@@ -154,23 +154,23 @@ public abstract class Conic extends HemisphericalProjection {
     protected Coordinate getHemisphereCenter () {
         return (_phi0 >= 0.0) ? NORTH_POLE : SOUTH_POLE;
     }
-    
-    /** 
+
+    /**
      * Returns the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are clipped.
      * Our clipping hemisphere has a radius of 3pi/4, so it's actually larger
-     * than a hemisphere, but I don't know the proper name for such a 
+     * than a hemisphere, but I don't know the proper name for such a
      * construction.
      * @return the radius of the clipping hemisphere
      */
     protected double getMaxC () {
         return GeometryUtils.THREE_QUARTERS_PI;
     }
-    
+
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public MultiPolygon process (Polygon poly) {
         GeometryFactory factory = poly.getFactory();
@@ -184,7 +184,7 @@ public abstract class Conic extends HemisphericalProjection {
         }
         return factory.createMultiPolygon(result.toArray(new Polygon[result.size()]));
     }
-    
+
     /** */
     public MultiLineString process (LineString line) {
         GeometryFactory factory = line.getFactory();
@@ -198,7 +198,7 @@ public abstract class Conic extends HemisphericalProjection {
         }
         return factory.createMultiLineString(result.toArray(new LineString[result.size()]));
     }
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();

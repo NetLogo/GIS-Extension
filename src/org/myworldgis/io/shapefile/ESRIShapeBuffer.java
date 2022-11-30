@@ -4,17 +4,17 @@
 
 package org.myworldgis.io.shapefile;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.MultiPoint;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPoint;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
 import java.io.IOException;
 import org.myworldgis.util.Buffer;
 import org.myworldgis.util.JTSUtils;
@@ -31,48 +31,48 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private UnitConverter _converter;
-    
+
     /** */
     private GeometryFactory _factory;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public ESRIShapeBuffer (int size, UnitConverter converter, GeometryFactory factory) {
         super(size, Buffer.ByteOrder.LITTLE_ENDIAN);
         _converter = converter;
         _factory = factory;
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public GeometryFactory getGeometryFactory () {
         return _factory;
     }
-    
+
     /** */
     public void setGeometryFactory (GeometryFactory newFactory) {
         _factory = newFactory;
     }
-    
+
     /** */
     public UnitConverter getUnitConverter () {
         return _converter;
     }
-    
+
     /** */
     public void setUnitConverter (UnitConverter newConverter) {
         _converter = newConverter;
     }
-    
+
     /**
      * Reads a bounding box record.  A bounding box is four double
      * representing, in order, xmin, ymin, xmax, ymax.
@@ -91,7 +91,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         double max_lat = _converter.convert(getDouble(offset));
         return new Envelope(min_lon, max_lon, min_lat, max_lat);
     }
-    
+
     /**
      * Writes the given bounding box  to the given buffer at the
      * given location.  The bounding box is written as four doubles
@@ -110,7 +110,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         bytesWritten += putDouble(offset + bytesWritten, _converter.convert(box.getMaxY()));
         return(bytesWritten);
     }
-    
+
     /** */
     public Geometry getESRIRecord (int offset) throws IOException {
         setByteOrder(ByteOrder.BIG_ENDIAN);
@@ -122,7 +122,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         int shapeType = getInt(offset);
         offset += 4;
         switch (shapeType) {
-            case SHAPE_TYPE_POINT: 
+            case SHAPE_TYPE_POINT:
                 return getESRIPointRecord(offset);
             case SHAPE_TYPE_POINTZ:
                 return getESRIPointZRecord(offset);
@@ -142,7 +142,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
                 throw new IOException("unsupported shape type");
         }
     }
-    
+
     /** */
     public Point getESRIPointRecord (int offset) {
         double x = _converter.convert(getDouble(offset));
@@ -161,7 +161,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         offset += 16; // 8 for the z coordinate, 8 more for the unused M field. -James Hovet 4/23/21
         return new PointZWrapper(_factory.createPoint(new Coordinate(x, y)), z);
     }
-    
+
     /** */
     public MultiPoint getESRIMultiPointRecord (int offset) {
         //Envelope envelope = getBoundingBox(offset);
@@ -176,7 +176,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
             offset += 8;
             coords[i] = new Coordinate(x, y);
         }
-        return _factory.createMultiPoint(coords);
+        return _factory.createMultiPointFromCoords(coords);
     }
 
     public MultiPoint getESRIMultiPointZRecord(int offset) {
@@ -196,9 +196,9 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         offset += 16; // Mmin and Mmax fields
         offset += 8 * nPoints; // Each M value
 
-        return _factory.createMultiPoint(coords);
+        return _factory.createMultiPointFromCoords(coords);
     }
-    
+
     /** */
     public MultiLineString getESRIPolyLineRecord (int offset) {
         //Envelope envelope = getBoundingBox(offset);
@@ -276,7 +276,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
 
         return _factory.createMultiLineString(parts);
     }
-    
+
     /** */
     public MultiPolygon getESRIPolygonRecord (int offset) {
         //Envelope envelope = getBoundingBox(offset);
@@ -292,7 +292,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         for (int i = 0; i < nParts; i += 1) {
             offsets[i] = getInt(offset);
             offset += 4;
-            
+
         }
         LinearRing[] parts = new LinearRing[nParts];
         int startIndex = offsets[0];
@@ -308,7 +308,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
                 offset += 8;
                 coords[coordIndex++] = new Coordinate(x, y);
                 currentIndex += 1;
-            }       
+            }
             parts[i] = _factory.createLinearRing(coords);
             startIndex = endIndex;
         }
@@ -372,7 +372,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
                 throw(new IllegalArgumentException("features of type '" + shape.getClass().getName() + "' can't be written to a ShapeFile"));
         }
     }
-    
+
     /** */
     public int putESRIPointRecord (int offset, Point shape, int index) {
         int bytesWritten = 0;
@@ -385,7 +385,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         bytesWritten += putDouble(offset + bytesWritten, _converter.convert(shape.getY()));
         return bytesWritten;
     }
-    
+
     /** */
     public int putESRIMultiPointRecord (int offset, MultiPoint shape, int index) {
         int bytesWritten = 0;
@@ -405,7 +405,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         }
         return bytesWritten;
     }
-    
+
     /** */
     public int putESRIPolyLineRecord (int offset, MultiLineString shape, int index) {
         int bytesWritten = 0;
@@ -436,7 +436,7 @@ public final class ESRIShapeBuffer extends Buffer implements ESRIShapeConstants 
         }
         return bytesWritten;
     }
-    
+
     /** */
     public int putESRIPolygonRecord (int offset, MultiPolygon shape, int index) {
         int bytesWritten = 0;

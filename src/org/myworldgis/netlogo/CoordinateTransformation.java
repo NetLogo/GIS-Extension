@@ -4,43 +4,43 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 import java.awt.geom.AffineTransform;
 import org.nlogo.core.ExtensionObject;
 
 
 /**
- * 
+ *
  */
 public final class CoordinateTransformation implements ExtensionObject {
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private final Envelope _gisEnvelope;
-    
+
     /** */
     private final Envelope _netLogoEnvelope;
-    
+
     /** */
     private final Coordinate _gisSpaceCenter;
-    
+
     /** */
     private final Coordinate _netLogoSpaceCenter;
-    
+
     /** NetLogo units per GIS units */
     private final double _scaleX;
 
     /** NetLogo units per GIS units */
     private final double _scaleY;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public CoordinateTransformation (Envelope gisSpaceEnvelope,
                                      Envelope netLogoSpaceEnvelope,
@@ -62,11 +62,11 @@ public final class CoordinateTransformation implements ExtensionObject {
         _netLogoSpaceCenter = new Coordinate(_netLogoEnvelope.getMinX() + (_netLogoEnvelope.getWidth() / 2.0),
                                              _netLogoEnvelope.getMinY() + (_netLogoEnvelope.getHeight() / 2.0));
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public AffineTransform getNetLogoToGISTransform () {
         AffineTransform result = AffineTransform.getTranslateInstance(_gisSpaceCenter.x,
@@ -78,13 +78,13 @@ public final class CoordinateTransformation implements ExtensionObject {
 
     /** */
     public AffineTransform getGISToNetLogoTransform () {
-        AffineTransform result = AffineTransform.getTranslateInstance(_netLogoSpaceCenter.x, 
+        AffineTransform result = AffineTransform.getTranslateInstance(_netLogoSpaceCenter.x,
                                                                       _netLogoSpaceCenter.y);
         result.scale(_scaleX, _scaleY);
         result.translate(-_gisSpaceCenter.x, -_gisSpaceCenter.y);
         return result;
     }
-    
+
     /** */
     public Coordinate netLogoToGIS (Coordinate pt, Coordinate storage) {
         if (storage == null) {
@@ -94,7 +94,7 @@ public final class CoordinateTransformation implements ExtensionObject {
         storage.y = ((pt.y - _netLogoSpaceCenter.y) / _scaleY) + _gisSpaceCenter.y;
         return storage;
     }
-    
+
     /** */
     public Coordinate gisToNetLogo (Coordinate pt, Coordinate storage) {
         if (storage == null) {
@@ -108,16 +108,16 @@ public final class CoordinateTransformation implements ExtensionObject {
             return null;
         }
     }
-    
+
     /** */
     public Envelope getEnvelope (org.nlogo.api.World world) {
         Coordinate bottomLeft = new Coordinate(world.minPxcor() - 0.5, world.minPycor() - 0.5);
         Coordinate topRight = new Coordinate(world.maxPxcor() + 0.5, world.maxPycor() + 0.5);
-        netLogoToGIS(bottomLeft, bottomLeft); 
+        netLogoToGIS(bottomLeft, bottomLeft);
         netLogoToGIS(topRight, topRight);
         return new Envelope(bottomLeft.x, topRight.x, bottomLeft.y, topRight.y);
     }
-    
+
     //--------------------------------------------------------------------------
     // ExtensionObject implementation
     //--------------------------------------------------------------------------
@@ -150,4 +150,3 @@ public final class CoordinateTransformation implements ExtensionObject {
         }
     }
 }
-

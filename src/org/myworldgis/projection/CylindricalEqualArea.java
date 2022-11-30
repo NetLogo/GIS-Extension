@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -23,28 +23,28 @@ public final class CylindricalEqualArea extends Cylindrical {
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Cylindrical_Equal_Area";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "central_meridian";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "standard_parallel_1";
 
     //-------------------------------------------------------------------------
     // Instance variables
     //-------------------------------------------------------------------------
-    
+
     /** Pre-compute these values for the given ellipsoid & projection center
         to save time when projecting. */
     private double _e, _k0, _qp, _subLat[];
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct a CylindricalEqualArea projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -53,8 +53,8 @@ public final class CylindricalEqualArea extends Cylindrical {
      * @param falseEasting value to add to x coordinate of each projected point, in METERS
      * @param falseNorthing value to add to y coordinate of each projected point, in METERS
      */
-    public CylindricalEqualArea (Ellipsoid ellipsoid, 
-                                 Coordinate center, 
+    public CylindricalEqualArea (Ellipsoid ellipsoid,
+                                 Coordinate center,
                                  Unit<Length> units,
                                  double falseEasting,
                                  double falseNorthing) {
@@ -63,21 +63,21 @@ public final class CylindricalEqualArea extends Cylindrical {
         _subLat = new double[3];
         computeParameters();
     }
-    
+
     /** */
-    public CylindricalEqualArea (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public CylindricalEqualArea (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
         _subLat = new double[3];
         computeParameters();
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -91,8 +91,8 @@ public final class CylindricalEqualArea extends Cylindrical {
         storage.y = (_a * q) / (2.0 * _k0);
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x float the x coordinate (easting) of the point to be inverse projected
      * @param y float the y coordinate (northing) of the point to be inverse projected
@@ -102,15 +102,15 @@ public final class CylindricalEqualArea extends Cylindrical {
     protected Coordinate inversePointRaw (double x, double y, Coordinate storage) {
         storage.x = _lambda0 + (x / (_a * _k0));
         double beta = StrictMath.asin((2.0*y*_k0)/(_a*_qp));
-        storage.y = beta + 
+        storage.y = beta +
                      _subLat[0] * StrictMath.sin(2.0 * beta) +
                      _subLat[1] * StrictMath.sin(4.0 * beta) +
                      _subLat[2] * StrictMath.sin(6.0 * beta);
         return storage;
     }
-    
-    /** 
-     * Initialize parameters, and recompute them whenever the ellipsoid or 
+
+    /**
+     * Initialize parameters, and recompute them whenever the ellipsoid or
      * projection center changes.
      */
     protected void computeParameters () {
@@ -127,7 +127,7 @@ public final class CylindricalEqualArea extends Cylindrical {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();
@@ -135,11 +135,11 @@ public final class CylindricalEqualArea extends Cylindrical {
         result.addAngularParameter(CENTER_LAT_PROPERTY, _phi0, SI.RADIAN);
         return result;
     }
-    
+
     //--------------------------------------------------------------------------
     // Cloneable implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Object clone () {
         CylindricalEqualArea clone = (CylindricalEqualArea)super.clone();

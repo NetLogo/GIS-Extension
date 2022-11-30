@@ -4,7 +4,7 @@
 
 package org.myworldgis.io.asciigrid;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import java.awt.Dimension;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferDouble;
@@ -19,30 +19,30 @@ import org.myworldgis.util.StringUtils;
  *
  */
 public final class AsciiGridFileReader implements AsciiGridConstants {
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private BufferedReader _in;
-    
+
     /** */
     private Dimension _gridSize;
-    
+
     /** */
     private Envelope _gridEnvelope;
-    
+
     /** */
     private double _nanValue;
-    
+
     /** */
     private String _cachedLine;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public AsciiGridFileReader (BufferedReader in) throws IOException {
         _in = in;
@@ -64,8 +64,8 @@ public final class AsciiGridFileReader implements AsciiGridConstants {
                 throw(new IOException("invalid row count marker on line 2"));
             }
             _gridSize = new Dimension(columnCount, rowCount);
-            
-            
+
+
             tokenizer = new StringTokenizer(_in.readLine());
             double originX = 0.0;
             if (StringUtils.startsWithIgnoreCase(tokenizer.nextToken(), LEFT_LONGITUDE)) {
@@ -77,7 +77,7 @@ public final class AsciiGridFileReader implements AsciiGridConstants {
             double originY = 0.0;
             if (StringUtils.startsWithIgnoreCase(tokenizer.nextToken(), BOTTOM_LATITUDE)) {
                 originY = Double.parseDouble(tokenizer.nextToken());
-            } else { 
+            } else {
                 throw(new IOException("invalid corner y on line 4"));
             }
             tokenizer = new StringTokenizer(_in.readLine());
@@ -91,7 +91,7 @@ public final class AsciiGridFileReader implements AsciiGridConstants {
                                          originX + (cellSize * columnCount),
                                          originY,
                                          originY + (cellSize * rowCount));
-            
+
             String lastLine = _in.readLine();
             tokenizer = new StringTokenizer(lastLine);
             if (StringUtils.startsWithIgnoreCase(tokenizer.nextToken(), NAN_VALUE)) {
@@ -107,11 +107,11 @@ public final class AsciiGridFileReader implements AsciiGridConstants {
             throw ex;
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // GridInputMethod implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Dimension getSize () {
         return _gridSize;
@@ -126,7 +126,7 @@ public final class AsciiGridFileReader implements AsciiGridConstants {
     public double getNaNValue () {
         return _nanValue;
     }
-    
+
     /** */
     public DataBuffer getData () throws IOException {
         int size = _gridSize.width * _gridSize.height;
@@ -151,9 +151,9 @@ public final class AsciiGridFileReader implements AsciiGridConstants {
                     try {
                         token = token.replace('e', 'E'); // NumberFormat.parse only accepts an uppercase E for scientific notation. -James Hovet 10/2020
                         Number n = VALUE_FORMAT.parse(token);
-                        if ((n != null) && (n.doubleValue() != _nanValue)) { 
+                        if ((n != null) && (n.doubleValue() != _nanValue)) {
                             value = n.doubleValue();
-                        }   
+                        }
                     } catch (ParseException e) {
                         // should we report?
                     }
@@ -169,12 +169,12 @@ public final class AsciiGridFileReader implements AsciiGridConstants {
         }
         return result;
     }
-    
+
     /** */
     public void close () throws IOException {
         try {
             _in.close();
-        } finally { 
+        } finally {
             _in = null;
         }
     }

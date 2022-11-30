@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.vividsolutions.jts.geom.*;
+import org.locationtech.jts.geom.*;
 
 import org.myworldgis.io.PointZWrapper;
 import org.myworldgis.netlogo.VectorDataset.PropertyType;
@@ -48,7 +48,7 @@ public class GeoJsonReader implements GeoJsonConstants {
     boolean                   shouldWarnUnusedZ = false;
     Object[][]                propertyValues;
     boolean                   containsDefaultValues;
-    
+
 
     public GeoJsonReader(File file, GeometryFactory factory) throws IOException, ParseException, ExtensionException {
         this.factory = factory;
@@ -84,7 +84,7 @@ public class GeoJsonReader implements GeoJsonConstants {
     }
 
     private void parseGeometryObject(JSONObject geometry, int featureIndex) throws ExtensionException {
-        if (!geometry.get("type").toString().equals(this.geojsonShapeType)) { 
+        if (!geometry.get("type").toString().equals(this.geojsonShapeType)) {
             throw new ExtensionException("Only homogenous FeatureCollections are supported");
         }
 
@@ -110,7 +110,7 @@ public class GeoJsonReader implements GeoJsonConstants {
                 PropertyType newType = getPropertyTypeForValue(entry.getValue());
                 if (existingType != newType) {
                     throw new ExtensionException("All features properties of the same name must be of the same datatype. "
-                    + "The property " + entry.getKey() + "has one value of type of " + existingType.toString() 
+                    + "The property " + entry.getKey() + "has one value of type of " + existingType.toString()
                     + "and one property type of " + newType.toString());
                 }
             } else {
@@ -267,7 +267,7 @@ public class GeoJsonReader implements GeoJsonConstants {
                 for (int i = 0; i < coordinates.size(); i++) {
                     pointCoords[i] = JSONPairToCoordinate((JSONArray) coordinates.get(i));
                 }
-                Geometry points = factory.createMultiPoint(pointCoords);
+                Geometry points = factory.createMultiPointFromCoords(pointCoords);
                 return points;
             case "LineString":
                 return parseSingleLineString(coordinates);

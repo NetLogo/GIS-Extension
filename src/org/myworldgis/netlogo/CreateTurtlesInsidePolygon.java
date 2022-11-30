@@ -1,6 +1,6 @@
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import org.myworldgis.util.VectorFeaturesToTurtlesUtil;
 import org.nlogo.agent.AgentSet;
 import org.nlogo.agent.TreeAgentSet;

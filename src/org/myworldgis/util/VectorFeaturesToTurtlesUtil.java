@@ -1,6 +1,6 @@
 package org.myworldgis.util;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import org.myworldgis.netlogo.GISExtension;
 import org.myworldgis.netlogo.VectorDataset;
 import org.myworldgis.netlogo.VectorFeature;

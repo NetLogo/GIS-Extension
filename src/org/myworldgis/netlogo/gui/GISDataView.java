@@ -4,16 +4,16 @@
 
 package org.myworldgis.netlogo.gui;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.geom.PrecisionModel;
-import com.vividsolutions.jts.geom.util.GeometryTransformer;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.util.GeometryTransformer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -45,82 +45,82 @@ import org.myworldgis.projection.Projection;
 import org.myworldgis.projection.ProjectionFormat;
 
 
-/** 
- * 
+/**
+ *
  */
 public final class GISDataView extends JComponent {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     private static class ProjectedSpaceToPixelSpaceTransform extends AffineTransform {
-        
+
         static final long serialVersionUID = 1L;
         private Point2D _gisCenter;
         private double _scale;
         private Point2D _pixelCenter;
-        
-        public ProjectedSpaceToPixelSpaceTransform (Point2D gisCenter, 
-                                                    double scale, 
+
+        public ProjectedSpaceToPixelSpaceTransform (Point2D gisCenter,
+                                                    double scale,
                                                     Point2D pixelCenter) {
             _gisCenter = gisCenter;
             _scale = scale;
             _pixelCenter = pixelCenter;
             recomputeTransform();
         }
-        
+
         public Point2D getProjectedCenter () {
             return (Point2D)_gisCenter.clone();
         }
-        
+
         public void setProjectedCenter (Point2D newCenter) {
             _gisCenter.setLocation(newCenter.getX(), newCenter.getY());
             recomputeTransform();
         }
-        
+
         public double getScale () {
             return(_scale);
         }
-        
+
         public void setScale (double newScale) {
             if (newScale != _scale) {
                 _scale = newScale;
                 recomputeTransform();
             }
         }
-        
+
         @SuppressWarnings("unused")
         public Point2D getPixelCenter () {
             return (Point2D)_pixelCenter.clone();
         }
-        
+
         public void setPixelCenter (Point2D newCenter) {
             _pixelCenter.setLocation(newCenter.getX(), newCenter.getY());
             recomputeTransform();
         }
-        
+
         private void recomputeTransform () {
             setToTranslation(_pixelCenter.getX(), _pixelCenter.getY());
             scale(_scale, -_scale);
             translate(-_gisCenter.getX(), -_gisCenter.getY());
         }
     }
-    
+
     /** */
     private class DragListener extends MouseInputAdapter {
-        
+
         private java.awt.Point _last;
-        
+
         public void mousePressed (MouseEvent evt) {
             _last = evt.getPoint();
         }
-        
+
         public void mouseReleased (MouseEvent evt) {
             _last = null;
         }
-        
+
         public void mouseDragged (MouseEvent evt) {
             if (_last != null) {
                 int dx = evt.getX() - _last.x;
@@ -133,7 +133,7 @@ public final class GISDataView extends JComponent {
                 repaint();
             }
         }
-        
+
         public void mouseMoved (MouseEvent evt) {
             if (_proj != null) {
                 try {
@@ -143,12 +143,12 @@ public final class GISDataView extends JComponent {
                     e.printStackTrace();
                 }
             }
-        }   
+        }
     }
-    
+
     /** */
     private class ZoomListener implements MouseWheelListener {
-        
+
         public void mouseWheelMoved (MouseWheelEvent evt) {
             if (evt.getUnitsToScroll() > 0) {
                 _transform.setScale(_transform.getScale() * 0.875);
@@ -158,24 +158,24 @@ public final class GISDataView extends JComponent {
             repaint();
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     static final long serialVersionUID = 1L;
-    
+
     /** */
     static final Stroke STROKE = new BasicStroke(0.001f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL);
-    
+
     /** */
     static final GeometryFactory FACTORY = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING));
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static void main (String[] args) {
         try {
@@ -207,7 +207,7 @@ public final class GISDataView extends JComponent {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }                      
+                }
             }
             dataView.zoomToEnvelope(env);
             JFrame window = new JFrame("GIS Data View");
@@ -219,7 +219,7 @@ public final class GISDataView extends JComponent {
             e.printStackTrace();
         }
     }
-    
+
     /** */
     private static void addToPath (LineString line, GeneralPath p) {
         Coordinate c = line.getCoordinateN(0);
@@ -229,24 +229,24 @@ public final class GISDataView extends JComponent {
             p.lineTo((float)c.x, (float)c.y);
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private List<Shape> _shapes;
-    
+
     /** */
     private ProjectedSpaceToPixelSpaceTransform _transform;
-    
+
     /** */
     private Projection _proj;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public GISDataView () {
         setOpaque(true);
@@ -263,16 +263,16 @@ public final class GISDataView extends JComponent {
         addMouseWheelListener(new ZoomListener());
         setSize(getPreferredSize());
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public void zoomToEnvelope (Envelope env) {
         double cx = env.getMinX() + ((env.getMaxX() - env.getMinX()) / 2.0);
         double cy = env.getMinY() + ((env.getMaxY() - env.getMinY()) / 2.0);
-        _transform.setProjectedCenter(new Point2D.Double(Double.isNaN(cx) ? 0.0 : cx, 
+        _transform.setProjectedCenter(new Point2D.Double(Double.isNaN(cx) ? 0.0 : cx,
                                                          Double.isNaN(cy) ? 0.0 : cy));
         double xScale = getWidth() / env.getWidth();
         if (xScale == 0) {
@@ -284,7 +284,7 @@ public final class GISDataView extends JComponent {
         }
         _transform.setScale(StrictMath.min(xScale, yScale));
     }
-    
+
     /** */
     public void addGeometry (Geometry geom) {
         if (geom instanceof Point) {
@@ -312,17 +312,17 @@ public final class GISDataView extends JComponent {
             }
         }
     }
-    
+
     /** */
     public Projection getProjection () {
         return _proj;
     }
-    
+
     /** */
     public void setProjection (Projection proj) {
         _proj = proj;
     }
-    
+
     /** */
     @SuppressWarnings("deprecation")
     public void reshape (int x, int y, int newWidth, int newHeight) {
@@ -332,7 +332,7 @@ public final class GISDataView extends JComponent {
         _transform.setPixelCenter(new Point2D.Float(insets.left + ((size.width-(insets.left+insets.right)) / 2.0f),
                                                     insets.top + ((size.height-(insets.top+insets.bottom)) / 2.0f)));
     }
-    
+
     /** */
     public void paintComponent (Graphics g) {
         g.setColor(getBackground());

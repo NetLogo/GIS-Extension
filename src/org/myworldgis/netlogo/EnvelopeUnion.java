@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import java.text.ParseException;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
@@ -15,14 +15,14 @@ import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 
 /**
- * 
+ *
  */
 public final class EnvelopeUnion extends GISExtension.Reporter {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "OTPL";
@@ -34,9 +34,9 @@ public final class EnvelopeUnion extends GISExtension.Reporter {
                                      Syntax.ListType(),
                                      2);
     }
-    
+
     /** */
-    public Object reportInternal (Argument args[], Context context) 
+    public Object reportInternal (Argument args[], Context context)
             throws ExtensionException, LogoException, ParseException {
         Envelope[] envelopes = new Envelope[args.length];
         for (int i = 0; i < args.length; i += 1) {

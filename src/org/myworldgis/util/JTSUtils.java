@@ -4,25 +4,25 @@
 
 package org.myworldgis.util;
 
-import com.vividsolutions.jts.algorithm.CGAlgorithms;
-import com.vividsolutions.jts.algorithm.locate.SimplePointInAreaLocator;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateArrays;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.GeometryFilter;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.Location;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.geom.TopologyException;
-import com.vividsolutions.jts.operation.polygonize.Polygonizer;
-import com.vividsolutions.jts.operation.valid.IsValidOp;
-import com.vividsolutions.jts.operation.valid.TopologyValidationError;
+import org.locationtech.jts.algorithm.Orientation;
+import org.locationtech.jts.algorithm.locate.SimplePointInAreaLocator;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.CoordinateArrays;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.GeometryFilter;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Location;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.TopologyException;
+import org.locationtech.jts.operation.polygonize.Polygonizer;
+import org.locationtech.jts.operation.valid.IsValidOp;
+import org.locationtech.jts.operation.valid.TopologyValidationError;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,15 +32,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-/** 
- * 
+/**
+ *
  */
 public final class JTSUtils {
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private static final Comparator<Polygon> POLYGON_AREA_COMPARATOR = new Comparator<Polygon>() {
             public int compare (Polygon p1, Polygon p2) {
@@ -55,7 +55,7 @@ public final class JTSUtils {
                 }
             }
         };
-    
+
     /** */
     private static final Comparator<Polygon> POLYGON_CONTAINMENT_COMPARATOR = new Comparator<Polygon>() {
             public int compare (Polygon p1, Polygon p2) {
@@ -68,20 +68,20 @@ public final class JTSUtils {
                 }
             }
         };
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /**
      * JTS enforces a much stricter standards for the topology of Polygons
      * than the shapefile format does. This method takes a list of polygon
      * rings and does its best to build a valid JTS MultiPolygon out of them
      * by grouping negative-area "hole" rings with their containing positive-
-     * area "shell" rings, and by repairing common topology errors such as 
+     * area "shell" rings, and by repairing common topology errors such as
      * self intersections.
      */
-    public static MultiPolygon buildPolygonGeometry (LinearRing[] rings, 
+    public static MultiPolygon buildPolygonGeometry (LinearRing[] rings,
                                                      GeometryFactory factory,
                                                      boolean repair) {
         MultiPolygon result = null;
@@ -97,7 +97,7 @@ public final class JTSUtils {
             for (int i = 0; i < rings.length; i += 1) {
                 LinearRing ring = rings[i];
                 if (ring.getNumPoints() > 0) {
-                    if (CGAlgorithms.isCCW(ring.getCoordinates())) {
+                    if (Orientation.isCCW(ring.getCoordinates())) {
                         holeRingList.add(ring);
                     } else {
                         shellRingList.add(ring);
@@ -106,7 +106,7 @@ public final class JTSUtils {
             }
             if (shellRingList.size() == 1) {
                 // short-circuit for another common, simple case
-                Polygon poly = factory.createPolygon(shellRingList.get(0), 
+                Polygon poly = factory.createPolygon(shellRingList.get(0),
                                                      GeometryFactory.toLinearRingArray(holeRingList));
                 result = factory.createMultiPolygon(new Polygon[] { poly });
             } else if (holeRingList.size() == 0) {
@@ -118,7 +118,7 @@ public final class JTSUtils {
                 result = factory.createMultiPolygon(polygons);
             } else {
                 // complex case: we have multiple shell rings AND one or more hole rings,
-                // so we need to do some work to figure out which shell ring each hole 
+                // so we need to do some work to figure out which shell ring each hole
                 // ring belongs to
                 Polygon[] polygons = new Polygon[shellRingList.size()];
                 for (int i = 0; i < shellRingList.size(); i += 1) {
@@ -138,12 +138,12 @@ public final class JTSUtils {
                         Polygon container = holeContainers.get(0);
                         LinearRing[] newHoles = new LinearRing[container.getNumInteriorRing()+1];
                         for (int j = 0; j < container.getNumInteriorRing(); j += 1) {
-                            newHoles[j] = (LinearRing)container.getInteriorRingN(j);
+                            newHoles[j] = container.getInteriorRingN(j);
                         }
                         newHoles[newHoles.length-1] = hole;
                         for (int j = 0; j < polygons.length; j += 1) {
                             if (container == polygons[j]) {
-                                polygons[j] = factory.createPolygon((LinearRing)container.getExteriorRing(), newHoles);
+                                polygons[j] = factory.createPolygon(container.getExteriorRing(), newHoles);
                                 break;
                             }
                         }
@@ -160,7 +160,7 @@ public final class JTSUtils {
         }
         return result;
     }
-    
+
     /** */
     public static Geometry repair (Geometry geom) {
         GeometryFactory factory = geom.getFactory();
@@ -185,7 +185,7 @@ public final class JTSUtils {
             return(geom);
         }
     }
-    
+
     /** */
     @SuppressWarnings("unchecked")
     public static Polygon repair (Polygon p) {
@@ -212,7 +212,7 @@ public final class JTSUtils {
                     p = factory.createPolygon(null, null);
                 }
             } else if (err.getErrorType() == TopologyValidationError.TOO_FEW_POINTS) {
-                LinearRing exterior = (LinearRing)p.getExteriorRing();
+                LinearRing exterior = p.getExteriorRing();
                 Coordinate[] coords = CoordinateArrays.removeRepeatedPoints(exterior.getCoordinates());
                 if (coords.length < 4) {
                     p = factory.createPolygon(null, null);
@@ -220,7 +220,7 @@ public final class JTSUtils {
                     exterior = factory.createLinearRing(coords);
                     List<LinearRing> validInteriorRings = new ArrayList<LinearRing>(p.getNumInteriorRing());
                     for (int i = 0; i < p.getNumInteriorRing(); i += 1) {
-                        LinearRing s = (LinearRing)p.getInteriorRingN(i);
+                        LinearRing s = p.getInteriorRingN(i);
                         coords = CoordinateArrays.removeRepeatedPoints(s.getCoordinates());
                         if (coords.length >= 4) {
                             validInteriorRings.add(factory.createLinearRing(coords));
@@ -237,20 +237,20 @@ public final class JTSUtils {
         }
         return(p);
     }
-    
+
     /** */
     public static GeometryCollection explodeMultiPolygon (MultiPolygon mp) {
         List<LinearRing> result = new ArrayList<LinearRing>(mp.getNumGeometries()*2);
         for (int i = 0; i < mp.getNumGeometries(); i += 1) {
             Polygon p = (Polygon)mp.getGeometryN(i);
-            result.add((LinearRing)p.getExteriorRing());
+            result.add(p.getExteriorRing());
             for (int j = 0; j < p.getNumInteriorRing(); j += 1) {
-                result.add((LinearRing)p.getInteriorRingN(j));
+                result.add(p.getInteriorRingN(j));
             }
-        }   
+        }
         return mp.getFactory().createGeometryCollection(GeometryFactory.toGeometryArray(result));
     }
-    
+
     /** */
     public static Geometry flatten (GeometryCollection gc) {
         final List<Point> points = new LinkedList<Point>();
@@ -275,7 +275,7 @@ public final class JTSUtils {
             return gc.getFactory().createMultiPoint(GeometryFactory.toPointArray(points));
         }
     }
-    
+
     /** */
     public static double getSharedAreaRatio (Geometry geom1, Geometry geom2) {
         try {
@@ -285,7 +285,7 @@ public final class JTSUtils {
             // reproduce it consistently. Why should computing the
             // intersection with a MultiPolygon fail when computing
             // the intersection with each of its constituent Polygons
-            // succeeds? I have no idea, but it does happen. This 
+            // succeeds? I have no idea, but it does happen. This
             // seems to fix the problem, though.
             double result = 0.0;
             if (geom2 instanceof GeometryCollection) {
@@ -299,9 +299,9 @@ public final class JTSUtils {
             }
         }
     }
-    
+
     /**
-     * This is ten times faster than the absolutely correct 
+     * This is ten times faster than the absolutely correct
      * version above, and it's only off by an average of 1%.
      * Note that the first argument MUST be rectangular, or
      * your results will be meaningless.
@@ -315,7 +315,7 @@ public final class JTSUtils {
             // I suppose it is possible for a valid polygon geometry
             // to contain all four corners and share considerably less
             // than 100% of its area with the envelope in question.
-            // But if you're that worried about correctness you 
+            // But if you're that worried about correctness you
             // shouldn't be using this method in the first place.
             return 1.0;
         }

@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import java.text.ParseException;
 import org.nlogo.api.Dump;
 import org.nlogo.core.LogoList;
@@ -12,21 +12,21 @@ import org.nlogo.api.LogoListBuilder;
 
 
 /**
- * 
+ *
  */
 public final class EnvelopeLogoListFormat {
 
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private static final EnvelopeLogoListFormat _instance = new EnvelopeLogoListFormat();
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static EnvelopeLogoListFormat getInstance () {
         return _instance;
@@ -35,14 +35,14 @@ public final class EnvelopeLogoListFormat {
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     private EnvelopeLogoListFormat () { }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Envelope parse (LogoList list) throws ParseException {
         if (list.size() != 4) {
@@ -68,9 +68,9 @@ public final class EnvelopeLogoListFormat {
                             ((Number)maxX).doubleValue(),
                             ((Number)minY).doubleValue(),
                             ((Number)maxY).doubleValue());
-        
+
     }
-    
+
     /** */
     @SuppressWarnings("unchecked")
     public LogoList format (Envelope envelope) {

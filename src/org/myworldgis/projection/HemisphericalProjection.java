@@ -4,12 +4,12 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.Unit;
@@ -23,21 +23,21 @@ import org.ngs.ngunits.quantity.Length;
  * Superclass of both Azimuthal and Conic projection families.
  */
 public abstract class HemisphericalProjection extends AbstractProjectedProjection {
-    
+
     //-------------------------------------------------------------------------
     // Instance variables
     //-------------------------------------------------------------------------
-    
+
     /** Latitude of the center of the clipping hemisphere */
     private double _hPhi1;
-    
+
     /** Longitude of the center of the clipping hemisphere */
     private double _hLambda0;
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct a HemisphericalProjection.
      * @param ellipsoid the ellipsoid for the projection
@@ -45,41 +45,41 @@ public abstract class HemisphericalProjection extends AbstractProjectedProjectio
      * @param falseEasting value to add to x coordinate of each projected point, in projected units
      * @param falseNorthing value to add to y coordinate of each projected point, in projected units
      */
-    public HemisphericalProjection (Ellipsoid ellipsoid, 
-                                    Coordinate center, 
+    public HemisphericalProjection (Ellipsoid ellipsoid,
+                                    Coordinate center,
                                     Unit<Length> units,
                                     double falseEasting,
                                     double falseNorthing) {
         super(ellipsoid, center, units, falseEasting, falseNorthing);
     }
-    
+
     /** */
-    public HemisphericalProjection (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public HemisphericalProjection (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
     }
-    
+
     //-------------------------------------------------------------------------
     // Abstract instance methods
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Get the center of the clipping hemisphere.
      * @return the center of the clipping hemisphere
      */
     protected abstract Coordinate getHemisphereCenter ();
-    
+
     /**
-     * Get the maximum angular distance from the center of the clipping 
+     * Get the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are to be clipped.
      * @return the radius of the clipping hemisphere
      */
     protected abstract double getMaxC ();
-    
+
     //-------------------------------------------------------------------------
     // Instance methods
     //-------------------------------------------------------------------------
-    
+
     /** */
     protected Coordinate inversePoint (double x, double y, Coordinate storage) {
         storage = super.inversePoint(x, y, storage);
@@ -91,7 +91,7 @@ public abstract class HemisphericalProjection extends AbstractProjectedProjectio
         }
         return storage;
     }
-    
+
     /** */
     public boolean equals (Object obj) {
         if (super.equals(obj)) {
@@ -103,18 +103,18 @@ public abstract class HemisphericalProjection extends AbstractProjectedProjectio
             return(false);
         }
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public Point process (Point point) {
         if (!point.isEmpty()) {
             Coordinate center = getHemisphereCenter();
-            double c = GeometryUtils.point_point_greatcircle_distance(center.x, 
-                                                                      center.y, 
-                                                                      point.getX(), 
+            double c = GeometryUtils.point_point_greatcircle_distance(center.x,
+                                                                      center.y,
+                                                                      point.getX(),
                                                                       point.getY());
             if (c > getMaxC()) {
                 return point.getFactory().createPoint((Coordinate)null);
@@ -122,7 +122,7 @@ public abstract class HemisphericalProjection extends AbstractProjectedProjectio
         }
         return point;
     }
-    
+
     /** */
     public MultiPolygon process (Polygon poly) {
         if (_lineType == LineType.RHUMB) {
@@ -132,7 +132,7 @@ public abstract class HemisphericalProjection extends AbstractProjectedProjectio
         }
         return ProjectionUtils.clip (poly, getHemisphereCenter(), getMaxC());
     }
-    
+
     /** */
     public MultiLineString process (LineString line) {
         if (_lineType == LineType.RHUMB) {
@@ -142,9 +142,9 @@ public abstract class HemisphericalProjection extends AbstractProjectedProjectio
         }
         return ProjectionUtils.clip(line, getHemisphereCenter(), getMaxC());
     }
-    
-    /** 
-     * Initialize parameters, and recompute them whenever the ellipsoid or 
+
+    /**
+     * Initialize parameters, and recompute them whenever the ellipsoid or
      * projection center changes.
      */
     protected void computeParameters () {

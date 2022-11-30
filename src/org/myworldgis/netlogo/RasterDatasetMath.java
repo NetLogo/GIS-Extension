@@ -4,8 +4,8 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 import java.awt.Dimension;
 import java.text.ParseException;
 import java.util.Iterator;
@@ -22,28 +22,28 @@ import org.nlogo.api.Turtle;
 import org.nlogo.api.World;
 
 
-/** 
- * 
+/**
+ *
  */
 public abstract class RasterDatasetMath {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class GetSample extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
-            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(), 
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.WildcardType() },
                                          Syntax.NumberType());
         }
-        
+
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             RasterDataset dataset = RasterDataset.getDataset(args[0]);
@@ -51,7 +51,7 @@ public abstract class RasterDatasetMath {
             if (arg1 instanceof LogoList) {
                 LogoList list = (LogoList)arg1;
                 if (list.size() == 2) {
-                    // List of length 2: a point in NetLogo space                    
+                    // List of length 2: a point in NetLogo space
                     Coordinate loc = new Coordinate(((Number)list.get(0)).doubleValue(),
                                                     ((Number)list.get(1)).doubleValue());
                     loc = GISExtension.getState().netLogoToGIS(loc, loc);
@@ -68,10 +68,10 @@ public abstract class RasterDatasetMath {
             } else if (arg1 instanceof Patch) {
                 Patch patch = (Patch)arg1;
                 Coordinate bl = GISExtension.getState().netLogoToGIS(new Coordinate(patch.pxcor()-0.5,
-                                                                                    patch.pycor()-0.5), 
+                                                                                    patch.pycor()-0.5),
                                                                      null);
-                Coordinate tr = GISExtension.getState().netLogoToGIS(new Coordinate(patch.pxcor()+0.5, 
-                                                                                    patch.pycor()+0.5), 
+                Coordinate tr = GISExtension.getState().netLogoToGIS(new Coordinate(patch.pxcor()+0.5,
+                                                                                    patch.pycor()+0.5),
                                                                      null);
                 return Double.valueOf(dataset.getValue(new Envelope(tr, bl)));
             } else if (arg1 instanceof Turtle) {
@@ -94,7 +94,7 @@ public abstract class RasterDatasetMath {
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.ListType(),
@@ -102,7 +102,7 @@ public abstract class RasterDatasetMath {
                                                      Syntax.NumberType() },
                                          Syntax.WildcardType());
         }
-        
+
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException, ParseException {
             RasterDataset dataset = RasterDataset.getDataset(args[0]);
@@ -112,21 +112,21 @@ public abstract class RasterDatasetMath {
             return dataset.resample(new GridDimensions(new Dimension(width, height), envelope));
         }
     }
-    
+
     /** */
     public static final class GetWorldEnvelope extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.NumberType(),
                                                      Syntax.NumberType() },
                                          Syntax.ListType());
         }
-        
+
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             RasterDataset dataset = RasterDataset.getDataset(args[0]);
@@ -142,14 +142,14 @@ public abstract class RasterDatasetMath {
             return EnvelopeLogoListFormat.getInstance().format(envelope);
         }
     }
-    
+
     /** */
     public static final class Convolve extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.NumberType(),
@@ -159,7 +159,7 @@ public abstract class RasterDatasetMath {
                                                      Syntax.NumberType() },
                                          Syntax.WildcardType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
@@ -176,7 +176,7 @@ public abstract class RasterDatasetMath {
             int row = kernelRows - 1;
             int col = 0;
             for (Iterator<Object> iterator = matrixElements.javaIterator(); iterator.hasNext();) {
-                // NOTE: reverse order of the rows, since image coordinate system 
+                // NOTE: reverse order of the rows, since image coordinate system
                 // (where the convolution is computed) has the reversed y axis
                 data[row*kernelColumns + col] = ((Number)iterator.next()).floatValue();
                 col += 1;
@@ -187,10 +187,10 @@ public abstract class RasterDatasetMath {
             }
             int kernelCenterRow = kernelRows - args[4].getIntValue() - 1;
             int kernelCenterColumn = args[5].getIntValue();
-            KernelJAI kernel = new KernelJAI(kernelColumns, 
-                                             kernelRows, 
-                                             kernelCenterColumn, 
-                                             kernelCenterRow, 
+            KernelJAI kernel = new KernelJAI(kernelColumns,
+                                             kernelRows,
+                                             kernelCenterColumn,
+                                             kernelCenterRow,
                                              data);
             return dataset.convolve(kernel);
         }

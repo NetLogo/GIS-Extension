@@ -4,9 +4,9 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.prep.PreparedGeometry;
-import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
+import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;

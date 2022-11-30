@@ -4,13 +4,13 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Polygon;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,14 +23,14 @@ import org.myworldgis.util.JTSUtils;
  *
  */
 public final class ProjectionUtils {
-    
+
     //-------------------------------------------------------------------------
     // Making Rhumb and Great Circle polygons
     //-------------------------------------------------------------------------
-    
+
     /** Maximum number of segments to use when projecting a GreatCircle or Rhumb line */
     private static final int MAX_SEGMENTS = 180;
-    
+
     /** */
     public static Polygon createRhumbPoly (Polygon poly) {
         LinearRing shell = (LinearRing)createRhumbLine(poly.getExteriorRing());
@@ -40,10 +40,10 @@ public final class ProjectionUtils {
         }
         return poly.getFactory().createPolygon(shell, holes);
     }
-    
-    /** 
+
+    /**
      * Forward projects a rhumb line polyline/polygon.
-     * Forward projects a rhumb line polyline/polygon by adding intermediate 
+     * Forward projects a rhumb line polyline/polygon by adding intermediate
      * points between each pair of vertices. If this projection is a Mercator
      * projection, there is no need to do that, since rhumb lines project as
      * straight lines in the Mercator projection.
@@ -89,10 +89,10 @@ public final class ProjectionUtils {
         }
         return poly.getFactory().createPolygon(shell, holes);
     }
-    
-    /** 
+
+    /**
      * Forward projects a great circle polyline/polygon.
-     * Forward projects a great circle polyline/polygon by adding intermediate 
+     * Forward projects a great circle polyline/polygon by adding intermediate
      * points between each pair of vertices. If this projection is a Gnomonic
      * projection, there is no need to do that, since great circles project as
      * straight lines in the Gnomonic projection.
@@ -128,35 +128,35 @@ public final class ProjectionUtils {
             return factory.createLineString(coordArray);
         }
     }
-    
+
     //-------------------------------------------------------------------------
     // Dateline wrapping
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Object representing an intersection of a polygon/polyline segment with
      * the edge of the projection.
      */
     private static final class WrappingIntersection {
-        
-        /** The index of the x coordinate of the end point of the intersected 
+
+        /** The index of the x coordinate of the end point of the intersected
             segment in the array of points */
         final int index;
-        
+
         /** Y coordinate of the intersection */
         final double lat;
-        
-        /** True if the segment in question intersects the edge moving from 
+
+        /** True if the segment in question intersects the edge moving from
             left to right (west to east), false otherwise */
         final boolean isLeftToRight;
-        
+
         /** Flag used to mark intersections that occur ON a vertex */
         final boolean isOnPoint;
-        
-        /** Flag used to mark <code>Intersection</code> objects as used when 
+
+        /** Flag used to mark <code>Intersection</code> objects as used when
             we iterate through our list of intersections */
         private boolean _used;
-        
+
         public WrappingIntersection (int index, double lat, boolean leftToRight, boolean isOnPoint) {
             this.index = index;
             this.lat = lat;
@@ -168,8 +168,8 @@ public final class ProjectionUtils {
         void markUsed () { _used = true; }
         void markUnused () { _used = false; }
     }
-    
-    /** <code>Comparator</code> for sorting <code>Intersection</code> objects 
+
+    /** <code>Comparator</code> for sorting <code>Intersection</code> objects
         in ascending order of their end point index (@see java.util.Comparator) */
     private static final Comparator<WrappingIntersection> INDEX_ASCENDING_COMPARATOR = new Comparator<WrappingIntersection>() {
             public int compare (WrappingIntersection i1, WrappingIntersection i2) {
@@ -178,7 +178,7 @@ public final class ProjectionUtils {
                 return(0);
             }
         };
-    
+
     /** Comparator for sorting <code>Intersection</code> objects in ascending
         order of their y coordinate (@see java.util.Comparator) */
     private static final Comparator<WrappingIntersection> LAT_ASCENDING_COMPARATOR = new Comparator<WrappingIntersection>() {
@@ -188,7 +188,7 @@ public final class ProjectionUtils {
                 return(0);
             }
         };
-    
+
     /** Comparator for sorting <code>Intersection</code> objects in ascending
         order of their y coordinate (@see java.util.Comparator) */
     private static final Comparator<WrappingIntersection> LAT_DESCENDING_COMPARATOR = new Comparator<WrappingIntersection>() {
@@ -198,22 +198,22 @@ public final class ProjectionUtils {
                 return(0);
             }
         };
-    
+
     /** */
     private static final double EDGE_SHIFT_EPSILON = 0.00001;
-    
+
     /** */
     private static final int LONGITUDE_SEGMENT_COUNT = 72;
-    
+
     /** */
     private static final double LATITUDE_FILL_INCREMENT = GeometryUtils.TWO_PI / LONGITUDE_SEGMENT_COUNT;
-    
+
     /**
      * Wraps a polyline along the projection edge.
      * This is simple: if a segment crosses the edge from left to right, end
      * the segment at the right edge and start it again at the left edge; if
      * a segment crosses from right to left, end it at the left edge and start
-     * it again at the right edge. Since no segment is allowed to have a 
+     * it again at the right edge. Since no segment is allowed to have a
      * longitudinal extent of more than pi radians, any segment which has one
      * end point at a longitude greater than PI/2 and the other at a longitude
      * less than -PI/2 must cross the dateline.
@@ -227,15 +227,15 @@ public final class ProjectionUtils {
         double rightEdgeLon = GeometryUtils.wrap_longitude(centerLon + (StrictMath.PI - EDGE_SHIFT_EPSILON));
         Coordinate c1 = line.getCoordinateN(0);
         Coordinate c2;
-        double transformedLon1; 
+        double transformedLon1;
         double transformedLon2;
         List<Coordinate> coords = new ArrayList<Coordinate>(line.getNumPoints());
-        coords.add(c1); 
+        coords.add(c1);
         transformedLon1 = GeometryUtils.wrap_longitude_positive(c1.x - centerLon);
         for (int i = 1; i < line.getNumPoints(); i += 1) {
             c2 = line.getCoordinateN(i);
             transformedLon2 = GeometryUtils.wrap_longitude_positive(c2.x - centerLon);
-            if ((transformedLon1 > GeometryUtils.HALF_PI) && (transformedLon1 < StrictMath.PI) && 
+            if ((transformedLon1 > GeometryUtils.HALF_PI) && (transformedLon1 < StrictMath.PI) &&
                 (transformedLon2 > StrictMath.PI) && (transformedLon2 < GeometryUtils.THREE_HALVES_PI)) {
                 double lat = c1.y + (c2.y - c1.y)*((StrictMath.PI - transformedLon1) / (transformedLon2 - transformedLon1));
                 coords.add(new Coordinate(rightEdgeLon, lat));
@@ -287,28 +287,28 @@ public final class ProjectionUtils {
             return factory.createMultiLineString(result.toArray(new LineString[result.size()]));
         }
     }
-    
+
     /** */
     public static MultiPolygon wrap (Polygon poly, double centerLon) {
-        List<LinearRing> newRings = wrap((LinearRing)poly.getExteriorRing(), centerLon);
+        List<LinearRing> newRings = wrap(poly.getExteriorRing(), centerLon);
         for (int i = 0; i < poly.getNumInteriorRing(); i += 1) {
-            newRings.addAll(wrap((LinearRing)poly.getInteriorRingN(i), centerLon));
+            newRings.addAll(wrap(poly.getInteriorRingN(i), centerLon));
         }
-        return JTSUtils.buildPolygonGeometry(newRings.toArray(new LinearRing[newRings.size()]), 
-                                             poly.getFactory(), 
+        return JTSUtils.buildPolygonGeometry(newRings.toArray(new LinearRing[newRings.size()]),
+                                             poly.getFactory(),
                                              true);
     }
-    
+
     /**
      * Wraps a polygon along the projection edge.
      * This is a little more complicated. In this method, we simply find all
-     * the intersections between polygon edges and the projection edge. If 
+     * the intersections between polygon edges and the projection edge. If
      * there are no such intersections, the polygon doesn't cross the edge at
      * all and we can just draw the polygon edges without modifiaction. If
      * there is exactly one intersection, the polygon is circular and needs
      * to be dealt with specially. If there is an odd number of intersections
      * greater than one, there must be an error someplace. Otherwise, we pass
-     * the intersections on to <code>wrapComplicatedPolygon </code> below, 
+     * the intersections on to <code>wrapComplicatedPolygon </code> below,
      * which handles the wrapping.
      * @param points unprojected points in lon,lat order
      * @return the wrapped polygon
@@ -322,7 +322,7 @@ public final class ProjectionUtils {
         for (int i = 1; i < ring.getNumPoints(); i += 1) {
             c2 = ring.getCoordinateN(i);
             transformedLon2 = GeometryUtils.wrap_longitude_positive(c2.x - centerLon);
-            if ((transformedLon1 > GeometryUtils.HALF_PI) && (transformedLon1 < StrictMath.PI) && 
+            if ((transformedLon1 > GeometryUtils.HALF_PI) && (transformedLon1 < StrictMath.PI) &&
                 (transformedLon2 > StrictMath.PI) && (transformedLon2 < GeometryUtils.THREE_HALVES_PI)) {
                 double lat = c1.y + (c2.y - c1.y)*((StrictMath.PI - transformedLon1) / (transformedLon2 - transformedLon1));
                 if (intersections == null) intersections = new ArrayList<WrappingIntersection>(2);
@@ -364,7 +364,7 @@ public final class ProjectionUtils {
             c1 = c2;
             transformedLon1 = transformedLon2;
         }
-        
+
         if (intersections == null) {
             List<LinearRing> result = new ArrayList<LinearRing>(1);
             result.add(ring);
@@ -379,7 +379,7 @@ public final class ProjectionUtils {
             return wrapComplicatedRing(ring, intersections, centerLon);
         }
     }
-    
+
     /** */
     private static LinearRing wrapCircularRing (LinearRing ring, WrappingIntersection intersection, double centerLon) {
         List<Coordinate> newPoints = new ArrayList<Coordinate>(ring.getNumPoints() + 144);
@@ -418,15 +418,15 @@ public final class ProjectionUtils {
         }
         return ring.getFactory().createLinearRing(newPoints.toArray(new Coordinate[newPoints.size()]));
     }
-    
-    /** 
+
+    /**
      * Wraps a polygon which intersects the projection edge.
-     * The algorithm is this: start with the left side, at the bottom of the 
-     * left edge; for each intersection we find: if it is left-to-right, 
-     * travel along the polygon (starting at intersection._index) until we 
-     * reach another  intersection; if it is right-to-left, travel up the 
-     * edge until we find the next intersection; repeat until we return to 
-     * the  intersection we started with; repeat until all intersections have 
+     * The algorithm is this: start with the left side, at the bottom of the
+     * left edge; for each intersection we find: if it is left-to-right,
+     * travel along the polygon (starting at intersection._index) until we
+     * reach another  intersection; if it is right-to-left, travel up the
+     * edge until we find the next intersection; repeat until we return to
+     * the  intersection we started with; repeat until all intersections have
      * been visited. Next, the right side: start at the top of the right
      * edge; for each intersection we find: if it is left-to-right, travel
      * down the edge until we reach the next intersection; if it is right-to-
@@ -437,8 +437,8 @@ public final class ProjectionUtils {
      * @param intersections a list of intersections between the polygon and the projection edge
      * @return the projected, wrapped polygon
      */
-    private static List<LinearRing> wrapComplicatedRing (LinearRing ring, 
-                                                         List<WrappingIntersection> intersections, 
+    private static List<LinearRing> wrapComplicatedRing (LinearRing ring,
+                                                         List<WrappingIntersection> intersections,
                                                          double centerLon) {
         GeometryFactory factory = ring.getFactory();
         List<LinearRing> result = new ArrayList<LinearRing>(4);
@@ -573,7 +573,7 @@ public final class ProjectionUtils {
         }
         return result;
     }
-    
+
     /**
      * Returns the intersection following the given intersection in the given list
      * (wrapping around if necessary).
@@ -591,21 +591,21 @@ public final class ProjectionUtils {
             index += 1;
         }
     }
-    
+
     //-------------------------------------------------------------------------
     // Hemisphere clipping
     //-------------------------------------------------------------------------
-    
+
     /** */
     private static final class ClippingIntersection {
-    
+
         final int index;
         final double lon;
         final double lat;
         final double azimuth;
         final boolean isEntry;
         private boolean _used;
-        
+
         public ClippingIntersection (int index, double lon, double lat, double azimuth, boolean isEntry) {
             this.index = index;
             this.lon = lon;
@@ -614,19 +614,19 @@ public final class ProjectionUtils {
             this.isEntry = isEntry;
             _used = false;
         }
-        
+
         boolean isUsed () {
             return(_used);
         }
-        
+
         void markUsed () {
             _used = true;
         }
-        
+
         public String toString () {
             return("i["+(index/2)+" "+isEntry+" "+azimuth+" "+"("+lat+","+lon+")]");
         }
-        
+
         public boolean equals(Object obj) {
             return((obj == this) ||
                    ((obj instanceof ClippingIntersection) &&
@@ -649,12 +649,12 @@ public final class ProjectionUtils {
     /** Angular size of each segment added to a polygon to fill a space which
         crosses out of the clipping hemisphere */
     private static double AZIMUTH_FILL_INCREMENT = GeometryUtils.TWO_PI / 360.0;
-    
+
     /**
      * Clips a polyline to an earth circle of radius maxC.
-     * The algorithm is simple. Find the first point inside the clipping 
+     * The algorithm is simple. Find the first point inside the clipping
      * hemisphere, project & draw until we exit the hemisphere, add a point
-     * along the edge to terminate, find next point inside the clipping 
+     * along the edge to terminate, find next point inside the clipping
      * hemisphere, add point along the edge, lather, rinse, repeat.
      * @param points unprojected vertices in lat,lon order in RADIANS
      * @return the clipped & projected polyline.
@@ -684,7 +684,7 @@ public final class ProjectionUtils {
                 pt = line.getCoordinateN(index-1);
                 double az = GeometryUtils.spherical_azimuth(center.x, center.y, pt.x, pt.y);
                 currentSegment.add(GeometryUtils.spherical_between(center.x, center.y, maxC, az));
-            } 
+            }
             else if (index < line.getNumPoints()) {
                 if (currentSegment.size() > 1) {
                     result.add(factory.createLineString(currentSegment.toArray(new Coordinate[currentSegment.size()])));
@@ -722,26 +722,26 @@ public final class ProjectionUtils {
             return factory.createMultiLineString(result.toArray(new LineString[result.size()]));
         }
     }
-    
+
     /** */
     public static MultiPolygon clip (Polygon poly, Coordinate center, double maxC) {
-        List<LinearRing> newRings = clip((LinearRing)poly.getExteriorRing(), center, maxC);
+        List<LinearRing> newRings = clip(poly.getExteriorRing(), center, maxC);
         for (int i = 0; i < poly.getNumInteriorRing(); i += 1) {
-            newRings.addAll(clip((LinearRing)poly.getInteriorRingN(i), center, maxC));
+            newRings.addAll(clip(poly.getInteriorRingN(i), center, maxC));
         }
-        return JTSUtils.buildPolygonGeometry(newRings.toArray(new LinearRing[newRings.size()]), 
-                                             poly.getFactory(), 
+        return JTSUtils.buildPolygonGeometry(newRings.toArray(new LinearRing[newRings.size()]),
+                                             poly.getFactory(),
                                              false);
     }
-    
+
     /**
      * Clips a polygon to an earth circle of radius maxC.
-     * The algorithm is this: find a point outside the clipping hemisphere; 
-     * if no such point exists, the polygon lies entirely within the clipping 
-     * hemisphere and we can build the projected polygon in the simplest 
-     * possible way; otherwise, find the first point inside the clipping 
-     * hemisphere following the series of points outside the hemisphere; 
-     * if no such point exists, the polygon lies entirely outside the 
+     * The algorithm is this: find a point outside the clipping hemisphere;
+     * if no such point exists, the polygon lies entirely within the clipping
+     * hemisphere and we can build the projected polygon in the simplest
+     * possible way; otherwise, find the first point inside the clipping
+     * hemisphere following the series of points outside the hemisphere;
+     * if no such point exists, the polygon lies entirely outside the
      * clipping hemisphere, and we can return an empty Poly; otherwise,
      * pass the buck to <code>clipComplexRing</code> below.
      * @param points unprojected vertices in lon,lat order in RADIANS
@@ -755,7 +755,7 @@ public final class ProjectionUtils {
             c = GeometryUtils.point_point_greatcircle_distance(center.x, center.y, pt.x, pt.y);
             firstOutsideIndex += 1;
         } while ((c <= maxC) && (firstOutsideIndex < ring.getNumPoints()));
-        
+
         if (firstOutsideIndex == ring.getNumPoints()) {
             // polygon is entirely inside projection domain
             List<LinearRing> result = new ArrayList<LinearRing>(1);
@@ -769,7 +769,7 @@ public final class ProjectionUtils {
                 Coordinate pt = ring.getCoordinateN(firstInsideIndex);
                 c = GeometryUtils.point_point_greatcircle_distance(center.x, center.y, pt.x, pt.y);
             } while ((c >= maxC) && (firstInsideIndex != firstOutsideIndex));
-            
+
             if (firstInsideIndex == firstOutsideIndex) {
                 // polygon is entirely outside projection domain
                 return new ArrayList<LinearRing>(0);
@@ -778,11 +778,11 @@ public final class ProjectionUtils {
             }
         }
     }
-    
-    /** 
-     * Clip and projects a polygon which lies partially within the 
+
+    /**
+     * Clip and projects a polygon which lies partially within the
      * clipping hemisphere and partially outside it.
-     * The algorithm is this: 
+     * The algorithm is this:
      *
      *** DESCRIPTION OF NEW ALGORITHM GOES HERE ***
      *
@@ -825,7 +825,7 @@ public final class ProjectionUtils {
                     // This is an awful lot of code to deal with an obscure special case,
                     // but it happens to be a special case that occurs regularly (usually
                     // with Antarctica), so we have to deal with it. First, we see if the
-                    // visible portion of the ring contains the zero-th element of the 
+                    // visible portion of the ring contains the zero-th element of the
                     // points array. If it does, we say that the ring "wrapsAround".
                     ClippingIntersection entry = i1.isEntry ? i1 : i2;
                     ClippingIntersection exit = i1.isEntry ? i2 : i1;
@@ -879,9 +879,9 @@ public final class ProjectionUtils {
                 }
                 if (currentExit.isUsed()) {
                     if (true /* currentExit == firstExit */)
-                        // We should really be testing here to make sure we've 
+                        // We should really be testing here to make sure we've
                         // moved in a proper ring, but in some situations involving
-                        // vertices at the poles this doesn't work, and trying to 
+                        // vertices at the poles this doesn't work, and trying to
                         // fix it was giving me a headache, so we'll just assume
                         // everything is kosher.
                         break;
@@ -921,10 +921,10 @@ public final class ProjectionUtils {
         }
         return result;
     }
-    
+
     /** */
-    private static ClippingIntersection nextIntersection (ClippingIntersection currentIntersection, 
-                                                          List<ClippingIntersection> intersections, 
+    private static ClippingIntersection nextIntersection (ClippingIntersection currentIntersection,
+                                                          List<ClippingIntersection> intersections,
                                                           boolean entry) {
         int start = (currentIntersection != null) ? intersections.indexOf(currentIntersection) : 0;
         int index = (start + 1);

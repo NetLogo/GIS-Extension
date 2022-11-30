@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -19,41 +19,41 @@ import org.ngs.ngunits.quantity.Length;
  * Washington, DC. pp. 48-65
  */
 public final class TransverseMercator extends HemisphericalProjection {
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Transverse_Mercator";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "central_meridian";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_origin";
-    
+
     /** */
     public static final String SCALE_FACTOR_PROPERTY = "scale_factor";
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** Scale factor along the central meridian */
     private double _k0;
-    
+
     /** Pre-compute these values for the given ellipsoid & projection center
         to save time when projecting. */
     private double _ePrimeSq, _subMU, _M0, _subM[], _subPhi1[];
-    
+
     /** */
     private Coordinate _hemisphereCenter;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /**
      * Construct a TransverseMercator projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -75,9 +75,9 @@ public final class TransverseMercator extends HemisphericalProjection {
         _subPhi1 = new double[4];
         computeParameters();
     }
-    
+
     /** */
-    public TransverseMercator (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public TransverseMercator (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
@@ -86,23 +86,23 @@ public final class TransverseMercator extends HemisphericalProjection {
         _subPhi1 = new double[4];
         computeParameters();
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //-------------------------------------------------------------------------
-    
+
     /** */
     public double getCenterScaleFactor () {
         return _k0;
     }
-    
+
     /** */
     public void setCenterScaleFactor (double newScale) {
         if (newScale != _k0) {
             _k0 = newScale;
         }
     }
-       
+
     /** */
     public boolean equals (Object obj) {
         if (super.equals(obj)) {
@@ -116,12 +116,12 @@ public final class TransverseMercator extends HemisphericalProjection {
     public int hashCode() {
         return (int) ((super.hashCode() * Math.round(this._k0 / GeometryUtils.EPSILON)) % Integer.MAX_VALUE);
     }
-    
+
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Returns the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are clipped.
      * Our clipping hemisphere has a radius of 81 degrees.
@@ -130,7 +130,7 @@ public final class TransverseMercator extends HemisphericalProjection {
     protected double getMaxC () {
         return 1.4137167; // 81 degrees expressed in radians
     }
-    
+
     /**
      * Returns the center of the clipping hemisphere.
      * The center of the clipping hemisphere for an azimuthal projection is the
@@ -140,12 +140,12 @@ public final class TransverseMercator extends HemisphericalProjection {
     protected Coordinate getHemisphereCenter () {
         return _hemisphereCenter;
     }
-    
+
     //--------------------------------------------------------------------------
     // AbstractProjection implementation
     //--------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -171,8 +171,8 @@ public final class TransverseMercator extends HemisphericalProjection {
         }
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -195,9 +195,9 @@ public final class TransverseMercator extends HemisphericalProjection {
         storage.x = _lambda0 + (D - (1.0 + 2.0*T1 + C1)*D*D*D/6.0 + (5.0 - 2.0*C1 + 28.0*T1 - 3.0*C1*C1 + 8.0*_ePrimeSq + 24.0*T1*T1)*D*D*D*D*D/120.0)/cosPhi1;
         return storage;
     }
-    
-    /** 
-     * Initialize parameters, and recompute them whenever the ellipsoid or 
+
+    /**
+     * Initialize parameters, and recompute them whenever the ellipsoid or
      * projection center changes.
      */
     protected void computeParameters () {
@@ -220,7 +220,7 @@ public final class TransverseMercator extends HemisphericalProjection {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();
@@ -233,7 +233,7 @@ public final class TransverseMercator extends HemisphericalProjection {
     //--------------------------------------------------------------------------
     // Cloneable implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Object clone () {
         TransverseMercator clone = (TransverseMercator)super.clone();

@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import java.text.ParseException;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
@@ -16,27 +16,27 @@ import org.nlogo.api.World;
 
 
 /**
- * 
+ *
  */
 public abstract class SetTransformation {
-    
+
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class Linked extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.ListType(), Syntax.ListType() });
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException, ParseException {
             GISExtension.getState().setTransformation(new CoordinateTransformation(
                     EnvelopeLogoListFormat.getInstance().parse(args[0].getList()),
@@ -44,19 +44,19 @@ public abstract class SetTransformation {
                     true));
         }
     }
-    
+
     /** */
     public static final class Independent extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.ListType(), Syntax.ListType() });
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException, ParseException {
             GISExtension.getState().setTransformation(new CoordinateTransformation(
                     EnvelopeLogoListFormat.getInstance().parse(args[0].getList()),
@@ -64,19 +64,19 @@ public abstract class SetTransformation {
                     false));
         }
     }
-    
+
     /** */
     public static final class WorldLinked extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.ListType() });
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException, ParseException {
             World w = context.getAgent().world();
             GISExtension.getState().setTransformation(new CoordinateTransformation(
@@ -85,19 +85,19 @@ public abstract class SetTransformation {
                     true));
         }
     }
-    
+
     /** */
     public static final class WorldIndependent extends GISExtension.Command {
 
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.ListType() });
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException, ParseException {
             World w = context.getAgent().world();
             GISExtension.getState().setTransformation(new CoordinateTransformation(

@@ -4,7 +4,7 @@
 
 package org.myworldgis.util;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import java.awt.Dimension;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,27 +15,27 @@ import java.util.Iterator;
 import java.util.Map;
 
 /** */
-public class URLBuilder 
+public class URLBuilder
 {
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private static final NumberFormat NUMBER_FORMAT = new DecimalFormat("#########0.#####");
 
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-            
+
     private String baseUrl;
-    
+
     private Map<String,String> queryVars;
 
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     public URLBuilder (String base) {
         try {
             URI uri = new URI(base);
@@ -59,11 +59,11 @@ public class URLBuilder
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     public void setParameter (String key, String value) {
         queryVars.put(key, value);
     }
-    
+
     public void setParameter (String key, Dimension value) {
         StringBuffer dim = new StringBuffer();
         dim.append(value.width);
@@ -71,7 +71,7 @@ public class URLBuilder
         dim.append(value.height);
         queryVars.put(key, dim.toString());
     }
-    
+
     public void setParameter (String key, Envelope value) {
         StringBuffer bbox = new StringBuffer();
         bbox.append(NUMBER_FORMAT.format(value.getMinX()));
@@ -83,7 +83,7 @@ public class URLBuilder
         bbox.append(NUMBER_FORMAT.format(value.getMaxY()));
         queryVars.put(key, bbox.toString());
     }
-    
+
     public String toString () {
         StringBuffer result = new StringBuffer();
         result.append(baseUrl);

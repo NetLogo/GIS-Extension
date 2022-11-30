@@ -4,12 +4,12 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -32,34 +32,34 @@ import org.nlogo.api.World;
 
 
 /**
- * 
+ *
  */
 public abstract class Painting extends GISExtension.Command {
-    
+
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class GetColor extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { }, Syntax.NumberType() | Syntax.ListType() );
         }
-        
+
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             return GISExtension.getState().getNetLogoColor();
         }
     }
-    
+
     /** */
     public static final class SetColor extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "OTLP";
         }
@@ -67,32 +67,32 @@ public abstract class Painting extends GISExtension.Command {
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.NumberType() | Syntax.ListType() });
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws ExtensionException , LogoException {
             GISExtension.getState().setNetLogoColor(args[0].get());
         }
     }
-    
+
     /** */
     private static abstract class VectorCommand extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "OTLP";
         }
-    
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(), Syntax.NumberType() });
         }
-        
-        public void performInternal (Argument args[], Context context) 
+
+        public void performInternal (Argument args[], Context context)
                 throws ExtensionException , LogoException {
             Object arg = args[0].get();
             double thickness = args[1].getDoubleValue();
             BufferedImage drawing = context.getDrawing();
             Graphics2D g = (Graphics2D)drawing.getGraphics();
             try {
-                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g.setColor(GISExtension.getState().getColor());
                 g.setTransform(getTransform(context.getAgent().world(),
                                             drawing.getWidth(),
@@ -110,24 +110,24 @@ public abstract class Painting extends GISExtension.Command {
                 g.dispose();
             }
         }
-        
+
         protected abstract void paint (Geometry geom, Graphics2D g, double thickness);
     }
-    
+
     /** */
     public static final class DrawVector extends VectorCommand {
-        
+
         protected void paint (Geometry geom, Graphics2D g, double thickness) {
             AffineTransform t = g.getTransform();
             double unitsPerPixel = 1.0 / StrictMath.max(t.getScaleX(), t.getScaleY());
             float segmentRadius = (float)(unitsPerPixel * thickness);
-            g.setStroke(new BasicStroke(segmentRadius, 
+            g.setStroke(new BasicStroke(segmentRadius,
                                         BasicStroke.CAP_BUTT,
-                                        BasicStroke.JOIN_BEVEL)); 
+                                        BasicStroke.JOIN_BEVEL));
             g.draw(toShape(geom, segmentRadius));
         }
     }
-    
+
     /** */
     public static final class FillVector extends VectorCommand {
 
@@ -135,13 +135,13 @@ public abstract class Painting extends GISExtension.Command {
             AffineTransform t = g.getTransform();
             double unitsPerPixel = 1.0 / StrictMath.max(t.getScaleX(), t.getScaleY());
             float segmentRadius = (float)(unitsPerPixel * thickness);
-            g.setStroke(new BasicStroke(segmentRadius, 
+            g.setStroke(new BasicStroke(segmentRadius,
                                         BasicStroke.CAP_BUTT,
-                                        BasicStroke.JOIN_BEVEL)); 
+                                        BasicStroke.JOIN_BEVEL));
             g.fill(toShape(geom, segmentRadius));
         }
     }
-    
+
     /** */
     public static final class PaintRaster extends GISExtension.Command {
 
@@ -156,7 +156,7 @@ public abstract class Painting extends GISExtension.Command {
         }
 
         /** */
-        public void performInternal (Argument args[], Context context) 
+        public void performInternal (Argument args[], Context context)
                 throws ExtensionException , LogoException {
             Object arg = args[0].get();
             if (! (arg instanceof RasterDataset)) {
@@ -179,9 +179,9 @@ public abstract class Painting extends GISExtension.Command {
                                                        false,
                                                        null);
                 // Work-around for JDK Bug #4723021: copy the image to a
-                // BufferedImage with an ARGB color model WITHOUT SCALING 
-                // before we try drawing, or the Java rendering pipeline 
-                // will fail with an ImagingOpException when we try and 
+                // BufferedImage with an ARGB color model WITHOUT SCALING
+                // before we try drawing, or the Java rendering pipeline
+                // will fail with an ImagingOpException when we try and
                 // scale the image.
                 // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4723021
                 BufferedImage img = new BufferedImage(bimg.getWidth(), bimg.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -192,10 +192,10 @@ public abstract class Painting extends GISExtension.Command {
                     gImg.dispose();
                 }
                 if (transparency > 0) {
-                    // It would be much more efficient to do this by making a new 
-                    // BufferedImage that re-uses the source image's Raster, with a 
-                    // custom ColorModel that decorates the source's ColorModel and 
-                    // adds/modifies the alpha channel. But the code is much more 
+                    // It would be much more efficient to do this by making a new
+                    // BufferedImage that re-uses the source image's Raster, with a
+                    // custom ColorModel that decorates the source's ColorModel and
+                    // adds/modifies the alpha channel. But the code is much more
                     // simple this way, and it's fast enough for now.
                     int alpha = 255 - transparency;
                     int width = img.getWidth();
@@ -230,18 +230,18 @@ public abstract class Painting extends GISExtension.Command {
             }
         }
     }
-    
+
     /** */
     private static final class LineStringPathIterator implements PathIterator {
-        
+
         private LineString _line;
         private int _position;
-        
+
         public LineStringPathIterator (LineString ls) {
             _line = ls;
             _position = 0;
         }
-        
+
         public int getWindingRule() {
             return WIND_NON_ZERO;
         }
@@ -249,18 +249,18 @@ public abstract class Painting extends GISExtension.Command {
         public boolean isDone() {
             return _position >= _line.getNumPoints();
         }
-        
+
         public void next() {
             _position += 1;
         }
-            
+
         public int currentSegment (float[] coords) {
             Coordinate c = _line.getCoordinateN(_position);
             coords[0] = (float)c.x;
             coords[1] = (float)c.y;
             return (_position == 0) ? SEG_MOVETO : SEG_LINETO;
         }
-        
+
         public int currentSegment(double[] coords) {
             Coordinate c = _line.getCoordinateN(_position);
             coords[0] = c.x;
@@ -272,11 +272,11 @@ public abstract class Painting extends GISExtension.Command {
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
-    static AffineTransform getTransform (World world, 
-                                         double drawingWidth, 
-                                         double drawingHeight) 
+    static AffineTransform getTransform (World world,
+                                         double drawingWidth,
+                                         double drawingHeight)
             throws ExtensionException {
         double worldCenterX = world.minPxcor() + (world.worldWidth() * 0.5);
         double worldCenterY = world.minPycor() + (world.worldHeight() * 0.5);
@@ -290,17 +290,17 @@ public abstract class Painting extends GISExtension.Command {
         result.concatenate(GISExtension.getState().getTransformation().getGISToNetLogoTransform());
         return result;
     }
-    
+
     /** */
     static java.awt.Shape toShape (Geometry geom, float pointRadius) {
         GeneralPath result = new GeneralPath(GeneralPath.WIND_NON_ZERO);
         if (geom instanceof Point) {
             Coordinate c = ((Point)geom).getCoordinate();
             if (c != null) {
-                result.append(new Ellipse2D.Double(c.x - pointRadius, 
-                                                   c.y - pointRadius, 
-                                                   pointRadius * 2, 
-                                                   pointRadius * 2), 
+                result.append(new Ellipse2D.Double(c.x - pointRadius,
+                                                   c.y - pointRadius,
+                                                   pointRadius * 2,
+                                                   pointRadius * 2),
                               false);
             }
         } else if (geom instanceof LineString) {

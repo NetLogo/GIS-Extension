@@ -4,8 +4,8 @@
 
 package org.myworldgis.io.shapefile;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.GeometryFactory;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import org.ngs.ngunits.UnitConverter;
@@ -19,29 +19,29 @@ public final class ESRIShapeIndexWriter implements ESRIShapeConstants {
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private RandomAccessFile _raf;
-    
+
     /** */
     private ESRIShapeBuffer _buffer;
-    
+
     /** */
     private Envelope _envelope;
-    
+
     /** */
     private int _esriShapeType;
-    
+
     /** */
     private int _fileSizeBytes;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
-    public ESRIShapeIndexWriter (RandomAccessFile file, 
-                                 Envelope envelope, 
+    public ESRIShapeIndexWriter (RandomAccessFile file,
+                                 Envelope envelope,
                                  int esriShapeType,
                                  UnitConverter radiansToFile,
                                  GeometryFactory factory) throws IOException {
@@ -54,11 +54,11 @@ public final class ESRIShapeIndexWriter implements ESRIShapeConstants {
         writeHeader();
         _raf.seek(SHAPE_FILE_HEADER_LENGTH);
     }
-    
+
     //--------------------------------------------------------------------------
     // instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     private void writeHeader () throws IOException {
         _buffer.clear(0, SHAPE_FILE_HEADER_LENGTH);
@@ -71,8 +71,8 @@ public final class ESRIShapeIndexWriter implements ESRIShapeConstants {
         _buffer.setByteOrder(ESRIShapeBuffer.ByteOrder.BIG_ENDIAN);
         _buffer.write(_raf, 0, SHAPE_FILE_HEADER_LENGTH);
     }
-    
-    
+
+
     /** */
     public void writeIndexRecord (ESRIShapeIndexRecord record) throws IOException {
         _buffer.putInt(0, record.getOffsetBytes() / 2);
@@ -80,12 +80,12 @@ public final class ESRIShapeIndexWriter implements ESRIShapeConstants {
         _buffer.write(_raf, 0, SHAPE_INDEX_RECORD_LENGTH);
         _fileSizeBytes += SHAPE_INDEX_RECORD_LENGTH;
     }
-    
+
     /** */
     public void close () throws IOException {
         _raf.seek(0);
         writeHeader();
         _raf.setLength(_fileSizeBytes);
         _raf.close();
-    }        
+    }
 }

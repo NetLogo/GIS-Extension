@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -23,20 +23,20 @@ public final class Gnomonic extends Azimuthal {
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Gnomonic";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "central_meridian";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_origin";
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct a Gnomonic projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -45,8 +45,8 @@ public final class Gnomonic extends Azimuthal {
      * @param falseEasting value to add to x coordinate of each projected point, in METERS
      * @param falseNorthing value to add to y coordinate of each projected point, in METERS
      */
-    public Gnomonic (Ellipsoid ellipsoid, 
-                     Coordinate center, 
+    public Gnomonic (Ellipsoid ellipsoid,
+                     Coordinate center,
                      Unit<Length> units,
                      double falseEasting,
                      double falseNorthing) {
@@ -54,35 +54,35 @@ public final class Gnomonic extends Azimuthal {
         _name = WKT_NAME;
         computeParameters();
     }
-    
+
     /** */
-    public Gnomonic (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public Gnomonic (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
         computeParameters();
     }
-    
+
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Returns the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are clipped.
-     * The radius of our clipping hemisphere is pi/3 
+     * The radius of our clipping hemisphere is pi/3
      * @return the radius of our clipping hemisphere
      */
     protected double getMaxC () {
         //return(GeometryUtils.THIRD_PI);
         return 1.396; // 80 degrees, expressed in radians
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -97,8 +97,8 @@ public final class Gnomonic extends Azimuthal {
         storage.y = _a * kPrime * (_cosPhi0*sinPhi - _sinPhi0*cosPhi*StrictMath.cos(lon - _lambda0));
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -129,7 +129,7 @@ public final class Gnomonic extends Azimuthal {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();

@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -23,20 +23,20 @@ public final class AzimuthalEquidistant extends Azimuthal {
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Azimuthal_Equidistant";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "longitude_of_center";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_center";
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct an AzimuthalEqualArea projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -45,8 +45,8 @@ public final class AzimuthalEquidistant extends Azimuthal {
      * @param falseEasting value to add to x coordinate of each projected point, in METERS
      * @param falseNorthing value to add to y coordinate of each projected point, in METERS
      */
-    public AzimuthalEquidistant (Ellipsoid ellipsoid, 
-                                   Coordinate center, 
+    public AzimuthalEquidistant (Ellipsoid ellipsoid,
+                                   Coordinate center,
                                    Unit<Length> units,
                                    double falseEasting,
                                    double falseNorthing) {
@@ -54,34 +54,34 @@ public final class AzimuthalEquidistant extends Azimuthal {
         _name = WKT_NAME;
         computeParameters();
     }
-    
+
     /** */
-    public AzimuthalEquidistant (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public AzimuthalEquidistant (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
         computeParameters();
     }
-    
+
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Returns the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are clipped.
-     * The radius of our clipping hemisphere is 3pi/4 
+     * The radius of our clipping hemisphere is 3pi/4
      * @return the radius of our clipping hemisphere
      */
     protected double getMaxC () {
         return (StrictMath.PI - GeometryUtils.QUARTER_PI);
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lambda the longitude of the point to project, in RADIANS
      * @param phi the latitude of the point to project, in RADIANS
@@ -101,8 +101,8 @@ public final class AzimuthalEquidistant extends Azimuthal {
         }
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -125,7 +125,7 @@ public final class AzimuthalEquidistant extends Azimuthal {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();

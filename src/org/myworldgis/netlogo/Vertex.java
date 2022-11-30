@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
@@ -16,29 +16,29 @@ import org.nlogo.core.SyntaxJ;
 
 
 /**
- * 
+ *
  */
 public final class Vertex implements ExtensionObject {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     @SuppressWarnings("unchecked")
     public static final class GetLocation extends GISExtension.Reporter {
-        
+
         private final Coordinate _temp = new Coordinate();
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.ListType());
         }
-        
+
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             Object arg0 = args[0].get();
@@ -57,36 +57,36 @@ public final class Vertex implements ExtensionObject {
             return result.toLogoList();
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private final Coordinate _coordinate;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Vertex (Coordinate coordinate) {
         _coordinate = coordinate;
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Coordinate getCoordinate () {
         return _coordinate;
     }
-    
+
     //--------------------------------------------------------------------------
     // ExtensionObject implementation
     //--------------------------------------------------------------------------
-    
+
     /**
      * Returns a string representation of the object.  If readable is
      * true, it should be possible read it as NL code.

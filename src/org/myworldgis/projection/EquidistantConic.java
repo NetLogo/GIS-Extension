@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -23,28 +23,28 @@ public final class EquidistantConic extends Conic {
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Equidistant_Conic";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "longitude_of_center";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_center";
-    
+
     //-------------------------------------------------------------------------
     // Instance variables
     //-------------------------------------------------------------------------
-    
+
     /** Pre-compute these values for the given ellipsoid & projection center
         to save time when projecting. */
     private double _n, _aG, _rho0, _subM[], _subPhi[];
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct a EquidistantConic projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -59,7 +59,7 @@ public final class EquidistantConic extends Conic {
                              Unit<Length> units,
                              double falseEasting,
                              double falseNorthing,
-                             double phi1, 
+                             double phi1,
                              double phi2) {
         super(ellipsoid, center, units, falseEasting, falseNorthing, phi1, phi2);
         _name = WKT_NAME;
@@ -67,9 +67,9 @@ public final class EquidistantConic extends Conic {
         _subPhi = new double[4];
         computeParameters();
     }
-    
+
     /** */
-    public EquidistantConic (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public EquidistantConic (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
@@ -77,27 +77,27 @@ public final class EquidistantConic extends Conic {
         _subPhi = new double[4];
         computeParameters();
     }
-    
+
     //-------------------------------------------------------------------------
     // Instance methods
     //-------------------------------------------------------------------------
-    
+
     /** */
     private double getm (double phi) {
         double sinPhi = StrictMath.sin(phi);
         return(StrictMath.cos(phi) / StrictMath.sqrt(1.0 - (_e2*sinPhi*sinPhi)));
     }
-    
+
     /** */
     private double getM (double phi) {
         return(_a * ((_subM[0]*phi) + (_subM[1]*StrictMath.sin(2.0 * phi)) + (_subM[2]*StrictMath.sin(4.0 * phi)) + (_subM[3]*StrictMath.sin(6.0 * phi))));
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lambda the longitude of the point to project, in RADIANS
      * @param phi the latitude of the point to project, in RADIANS
@@ -112,8 +112,8 @@ public final class EquidistantConic extends Conic {
         storage.y = _rho0 - (rho * StrictMath.cos(theta));
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x float the x coordinate of the point to be inverse projected
      * @param y float the y coordinate of the point to be inverse projected
@@ -126,9 +126,9 @@ public final class EquidistantConic extends Conic {
         double M = _aG - rho;
         double mu = M / (_a * _subM[0]);
         double theta = (_n < 0.0) ?  StrictMath.atan2(-x, -rho0minusY) : StrictMath.atan2(x, rho0minusY);
-        storage.y = mu + 
-                     (_subPhi[0]*StrictMath.sin(2.0 * mu)) + 
-                     (_subPhi[1]*StrictMath.sin(4.0 * mu)) + 
+        storage.y = mu +
+                     (_subPhi[0]*StrictMath.sin(2.0 * mu)) +
+                     (_subPhi[1]*StrictMath.sin(4.0 * mu)) +
                      (_subPhi[2]*StrictMath.sin(6.0 * mu)) +
                      (_subPhi[3]*StrictMath.sin(8.0 * mu));
         double thetaOverN = theta/_n;
@@ -139,9 +139,9 @@ public final class EquidistantConic extends Conic {
         }
         return storage;
     }
-    
-    /** 
-     * Initialize parameters, and recompute them whenever the ellipsoid or 
+
+    /**
+     * Initialize parameters, and recompute them whenever the ellipsoid or
      * projection center changses.
      */
     protected void computeParameters () {
@@ -168,7 +168,7 @@ public final class EquidistantConic extends Conic {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();
@@ -180,7 +180,7 @@ public final class EquidistantConic extends Conic {
     //--------------------------------------------------------------------------
     // Cloneable implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Object clone () {
         EquidistantConic clone = (EquidistantConic)super.clone();

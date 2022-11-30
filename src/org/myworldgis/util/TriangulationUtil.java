@@ -5,13 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateSequence;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.CoordinateSequence;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Polygon;
 
 import org.nlogo.api.ExtensionException;
 import org.tinfour.common.IConstraint;
@@ -32,11 +32,11 @@ public class TriangulationUtil {
             coords[i] = tinfourVertexToJTSCoordinate(verts[i]);
         }
         // in JTS poygons, the first and last vertex are identical -James Hovet 3/8/21
-        coords[3] = tinfourVertexToJTSCoordinate(verts[0]);         
+        coords[3] = tinfourVertexToJTSCoordinate(verts[0]);
         return factory.createPolygon(coords);
     }
 
-    // Consumes triangle verts from the tinfour triangulation and turns them into JTS Polygon triangles within a 
+    // Consumes triangle verts from the tinfour triangulation and turns them into JTS Polygon triangles within a
     // GeometryCollection. - James Hovet 3/8/21
     private static class GeometryCollectionBuilder implements Consumer<Vertex[]> {
         GeometryFactory factory;
@@ -77,7 +77,7 @@ public class TriangulationUtil {
 
     public static Geometry triangulate(Geometry geom) throws ExtensionException {
         List<IConstraint> constraints = new ArrayList<>();
-        
+
         double nominalPointSpacing = geom.getEnvelopeInternal().maxExtent();
 
         for (int n = 0; n < geom.getNumGeometries(); n++) {
@@ -95,11 +95,11 @@ public class TriangulationUtil {
         }
 
         // This library requires a "nominal point spacing" constant in order to function and unfortunatly, doesn't fail
-        // gracefully when the chosen constant is to large or too small. Thankfully it can be within a few orders of 
-        // magnitude of the "ideal" and still function, so we can just start at an upper bound generated from the 
-        // point spacing of the input polygons and try a few until one works or we realize that the input is 
-        // nonsensical. In my testing, all sane/real-world datasets needed a maximum of one extra attempt, 
-        // and I had to create a dataset with an outlandish precision of 10^-17 to reach a point where we give up.  
+        // gracefully when the chosen constant is to large or too small. Thankfully it can be within a few orders of
+        // magnitude of the "ideal" and still function, so we can just start at an upper bound generated from the
+        // point spacing of the input polygons and try a few until one works or we realize that the input is
+        // nonsensical. In my testing, all sane/real-world datasets needed a maximum of one extra attempt,
+        // and I had to create a dataset with an outlandish precision of 10^-17 to reach a point where we give up.
         // -James Hovet 3/8/21
 
         nominalPointSpacing /= 1000.0;
@@ -116,16 +116,16 @@ public class TriangulationUtil {
             }
             triangulationAttempts += 1;
         }
-        
+
         if (triangulationAttempts >= 5) {
             throw new ExtensionException("This polygon is too dense and/or complex to generate a point within it. Try simplifying the vector dataset with a tool like QGIS/GRASS v.generalize: https://docs.qgis.org/latest/en/docs/training_manual/processing/generalize.html");
         }
-        
+
         GeometryCollectionBuilder geometryCollectionBuilder = new GeometryCollectionBuilder(geom);
         TriangleCollector.visitTrianglesConstrained(tin, geometryCollectionBuilder);
         tin.dispose();
 
         return geometryCollectionBuilder.getCollection();
     }
-    
+
 }

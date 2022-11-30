@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -19,67 +19,67 @@ import org.ngs.ngunits.quantity.Length;
  * Washington, DC. pp. 72-75
  */
 public final class ObliqueMercator extends HemisphericalProjection {
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Oblique_Mercator";
-    
+
     /** */
     public static final String ALTERNATE_WKT_NAME = "hotine_oblique_mercator";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "longitude_of_center";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_center";
-    
+
     /** */
     public static final String SCALE_FACTOR_PROPERTY = "scale_factor";
-    
+
     /** */
     public static final String AZIMUTH_PROPERTY = "azimuth";
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** Scale factor along the central meridian */
     private double _k0;
-    
+
     /** Azimuth of the central meridian as it passes through projection center */
     private double _alpha;
-    
+
     /** Ellipsoid eccentricity */
     private double _e;
-    
+
     /** Rectified center longitude */
     private double _lambdaZ;
-    
+
     /** Sine of azimuth */
     private double _sinAlpha;
-    
+
     /** Cosine of azimuth */
     private double _cosAlpha;
-    
+
     /** Sine of rectified azimuth */
     private double _sinGamma0;
-    
+
     /** Cosine of rectified azimuth */
     private double _cosGamma0;
-    
+
     /** Other cached intermediate values */
     private double _B, _A, _E, _subPhi[];
-    
+
     /** */
     private Coordinate _hemisphereCenter;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /**
      * Construct a ObliqueMercator projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -103,9 +103,9 @@ public final class ObliqueMercator extends HemisphericalProjection {
         _subPhi = new double[4];
         computeParameters();
     }
-    
+
     /** */
-    public ObliqueMercator (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public ObliqueMercator (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
@@ -114,16 +114,16 @@ public final class ObliqueMercator extends HemisphericalProjection {
         _subPhi = new double[4];
         computeParameters();
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //-------------------------------------------------------------------------
-    
+
     /** */
     public double getCenterScaleFactor () {
         return _k0;
     }
-    
+
     /** */
     public void setCenterScaleFactor (double newScale) {
         if (newScale != _k0) {
@@ -131,12 +131,12 @@ public final class ObliqueMercator extends HemisphericalProjection {
             computeParameters();
         }
     }
-    
+
     /** */
     public double getCentralLineAzimuth () {
         return _alpha;
     }
-    
+
     /** */
     public void setCentralLineAzimuth (double newAzimuth) {
         if (newAzimuth != _alpha) {
@@ -144,7 +144,7 @@ public final class ObliqueMercator extends HemisphericalProjection {
             computeParameters();
         }
     }
-    
+
     /** */
     public boolean equals (Object obj) {
         if (super.equals(obj)) {
@@ -167,11 +167,11 @@ public final class ObliqueMercator extends HemisphericalProjection {
         double eSinPhi = _e*StrictMath.sin(phi);
         return(StrictMath.tan(GeometryUtils.QUARTER_PI - (phi / 2.0)) / StrictMath.pow((1.0 - eSinPhi) / (1.0 + eSinPhi), _e / 2.0));
     }
-    
+
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------
-    
+
     /**
      * Returns the center of the clipping hemisphere.
      * The center of the clipping hemisphere for an azimuthal projection is the
@@ -181,8 +181,8 @@ public final class ObliqueMercator extends HemisphericalProjection {
     protected Coordinate getHemisphereCenter () {
         return _hemisphereCenter;
     }
-    
-    /** 
+
+    /**
      * Returns the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are clipped.
      * Our clipping hemisphere has a radius of 81 degrees.
@@ -191,12 +191,12 @@ public final class ObliqueMercator extends HemisphericalProjection {
     protected double getMaxC () {
         return GeometryUtils.HALF_PI;
     }
-    
+
     //--------------------------------------------------------------------------
     // AbstractProjection implementation
     //--------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -216,8 +216,8 @@ public final class ObliqueMercator extends HemisphericalProjection {
         storage.y = u * _cosAlpha - v * _sinAlpha;
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -237,18 +237,18 @@ public final class ObliqueMercator extends HemisphericalProjection {
         } else {
             double t = StrictMath.pow(_E / StrictMath.sqrt((1.0 + Up) / (1.0 - Up)), (1.0 / _B));
             double chi = GeometryUtils.HALF_PI - 2.0 * StrictMath.atan(t);
-            storage.y = chi + 
-                        (_subPhi[0] * StrictMath.sin(2.0 * chi)) + 
-                        (_subPhi[1] * StrictMath.sin(4.0 * chi)) + 
-                        (_subPhi[2] * StrictMath.sin(6.0 * chi)) + 
+            storage.y = chi +
+                        (_subPhi[0] * StrictMath.sin(2.0 * chi)) +
+                        (_subPhi[1] * StrictMath.sin(4.0 * chi)) +
+                        (_subPhi[2] * StrictMath.sin(6.0 * chi)) +
                         (_subPhi[3] * StrictMath.sin(8.0 * chi));
         }
         storage.x = _lambdaZ - (StrictMath.atan2((Sp*_cosGamma0)-(Vp*_sinGamma0), StrictMath.cos((_B*up)/_A)) / _B);
         return storage;
     }
-    
-    /** 
-     * Initialize parameters, and recompute them whenever the ellipsoid or 
+
+    /**
+     * Initialize parameters, and recompute them whenever the ellipsoid or
      * projection center changes.
      */
     protected void computeParameters () {
@@ -283,7 +283,7 @@ public final class ObliqueMercator extends HemisphericalProjection {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();
@@ -297,7 +297,7 @@ public final class ObliqueMercator extends HemisphericalProjection {
     //--------------------------------------------------------------------------
     // Cloneable implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Object clone () {
         ObliqueMercator clone = (ObliqueMercator)super.clone();

@@ -4,9 +4,9 @@
 
 package org.myworldgis.io.shapefile;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import org.ngs.ngunits.UnitConverter;
@@ -16,32 +16,32 @@ import org.ngs.ngunits.UnitConverter;
  *
  */
 public final class ESRIShapefileReader implements ESRIShapeConstants {
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private InputStream _in;
-    
+
     /** */
     private ESRIShapeBuffer _buffer;
-    
+
     /** */
     private Envelope _envelope;
-    
+
     /** */
     private int _shapeType;
-    
+
     /** */
     private int _fileSizeBytes;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
-    public ESRIShapefileReader (InputStream in, 
+    public ESRIShapefileReader (InputStream in,
                                 UnitConverter inputConverter,
                                 GeometryFactory factory) throws IOException {
         _in = in;
@@ -53,26 +53,26 @@ public final class ESRIShapefileReader implements ESRIShapeConstants {
         _fileSizeBytes = _buffer.getInt(24) * 2;
         _buffer.setByteOrder(ESRIShapeBuffer.ByteOrder.LITTLE_ENDIAN);
     }
-    
+
     //--------------------------------------------------------------------------
     // instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Envelope getEnvelope () {
         return _envelope;
     }
-    
+
     /** */
     public int getShapeType () {
         return _shapeType;
     }
-    
+
     /** */
     public int getSizeBytes () {
         return _fileSizeBytes;
     }
-    
+
     /** */
     public Geometry getNextShape () throws IOException {
         int bytesRead = _buffer.read(_in, 0, SHAPE_RECORD_HEADER_LENGTH);
@@ -86,9 +86,9 @@ public final class ESRIShapefileReader implements ESRIShapeConstants {
         _buffer.read(_in, SHAPE_RECORD_HEADER_LENGTH, contentByteLength);
         return _buffer.getESRIRecord(0);
     }
-    
+
     /** */
     public void close () throws IOException {
         _in.close();
-    }    
+    }
 }

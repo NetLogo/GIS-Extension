@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.ExtensionException;
@@ -15,22 +15,22 @@ import org.nlogo.core.SyntaxJ;
 
 
 /**
- * 
+ *
  */
 public abstract class Dataset implements ExtensionObject {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class GetDatasetType extends GISExtension.Reporter {
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.StringType());
         }
-        
+
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             Object obj = args[0].get();
@@ -47,39 +47,39 @@ public abstract class Dataset implements ExtensionObject {
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private final String _type;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
-    public Dataset (String type) { 
+    public Dataset (String type) {
         _type = type;
     }
-    
+
     //--------------------------------------------------------------------------
     // Abstract instance methods
     //--------------------------------------------------------------------------
 
     /** */
     public abstract Envelope getEnvelope ();
-        
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getType () {
         return _type;
     }
-    
+
     //--------------------------------------------------------------------------
     // (partial) ExtensionObject implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getExtensionName () {
         return "gis";

@@ -4,142 +4,142 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 import java.awt.Dimension;
 import org.nlogo.core.ExtensionObject;
 
 
 /**
- * 
+ *
  */
 public final class GridDimensions implements Cloneable, ExtensionObject {
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private final Dimension _size;
-    
+
     /** */
     private final Envelope _envelope;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public GridDimensions (int gridWidth,
                            int gridHeight,
                            float cellWidth,
                            float cellHeight,
-                           float originX, 
+                           float originX,
                            float originY) {
         _size = new Dimension(gridWidth, gridHeight);
-        _envelope = new Envelope(originX, 
+        _envelope = new Envelope(originX,
                                  originX + (gridWidth * cellWidth),
                                  originY,
                                  originY + (gridHeight * cellHeight));
     }
-    
+
     /** */
     public GridDimensions (Dimension size, Envelope envelope) {
         _size = new Dimension(size.width, size.height);
         _envelope = new Envelope(envelope);
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public int getGridWidth () {
         return _size.width;
     }
-    
+
     /** */
     public int getGridHeight () {
         return _size.height;
     }
-    
+
     /** */
     public int getCellCount () {
         return (_size.width * _size.height);
     }
-    
+
     /** Cell width */
     public double getCellWidth () {
         return _envelope.getWidth() / _size.width;
     }
-    
+
     /** Cell height */
     public double getCellHeight () {
         return _envelope.getHeight() / _size.height;
     }
-    
+
     /** Left edge of grid */
     public double getLeft () {
         return _envelope.getMinX();
     }
-    
+
     /** Right edge of grid */
     public double getRight () {
         return _envelope.getMaxX();
     }
-    
+
     /** Bottom edge of grid */
     public double getBottom () {
         return _envelope.getMinY();
     }
-    
+
     /** Top edge of grid */
     public double getTop () {
         return _envelope.getMaxY();
     }
-    
+
     /** */
     public double getWidth () {
         return _envelope.getWidth();
     }
-    
+
     /** */
     public double getHeight () {
         return _envelope.getHeight();
     }
-    
+
     /** */
     public double getColumnLeft (int column) {
         return _envelope.getMinX() + (getCellWidth() * column);
     }
-    
+
     /** */
     public double getColumnCenter (int column) {
         double cellWidth = getCellWidth();
         return _envelope.getMinX() + (cellWidth * column) + (cellWidth * 0.5);
     }
-    
+
     /** */
     public double getColumnRight (int column) {
         return _envelope.getMinX() + (getCellWidth() * (column + 1));
     }
-    
+
     /** */
     public double getRowBottom (int row) {
         return _envelope.getMinY() + (getCellHeight() * row);
     }
-    
+
     /** */
     public double getRowCenter (int row) {
         double cellHeight = getCellHeight();
         return _envelope.getMinY() + (cellHeight * row) + (cellHeight * 0.5);
     }
-    
+
     /** */
     public double getRowTop (int row) {
         return _envelope.getMinY() + (getCellHeight() * (row + 1));
     }
-    
+
     /** */
     public int getColumn (double x) {
         int column = (int)StrictMath.floor((x - _envelope.getMinX()) / getCellWidth());
@@ -149,7 +149,7 @@ public final class GridDimensions implements Cloneable, ExtensionObject {
             return -1;
         }
     }
-    
+
     /** */
     public int getRow (double y) {
         int row = (int)StrictMath.floor((y - _envelope.getMinY()) / getCellHeight());
@@ -159,19 +159,19 @@ public final class GridDimensions implements Cloneable, ExtensionObject {
             return -1;
         }
     }
-    
+
     /** */
     public Dimension getGridSize() {
         return new Dimension(_size);
     }
-    
+
     /** */
     public Envelope getEnvelope () {
         return new Envelope(_envelope);
     }
-    
+
     /** */
-    public Coordinate gisToGrid (Coordinate coord, Coordinate storage) {                               
+    public Coordinate gisToGrid (Coordinate coord, Coordinate storage) {
         if (storage == null) {
             storage = new Coordinate();
         }
@@ -207,7 +207,7 @@ public final class GridDimensions implements Cloneable, ExtensionObject {
        }
        return storage;
     }
-   
+
     /** */
     public String toString () {
         StringBuffer buffer = new StringBuffer();
@@ -220,7 +220,7 @@ public final class GridDimensions implements Cloneable, ExtensionObject {
         buffer.append("]");
         return buffer.toString();
     }
-    
+
     /** */
     public boolean equals (Object obj) {
         if (obj instanceof GridDimensions) {
@@ -231,7 +231,7 @@ public final class GridDimensions implements Cloneable, ExtensionObject {
             return false;
         }
     }
-    
+
     public int hashCode() {
       return (int) ((Math.pow(2, _size.hashCode()) * Math.pow(3, _envelope.hashCode())) % Integer.MAX_VALUE);
     }
@@ -239,7 +239,7 @@ public final class GridDimensions implements Cloneable, ExtensionObject {
     //--------------------------------------------------------------------------
     // Cloneable implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Object clone () {
         try {
@@ -250,11 +250,11 @@ public final class GridDimensions implements Cloneable, ExtensionObject {
             throw err;
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // ExtensionObject implementation
     //--------------------------------------------------------------------------
-    
+
     /**
      * Returns a string representation of the object.  If readable is
      * true, it should be possible read it as NL code.

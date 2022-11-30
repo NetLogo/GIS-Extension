@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.FieldPosition;
@@ -23,29 +23,29 @@ import org.ngs.ngunits.quantity.Length;
 
 
 /**
- * 
+ *
  */
 public final class ProjectionFormat extends Format {
 
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     static final long serialVersionUID = 1L;
-    
+
     /** */
     private static final ProjectionFormat _instance = new ProjectionFormat();
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static ProjectionFormat getInstance () {
         return _instance;
     }
-    
+
     /**
      * For testing
      */
@@ -63,16 +63,16 @@ public final class ProjectionFormat extends Format {
             e.printStackTrace();
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String format (Projection proj) {
         return WKTFormat.getInstance().formatWKT(toWKT(proj));
     }
-    
+
     /** */
     public WKTElement toWKT (Projection proj) {
         if (proj instanceof Geographic) {
@@ -102,7 +102,7 @@ public final class ProjectionFormat extends Format {
             return projcs;
         }
     }
-    
+
     /** */
     private WKTElement makeDatumElement (Ellipsoid ellipsoid) {
         return new WKTElement("DATUM",
@@ -112,28 +112,28 @@ public final class ProjectionFormat extends Format {
                         Double.valueOf(ellipsoid.radius),
                         Double.valueOf(ellipsoid.getInverseFlattening())));
     }
-    
+
     /** */
     private WKTElement makePrimeMeridianElement (double longitude) {
         return new WKTElement("PRIMEM",
                 ((longitude == 0.0) ? "Greenwich" : "Custom"),
                 Double.valueOf(Projection.RADIANS_TO_DEGREES.convert(longitude)));
     }
-    
+
     /** */
     private WKTElement makeAngularUnitsElement (Unit<Angle> units) {
         return new WKTElement("UNIT",
                 units.toString(),
                 Double.valueOf(units.getConverterTo(SI.RADIAN).convert(1.0)));
     }
-    
+
     /** */
     private WKTElement makeLinearUnitsElement (Unit<Length> units) {
         return new WKTElement("UNIT",
                 units.toString(),
                 Double.valueOf(units.getConverterTo(SI.METRE).convert(1.0)));
     }
-    
+
     /** */
     public Projection parseProjection (BufferedReader in) throws IOException, ParseException {
         StringBuffer wkt = new StringBuffer();
@@ -143,18 +143,18 @@ public final class ProjectionFormat extends Format {
         }
         return parseProjection(wkt.toString());
     }
-    
+
     /** */
     public Projection parseProjection (String text) throws ParseException {
         return parseProjection(text, new ParsePosition(0));
-    }   
-    
+    }
+
     /** */
-    public Projection parseProjection (String text, ParsePosition pos) 
+    public Projection parseProjection (String text, ParsePosition pos)
             throws ParseException {
         return parseProjection(WKTFormat.getInstance().parseWKT(text, pos));
     }
-    
+
     /** */
     public Projection parseProjection (WKTElement wkt) throws ParseException {
         if (wkt.getKeyword().equals("GEOGCS")) {
@@ -165,9 +165,9 @@ public final class ProjectionFormat extends Format {
             throw new ParseException("only GEOGCS and PROJCS are supported. Try using a tool like QGIS or ArcMap to convert your data to a different projection like WGS84", 0);
         }
     }
-    
+
     /** */
-    private Geographic parseGeographic (WKTElement element) 
+    private Geographic parseGeographic (WKTElement element)
             throws ParseException {
         WKTElement datumElt = element.nextElement("DATUM", true);
         WKTElement spheriodElt = datumElt.nextElement("SPHEROID", true);
@@ -186,9 +186,9 @@ public final class ProjectionFormat extends Format {
         Coordinate center = new Coordinate(centerConverter.convert(primeMElement.nextNumber(true).doubleValue()), 0.0);
         return new Geographic(ellipsoid, center, units);
     }
-    
+
     /** */
-    private Projection parseProjected (WKTElement element) 
+    private Projection parseProjected (WKTElement element)
             throws ParseException {
         WKTElement gcsElement = element.nextElement("GEOGCS", true);
         WKTElement angularUnitsElement = gcsElement.nextElement("UNIT", true);
@@ -212,7 +212,7 @@ public final class ProjectionFormat extends Format {
         ProjectionParameters parameters = new ProjectionParameters(angularUnits, linearUnits);
         WKTElement paramElement = null;
         while ((paramElement = element.nextElement("PARAMETER", false)) != null) {
-            parameters.addParameter(paramElement.nextString(true), 
+            parameters.addParameter(paramElement.nextString(true),
                                     paramElement.nextNumber(true));
         }
         WKTElement projectionElt = element.nextElement("PROJECTION", true);
@@ -256,13 +256,13 @@ public final class ProjectionFormat extends Format {
     //--------------------------------------------------------------------------
     // Format implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public StringBuffer format (Object obj, StringBuffer buf, FieldPosition pos) {
         buf.append(format((Projection)obj));
         return buf;
     }
-    
+
     /** */
     public Object parseObject (String str, ParsePosition pos) {
         try {

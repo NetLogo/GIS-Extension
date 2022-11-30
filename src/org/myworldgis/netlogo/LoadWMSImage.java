@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -26,35 +26,35 @@ import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
 
 /**
- * Examples: 
+ * Examples:
  *   gis:import-wms-drawing "http://terraservice.net/ogcmap.ashx" "EPSG:4326" "DOQ" 128
  *   gis:import-wms-drawing "http://nmcatalog.usgs.gov/catalogwms/base" "EPSG:4326" "T_5" 128
  *   gis:import-wms-drawing "http://neowms.sci.gsfc.nasa.gov/wms/wms" "EPSG:4326" "BlueMarbleNG" 128
  *   gis:import-wms-drawing "http://neowms.sci.gsfc.nasa.gov/wms/wms" "EPSG:4326" "MOD12Q1_T1" 128
- * 
+ *
  * Only works if your projection is Geographic in decimal degrees.
  */
 public class LoadWMSImage extends GISExtension.Command {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Command implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "O";
     }
-    
+
     /** */
     public Syntax getSyntax() {
-        return SyntaxJ.commandSyntax(new int[] { Syntax.StringType(), 
-                                                Syntax.StringType(), 
+        return SyntaxJ.commandSyntax(new int[] { Syntax.StringType(),
+                                                Syntax.StringType(),
                                                 Syntax.StringType(),
                                                 Syntax.NumberType() });
     }
-    
+
     /** */
-    public void performInternal (Argument args[], Context context) 
+    public void performInternal (Argument args[], Context context)
             throws ExtensionException, IOException, LogoException {
         String serverURL = args[0].getString();
         String srs = args[1].getString();
@@ -82,12 +82,12 @@ public class LoadWMSImage extends GISExtension.Command {
         } finally {
             method.releaseConnection();
         }
-        
+
         if (transparency > 0) {
-            // It would be much more efficient to do this by making a new 
-            // BufferedImage that re-uses the source image's Raster, with a 
-            // custom ColorModel that decorates the source's ColorModel and 
-            // adds/modifies the alpha channel. But the code is much more 
+            // It would be much more efficient to do this by making a new
+            // BufferedImage that re-uses the source image's Raster, with a
+            // custom ColorModel that decorates the source's ColorModel and
+            // adds/modifies the alpha channel. But the code is much more
             // simple this way, and it's fast enough for now.
             int alpha = 255 - transparency;
             int width = image.getWidth();
@@ -108,7 +108,7 @@ public class LoadWMSImage extends GISExtension.Command {
             }
             image = tImg;
         }
-        
+
         Graphics2D g = (Graphics2D)drawing.getGraphics();
         try {
             g.drawRenderedImage(image, new AffineTransform());

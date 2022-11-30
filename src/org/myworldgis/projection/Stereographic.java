@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -19,34 +19,34 @@ import org.ngs.ngunits.quantity.Length;
  * Washington, DC. pp. 154-163
  */
 public final class Stereographic extends Azimuthal {
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Stereographic";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "central_meridian";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_origin";
-    
+
     /** */
     public static final String SCALE_FACTOR_PROPERTY = "scale_factor";
-    
+
     //-------------------------------------------------------------------------
     // Instance variables
     //-------------------------------------------------------------------------
-    
+
     /** Scale factor at the center of the projection, usually 1.0 */
     private double _k0;
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct a Stereographic projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -55,14 +55,14 @@ public final class Stereographic extends Azimuthal {
      * @param falseEasting value to add to x coordinate of each projected point, in projected units
      * @param falseNorthing value to add to y coordinate of each projected point, in projected units
      */
-    public Stereographic (Ellipsoid ellipsoid, 
-                          Coordinate center, 
+    public Stereographic (Ellipsoid ellipsoid,
+                          Coordinate center,
                           Unit<Length> units,
                           double falseEasting,
                           double falseNorthing) {
         this(ellipsoid, center, units, falseEasting, falseNorthing, 1.0);
     }
-    
+
     /**
      * Construct a Stereographic projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -72,8 +72,8 @@ public final class Stereographic extends Azimuthal {
      * @param falseNorthing value to add to y coordinate of each projected point, in projected units
      * @param k0 the scale factor at the center of the projection. 1.0 by default.
      */
-    public Stereographic (Ellipsoid ellipsoid, 
-                          Coordinate center, 
+    public Stereographic (Ellipsoid ellipsoid,
+                          Coordinate center,
                           Unit<Length> units,
                           double falseEasting,
                           double falseNorthing,
@@ -83,32 +83,32 @@ public final class Stereographic extends Azimuthal {
         _k0 = k0;
         computeParameters();
     }
-    
+
     /** */
-    public Stereographic (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public Stereographic (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
         _k0 = parameters.getDimensionlessParameter(SCALE_FACTOR_PROPERTY);
         computeParameters();
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //-------------------------------------------------------------------------
-    
+
     /** */
     public double getCenterScaleFactor () {
         return _k0;
     }
-    
+
     /** */
     public void setCenterScaleFactor (double newScale) {
         if (newScale != _k0) {
             _k0 = newScale;
         }
     }
-    
+
     /** */
     public boolean equals (Object obj) {
         if (super.equals(obj)) {
@@ -126,8 +126,8 @@ public final class Stereographic extends Azimuthal {
     //-------------------------------------------------------------------------
     // HemisphericalProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Returns the maximum angular distance from the center of the clipping
      * hemisphere to which polylines & polygons are clipped.
      * Our clipping hemisphere has a radius of pi/2, so it's a proper hemisphere.
@@ -136,12 +136,12 @@ public final class Stereographic extends Azimuthal {
     protected double getMaxC () {
         return GeometryUtils.HALF_PI;
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -157,8 +157,8 @@ public final class Stereographic extends Azimuthal {
         storage.y = _a * k * (_cosPhi0*sinPhi - _sinPhi0*cosPhi*cosLonMinusLambda0);
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -189,7 +189,7 @@ public final class Stereographic extends Azimuthal {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();

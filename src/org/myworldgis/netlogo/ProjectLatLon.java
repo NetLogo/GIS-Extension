@@ -11,9 +11,9 @@ import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.ngs.ngunits.NonSI;
 import org.ngs.ngunits.SI;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.util.GeometryTransformer;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.util.GeometryTransformer;
 
 
 public abstract class ProjectLatLon {
@@ -23,16 +23,16 @@ public abstract class ProjectLatLon {
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
-            return SyntaxJ.reporterSyntax(new int[] { Syntax.NumberType(), 
-                                                      Syntax.NumberType(), 
-                                                      Syntax.NumberType(), 
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.NumberType(),
+                                                      Syntax.NumberType(),
+                                                      Syntax.NumberType(),
                                                       Syntax.NumberType()},
                                             Syntax.ListType());
         }
 
-        public Object reportInternal (Argument args[], Context context) 
+        public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException , LogoException {
             double lat = args[0].getDoubleValue();
             double lon = args[1].getDoubleValue();
@@ -48,13 +48,13 @@ public abstract class ProjectLatLon {
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.NumberType(), Syntax.NumberType() },
                                         Syntax.ListType());
         }
-        
-        public Object reportInternal (Argument args[], Context context) 
+
+        public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException , LogoException {
             double lat = args[0].getDoubleValue();
             double lon = args[1].getDoubleValue();
@@ -77,12 +77,12 @@ public abstract class ProjectLatLon {
         if (point == null) {
             return result.toLogoList();
         }
-        
+
         Ellipsoid dstEllipsoid = dstProj.getEllipsoid();
         // in cases where the current projection uses a geographic (as opposed to projected)
-        // coordinate system (i.e. values are expressed in terms of angular distance as 
+        // coordinate system (i.e. values are expressed in terms of angular distance as
         // opposed to linear distance on a 2D projection) and the given ellipsoid
-        // is the same one used as the destination projection, do not reproject and 
+        // is the same one used as the destination projection, do not reproject and
         // introduce precision errors. cf. similar behavior in LoadDataset.java -James Hovet 10/2020
         boolean shouldReproject = !(dstProj instanceof Geographic) || !srcEllipsoid.equals(dstEllipsoid);
         if (shouldReproject) {

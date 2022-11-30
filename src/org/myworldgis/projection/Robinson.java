@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -14,38 +14,38 @@ import org.ngs.ngunits.quantity.Length;
 
 /**
  * Robinson pseudocylindrical projection.
- * Formulas from the source code of the USGS computer program "gctpc2", 
+ * Formulas from the source code of the USGS computer program "gctpc2",
  * available <a href="http://mapping.usgs.gov/ftp/software/current_software/gctpc2/">Here</a>
  */
 public final class Robinson extends Cylindrical {
-    
+
     //-------------------------------------------------------------------------
     // Class variables
     //-------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Robinson";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "longitude_of_center";
-    
+
     /** */
     private static final double EPSLN = 0.000001;
-    
+
     /** */
-    private static final double[] pr = { 0.0, -0.062, 0.0, 0.062, 0.124, 
-                                         0.186, 0.248, 0.31, 0.372, 0.434, 
-                                         0.4958, 0.5571, 0.6176, 0.6769, 
-                                         0.7346, 0.7903, 0.8435, 0.8936, 
+    private static final double[] pr = { 0.0, -0.062, 0.0, 0.062, 0.124,
+                                         0.186, 0.248, 0.31, 0.372, 0.434,
+                                         0.4958, 0.5571, 0.6176, 0.6769,
+                                         0.7346, 0.7903, 0.8435, 0.8936,
                                          0.9394, 0.9761, 1.0 };
-    
+
     /** */
-    private static final double[] xlr = { 0.0, 0.9986, 1.0, 0.9986, 0.9954, 
+    private static final double[] xlr = { 0.0, 0.9986, 1.0, 0.9986, 0.9954,
                                           0.99, 0.9822, 0.973, 0.96, 0.9427,
                                           0.9216, 0.8962, 0.8679, 0.835,
                                           0.7986, 0.7597, 0.7186, 0.6732,
                                           0.6213, 0.5722, 0.5322 };
-    
+
     /** */
     static {
         for (int i = 0; i < 21; i += 1) {
@@ -56,7 +56,7 @@ public final class Robinson extends Cylindrical {
     //-------------------------------------------------------------------------
     // Class methods
     //-------------------------------------------------------------------------
-    
+
     /** */
     private static ProjectionParameters addCenterLon (ProjectionParameters params) {
         // HACK: the AbstractProjectedProjection will barf if the
@@ -64,11 +64,11 @@ public final class Robinson extends Cylindrical {
         params.addParameter("latitude_of_center", Double.valueOf(0.0));
         return params;
     }
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct a Robinson projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -77,8 +77,8 @@ public final class Robinson extends Cylindrical {
      * @param falseEasting value to add to x coordinate of each projected point, in projected units
      * @param falseNorthing value to add to y coordinate of each projected point, in projected units
      */
-    public Robinson (Ellipsoid ellipsoid, 
-                     Coordinate center, 
+    public Robinson (Ellipsoid ellipsoid,
+                     Coordinate center,
                      Unit<Length> units,
                      double falseEasting,
                      double falseNorthing) {
@@ -86,25 +86,25 @@ public final class Robinson extends Cylindrical {
         _name = WKT_NAME;
         computeParameters();
     }
-    
+
     /** */
-    public Robinson (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public Robinson (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, addCenterLon(parameters));
         _name = WKT_NAME;
         computeParameters();
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public boolean isRhumbRectangular () {
         return(false);
     }
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -120,8 +120,8 @@ public final class Robinson extends Cylindrical {
         storage.y = GeometryUtils.sign(lat) * _a * (pr[ip1 + 2] + p2 * (pr[ip1 + 3] - pr[ip1 +1]) / 2.0 + p2 * p2 * (pr[ip1 + 3] - 2.0 * pr[ip1 + 2] + pr[ip1 + 1]) / 2.0) * GeometryUtils.HALF_PI;
         return(storage);
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -180,7 +180,7 @@ public final class Robinson extends Cylindrical {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();

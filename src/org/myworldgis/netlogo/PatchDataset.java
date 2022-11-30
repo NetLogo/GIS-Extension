@@ -4,7 +4,7 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import java.awt.Dimension;
 import java.awt.image.BandedSampleModel;
 import java.awt.image.DataBuffer;
@@ -24,18 +24,18 @@ import org.nlogo.prim._reference;
 
 
 /**
- * 
+ *
  */
 public final class PatchDataset extends GISExtension.Reporter {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation
     //--------------------------------------------------------------------------
-    
+
     public String getAgentClassString() {
         return "O";
     }
-    
+
     public Syntax getSyntax() {
         return SyntaxJ.reporterSyntax(new int[] { Syntax.ReferenceType() },
                                      Syntax.WildcardType());

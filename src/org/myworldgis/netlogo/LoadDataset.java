@@ -4,10 +4,10 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.util.GeometryTransformer;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.util.GeometryTransformer;
 import java.awt.image.BandedSampleModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.Raster;
@@ -47,14 +47,14 @@ import org.nlogo.api.World;
 
 
 /**
- * 
+ *
  */
 public final class LoadDataset extends GISExtension.Reporter {
 
     private static final String ADDED_Z_FIELD = "_Z";
 
     private static Context _context;
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
@@ -66,7 +66,7 @@ public final class LoadDataset extends GISExtension.Reporter {
         GeometryTransformer inverse = null;
         GeometryTransformer forward = null;
         boolean reproject = false;
-        if ((srcProj != null) && 
+        if ((srcProj != null) &&
             (dstProj != null) &&
             (!srcProj.equals(dstProj))) {
             inverse = srcProj.getInverseTransformer();
@@ -80,7 +80,7 @@ public final class LoadDataset extends GISExtension.Reporter {
             if (shpFile == null) {
                 throw new ExtensionException("shapefile " + shpFilePath + " not found");
             }
-            shp = new ESRIShapefileReader(shpFile.getInputStream(), 
+            shp = new ESRIShapefileReader(shpFile.getInputStream(),
                                           AbstractUnitConverter.IDENTITY,
                                           GISExtension.getState().factory());
             String dbfFilePath = StringUtils.changeFileExtension(shpFilePath, "dbf");
@@ -89,7 +89,7 @@ public final class LoadDataset extends GISExtension.Reporter {
                 throw new ExtensionException("dbf file " + dbfFilePath + " not found");
             }
             dbf = new DBaseFileReader(dbfFile.getInputStream());
-            
+
             VectorDataset.ShapeType shapeType = null;
             boolean shouldAddZField = false;
             boolean shouldWarnPartiallySupportedZ = false;
@@ -171,12 +171,12 @@ public final class LoadDataset extends GISExtension.Reporter {
                     result.add(shape, dbf.getNextRecord());
                 }
             }
-            
+
             return result;
         } finally {
             if (shp != null) {
-                try { shp.close(); } catch (IOException e) { 
-                    // who's bright idea was it to allow close() 
+                try { shp.close(); } catch (IOException e) {
+                    // who's bright idea was it to allow close()
                     // to throw an exception, anyway?
                 }
             }
@@ -186,7 +186,7 @@ public final class LoadDataset extends GISExtension.Reporter {
         }
     }
 
-    private static VectorDataset loadGeoJson (String geojsonFilePath, 
+    private static VectorDataset loadGeoJson (String geojsonFilePath,
                                               Projection dstProj) throws ExtensionException, IOException {
         Projection srcProj = new Geographic(Ellipsoid.WGS_84, Projection.DEFAULT_CENTER, NonSI.DEGREE_ANGLE);
         GeometryTransformer inverse = srcProj.getInverseTransformer();
@@ -270,7 +270,7 @@ public final class LoadDataset extends GISExtension.Reporter {
             }
         }
     }
-    
+
     /** */
     private static RasterDataset loadAsciiGrid (String ascFilePath,
                                                 Projection srcProj,
@@ -284,12 +284,12 @@ public final class LoadDataset extends GISExtension.Reporter {
             asc = new AsciiGridFileReader(new BufferedReader(new InputStreamReader(ascFile.getInputStream())));
             GridDimensions dimensions = new GridDimensions(asc.getSize(), asc.getEnvelope());
             DataBuffer data = asc.getData();
-            BandedSampleModel sampleModel = new BandedSampleModel(data.getDataType(), 
-                                                                  dimensions.getGridWidth(), 
-                                                                  dimensions.getGridHeight(), 
+            BandedSampleModel sampleModel = new BandedSampleModel(data.getDataType(),
+                                                                  dimensions.getGridWidth(),
+                                                                  dimensions.getGridHeight(),
                                                                   1);
             WritableRaster raster = Raster.createWritableRaster(sampleModel, data, null);
-            if ((srcProj != null) && 
+            if ((srcProj != null) &&
                 (dstProj != null) &&
                 (!srcProj.equals(dstProj))) {
                 return new RasterDataset(raster, dimensions, srcProj, dstProj);
@@ -302,11 +302,11 @@ public final class LoadDataset extends GISExtension.Reporter {
             }
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "OTPL";
@@ -317,7 +317,7 @@ public final class LoadDataset extends GISExtension.Reporter {
         return SyntaxJ.reporterSyntax(new int[] { Syntax.StringType() },
                                      Syntax.WildcardType());
     }
-    
+
     /** */
     public Object reportInternal (Argument[] args, Context context)
             throws ExtensionException, IOException, LogoException, ParseException {
@@ -341,7 +341,7 @@ public final class LoadDataset extends GISExtension.Reporter {
         } else if (extension.equalsIgnoreCase(AsciiGridFileReader.ASCII_GRID_FILE_EXTENSION_1) ||
                    extension.equalsIgnoreCase(AsciiGridFileReader.ASCII_GRID_FILE_EXTENSION_2)) {
             result = loadAsciiGrid(dataFilePath, datasetProjection, netLogoProjection);
-        } else if (extension.equalsIgnoreCase(GeoJsonReader.GEOJSON_EXTENSION) || 
+        } else if (extension.equalsIgnoreCase(GeoJsonReader.GEOJSON_EXTENSION) ||
                    extension.equalsIgnoreCase(GeoJsonReader.JSON_EXTENSION)){
             result = loadGeoJson(dataFilePath, netLogoProjection);
         } else {

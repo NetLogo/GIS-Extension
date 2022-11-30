@@ -4,10 +4,10 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.util.GeometryTransformer;
-import com.vividsolutions.jts.io.WKTReader;
-import com.vividsolutions.jts.io.WKTWriter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.util.GeometryTransformer;
+import org.locationtech.jts.io.WKTReader;
+import org.locationtech.jts.io.WKTWriter;
 import java.awt.image.BandedSampleModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.Raster;
@@ -37,36 +37,36 @@ import org.nlogo.api.LogoListBuilder;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 
-/** 
- * 
+/**
+ *
  */
 public abstract class MyWorld {
-    
+
     //-------------------------------------------------------------------------
     // Class variables
     //-------------------------------------------------------------------------
-    
+
     /** */
     public static final int MYWORLD_PORT = 8328;
-    
+
     /** */
     private static final ProjectionFormat PROJ_FORMAT = new ProjectionFormat();
-    
+
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class GetLayers extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { }, Syntax.ListType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, IOException, LogoException {
@@ -106,23 +106,23 @@ public abstract class MyWorld {
                 if (socket != null) {
                     try { socket.close(); } catch (IOException e) { }
                 }
-            } 
+            }
         }
     }
-    
+
     /** */
     public static final class GetDataset extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
-            return SyntaxJ.reporterSyntax(new int[] { Syntax.NumberType() + Syntax.RepeatableType() }, 
-                                         Syntax.WildcardType(), 
+            return SyntaxJ.reporterSyntax(new int[] { Syntax.NumberType() + Syntax.RepeatableType() },
+                                         Syntax.WildcardType(),
                                          1);
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, IOException, LogoException {
@@ -134,7 +134,7 @@ public abstract class MyWorld {
                 for (int i = 0; i < args.length; i += 1) {
                     out.write(' ');
                     out.write(Integer.toString(args[i].getIntValue()));
-                }   
+                }
                 out.write("\n");
                 out.flush();
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -155,21 +155,21 @@ public abstract class MyWorld {
             }
         }
     }
-    
-    
+
+
     /** */
     public static final class PutDataset extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "O";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
                                                     Syntax.NumberType() + Syntax.RepeatableType() },
                                         1);
         }
-        
+
         @SuppressWarnings("unchecked")
         public void performInternal (Argument args[], Context context)
                 throws ExtensionException, IOException, LogoException {
@@ -182,7 +182,7 @@ public abstract class MyWorld {
                 for (int i = 1; i < args.length; i += 1) {
                     out.write(' ');
                     out.write(Integer.toString(args[i].getIntValue()));
-                }   
+                }
                 out.write("\n");
                 out.flush();
                 if (arg0 instanceof VectorDataset) {
@@ -204,14 +204,14 @@ public abstract class MyWorld {
                 if (socket != null) {
                     try { socket.close(); } catch (IOException e) { }
                 }
-            } 
+            }
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     private static VectorDataset readVectorDataset (BufferedReader in)
             throws IOException {
@@ -225,7 +225,7 @@ public abstract class MyWorld {
         GeometryTransformer inverse = null;
         GeometryTransformer forward = null;
         boolean reproject = false;
-        if ((srcProj != null) && 
+        if ((srcProj != null) &&
             (dstProj != null) &&
             (!srcProj.equals(dstProj))) {
             inverse = srcProj.getInverseTransformer();
@@ -274,7 +274,7 @@ public abstract class MyWorld {
                 Object value = datum;
                 if (propertyTypes[index] == VectorDataset.PropertyType.NUMBER) {
                     try {
-                        value = Double.valueOf(datum); 
+                        value = Double.valueOf(datum);
                     } catch (NumberFormatException e) {
                         value = null;
                     }
@@ -287,7 +287,7 @@ public abstract class MyWorld {
                     geom = forward.transform(inverse.transform(geom));
                 }
                 result.add(geom, data);
-            } catch (com.vividsolutions.jts.io.ParseException e) {
+            } catch (org.locationtech.jts.io.ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -295,7 +295,7 @@ public abstract class MyWorld {
     }
 
     /** */
-    private static void writeVectorDataset (VectorDataset dataset, Writer out) 
+    private static void writeVectorDataset (VectorDataset dataset, Writer out)
             throws IOException {
         out.write("VECTOR\n");
         if (GISExtension.getState().getProjection() != null) {
@@ -355,7 +355,7 @@ public abstract class MyWorld {
         out.write('\n');
         out.write('\n');
     }
-    
+
     /** */
     private static RasterDataset readRasterDataset (BufferedReader in)
             throws IOException {
@@ -369,12 +369,12 @@ public abstract class MyWorld {
         AsciiGridFileReader asc = new AsciiGridFileReader(in);
         GridDimensions dimensions = new GridDimensions(asc.getSize(), asc.getEnvelope());
         DataBuffer data = asc.getData();
-        BandedSampleModel sampleModel = new BandedSampleModel(data.getDataType(), 
-                                                              dimensions.getGridWidth(), 
-                                                              dimensions.getGridHeight(), 
+        BandedSampleModel sampleModel = new BandedSampleModel(data.getDataType(),
+                                                              dimensions.getGridWidth(),
+                                                              dimensions.getGridHeight(),
                                                               1);
         WritableRaster raster = Raster.createWritableRaster(sampleModel, data, null);
-        if ((srcProj != null) && 
+        if ((srcProj != null) &&
             (dstProj != null) &&
             (!srcProj.equals(dstProj))) {
             return new RasterDataset(raster, dimensions, srcProj, dstProj);
@@ -382,9 +382,9 @@ public abstract class MyWorld {
             return new RasterDataset(dimensions, raster);
         }
     }
-    
+
     /** */
-    private static void writeRasterDataset (RasterDataset dataset, Writer out) 
+    private static void writeRasterDataset (RasterDataset dataset, Writer out)
             throws IOException {
         out.write("RASTER\n");
         if (GISExtension.getState().getProjection() != null) {

@@ -4,10 +4,10 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
 import java.util.Arrays;
 import java.util.Iterator;
 import org.nlogo.api.Agent;
@@ -22,33 +22,33 @@ import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
 
 /**
- * 
+ *
  */
 public final class LinkDataset extends GISExtension.Reporter {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "OTPL";
     }
-    
+
     // gis:set-world-envelope [ -100 -80 40 60 ]
     // gis:store-dataset gis:link-dataset links "link-test.shp"
-    
+
     /** */
     public Syntax getSyntax() {
         return SyntaxJ.reporterSyntax(new int[] { Syntax.LinksetType() },
                                      Syntax.WildcardType());
     }
-    
+
     /** */
-    public Object reportInternal (Argument args[], Context context) 
+    public Object reportInternal (Argument args[], Context context)
             throws ExtensionException, LogoException {
-        org.nlogo.agent.World world = (org.nlogo.agent.World) context.getAgent().world(); // workaround to weird 
-        // interface issue. linkBreedsOwnNameAt is in org.nlogo.agent.World but not org.nlogo.api.World, so we 
+        org.nlogo.agent.World world = (org.nlogo.agent.World) context.getAgent().world(); // workaround to weird
+        // interface issue. linkBreedsOwnNameAt is in org.nlogo.agent.World but not org.nlogo.api.World, so we
         // need to do a cast here. - James Hovet 1/2021
         AgentSet links = (AgentSet)args[0].get();
         AgentSet breed = null;
@@ -81,7 +81,7 @@ public final class LinkDataset extends GISExtension.Reporter {
                 }
             }
         }
-        VectorDataset result = new VectorDataset(VectorDataset.ShapeType.LINE, 
+        VectorDataset result = new VectorDataset(VectorDataset.ShapeType.LINE,
                                                  variableNames,
                                                  variableTypes);
         for (Iterator<Agent> i = links.agents().iterator(); i.hasNext();) {

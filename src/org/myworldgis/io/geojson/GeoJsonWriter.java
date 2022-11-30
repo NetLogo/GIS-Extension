@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Iterator;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.MultiPoint;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPoint;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -39,7 +39,7 @@ public class GeoJsonWriter implements GeoJsonConstants {
     }
 
     private void setupJsonObject() {
-        this.root.put("type", "FeatureCollection");  
+        this.root.put("type", "FeatureCollection");
     }
 
     private void processVectorFeatures() throws IOException {
@@ -74,7 +74,7 @@ public class GeoJsonWriter implements GeoJsonConstants {
         if (geom instanceof Point) {
             return createGeometryObject((Point) geom);
         } else if (geom instanceof MultiPoint) {
-            return createGeometryObject((MultiPoint) geom); 
+            return createGeometryObject((MultiPoint) geom);
         } else if (geom instanceof LineString) {
             return createGeometryObject((LineString) geom);
         } else if (geom instanceof MultiLineString) {
@@ -153,7 +153,7 @@ public class GeoJsonWriter implements GeoJsonConstants {
 
         return out;
     }
-    
+
     //--------------------------------------------------------------------------
     // Geometry to JSON Utils
     //--------------------------------------------------------------------------

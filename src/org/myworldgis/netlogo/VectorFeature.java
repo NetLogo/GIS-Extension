@@ -4,15 +4,13 @@
 
 package org.myworldgis.netlogo;
 
-import com.vividsolutions.jts.algorithm.CentroidArea;
-import com.vividsolutions.jts.algorithm.CentroidLine;
-import com.vividsolutions.jts.algorithm.CentroidPoint;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryComponentFilter;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.algorithm.Centroid;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryComponentFilter;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,27 +30,27 @@ import org.nlogo.core.SyntaxJ;
 
 
 /**
- * 
+ *
  */
 public final class VectorFeature implements ExtensionObject {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class GetProperty extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType() },
                                          Syntax.ReadableType());
         }
-        
+
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             VectorFeature feature = getFeature(args[0]);
@@ -69,19 +67,19 @@ public final class VectorFeature implements ExtensionObject {
             }
         }
     }
-    
+
     public static final class SetProperty extends GISExtension.Command {
-        
+
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
                                                      Syntax.StringType() | Syntax.NumberType() });
         }
-        
+
         public void performInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             VectorFeature feature = getFeature(args[0]);
@@ -113,12 +111,12 @@ public final class VectorFeature implements ExtensionObject {
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.ListType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
@@ -137,45 +135,31 @@ public final class VectorFeature implements ExtensionObject {
                                 list.add(new Vertex(ls.getCoordinateN(i)));
                             }
                             result.add(list.toLogoList());
-                        }   
+                        }
                     }
                 });
             return result.toLogoList();
         }
     }
-    
+
     /** */
     public static final class GetCentroid extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.WildcardType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             VectorFeature feature = getFeature(args[0]);
-            switch (feature.getShapeType()) {
-                case POINT:
-                    CentroidPoint cp = new CentroidPoint();
-                    cp.add(feature.getGeometry());
-                    return new Vertex(cp.getCentroid());
-                case LINE:
-                    CentroidLine cl = new CentroidLine();
-                    cl.add(feature.getGeometry());
-                    return new Vertex(cl.getCentroid());
-                case POLYGON:
-                    CentroidArea ca = new CentroidArea();
-                    ca.add(feature.getGeometry());
-                    return new Vertex(ca.getCentroid());
-                default:
-                    throw new ExtensionException("invalid shape type");
-            }
+            Centroid cp = new Centroid(feature.getGeometry());
+            return new Vertex(cp.getCentroid());
         }
     }
 
@@ -184,15 +168,15 @@ public final class VectorFeature implements ExtensionObject {
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                          Syntax.ListType());
         }
 
 
- 
-        public Object reportInternal (Argument args[], Context context) 
+
+        public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
 
             VectorFeature feature = getFeature(args[0]);
@@ -204,9 +188,9 @@ public final class VectorFeature implements ExtensionObject {
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
-    static VectorFeature getFeature (Argument arg) 
+    static VectorFeature getFeature (Argument arg)
             throws ExtensionException, LogoException {
         Object obj = arg.get();
         if (obj instanceof VectorFeature) {
@@ -215,17 +199,17 @@ public final class VectorFeature implements ExtensionObject {
             throw new ExtensionException("not a VectorFeature: " + obj);
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private VectorDataset.ShapeType _shapeType;
-    
+
     /** */
     private Geometry _geometry;
-    
+
     /** */
     private Map<String,Object> _properties;
 
@@ -234,13 +218,13 @@ public final class VectorFeature implements ExtensionObject {
      * requested - James Hovet 2/24/21
      */
     private Geometry _triangulation;
-    private double[] _triangulation_areas_cumulative;  
+    private double[] _triangulation_areas_cumulative;
     private double _total_area;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public VectorFeature (VectorDataset.ShapeType shapeType,
                           Geometry geometry,
@@ -250,34 +234,34 @@ public final class VectorFeature implements ExtensionObject {
         _geometry = geometry;
         _properties = new HashMap<String,Object>(properties.length);
         for (int i = 0; i < properties.length; i += 1) {
-            _properties.put(properties[i].getName(), propertyValues[i]);   
+            _properties.put(properties[i].getName(), propertyValues[i]);
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public VectorDataset.ShapeType getShapeType () {
         return _shapeType;
     }
-    
+
     /** */
     public Envelope getEnvelope () {
         return _geometry.getEnvelopeInternal();
     }
-    
+
     /** */
     public Geometry getGeometry () {
         return _geometry;
     }
-    
+
     /** */
     public boolean hasProperty (String name) {
         return _properties.containsKey(name);
     }
-    
+
     /** */
     public Object getProperty (String name) {
         return _properties.get(name.toUpperCase());
@@ -364,7 +348,7 @@ public final class VectorFeature implements ExtensionObject {
     //--------------------------------------------------------------------------
     // ExtensionObject implementation
     //--------------------------------------------------------------------------
-    
+
     /**
      * Returns a string representation of the object.  If readable is
      * true, it should be possible read it as NL code.
@@ -392,7 +376,7 @@ public final class VectorFeature implements ExtensionObject {
     public String getNLTypeName() {
         return "VectorFeature";
     }
-    
+
     /** */
     public boolean recursivelyEqual (Object obj) {
         if (obj instanceof VectorFeature) {

@@ -4,7 +4,7 @@
 
 package org.myworldgis.projection;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import java.text.ParseException;
 import org.myworldgis.util.GeometryUtils;
 import org.ngs.ngunits.SI;
@@ -19,24 +19,24 @@ import org.ngs.ngunits.quantity.Length;
  * Washington, DC. pp. 38-47
  */
 public final class Miller extends Cylindrical {
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final String WKT_NAME = "Miller_Cylindrical";
-    
+
     /** */
     public static final String CENTER_LON_PROPERTY = "longitude_of_center";
-    
+
     /** */
     public static final String CENTER_LAT_PROPERTY = "latitude_of_center";
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /**
      * Construct a Miller projection.
      * @param ellipsoid the ellipsoid for the projection
@@ -45,8 +45,8 @@ public final class Miller extends Cylindrical {
      * @param falseEasting value to add to x coordinate of each projected point, in METERS
      * @param falseNorthing value to add to y coordinate of each projected point, in METERS
      */
-    public Miller (Ellipsoid ellipsoid, 
-                   Coordinate center, 
+    public Miller (Ellipsoid ellipsoid,
+                   Coordinate center,
                    Unit<Length> units,
                    double falseEasting,
                    double falseNorthing) {
@@ -54,20 +54,20 @@ public final class Miller extends Cylindrical {
         _name = WKT_NAME;
         computeParameters();
     }
-    
+
     /** */
-    public Miller (Ellipsoid ellipsoid, ProjectionParameters parameters) 
+    public Miller (Ellipsoid ellipsoid, ProjectionParameters parameters)
             throws ParseException {
         super(ellipsoid, parameters);
         _name = WKT_NAME;
         computeParameters();
     }
-    
+
     //-------------------------------------------------------------------------
     // AbstractProjection implementation
     //-------------------------------------------------------------------------
-    
-    /** 
+
+    /**
      * Forward projects a point.
      * @param lat the latitude of the point to project, in RADIANS
      * @param lat the longitude of the point to project, in RADIANS
@@ -79,8 +79,8 @@ public final class Miller extends Cylindrical {
         storage.y = _a * GeometryUtils.asinh(StrictMath.tan(0.8 * lat)) / 0.8;
         return storage;
     }
-    
-    /** 
+
+    /**
      * Inverse projects a point.
      * @param x the x coordinate of the point to be inverse projected
      * @param y the y coordinate of the point to be inverse projected
@@ -96,7 +96,7 @@ public final class Miller extends Cylindrical {
     //-------------------------------------------------------------------------
     // Projection implementation
     //-------------------------------------------------------------------------
-    
+
     /** */
     public ProjectionParameters getParameters () {
         ProjectionParameters result = super.getParameters();

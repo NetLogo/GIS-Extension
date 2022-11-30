@@ -1,6 +1,6 @@
 package org.myworldgis.io;
 
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Point;
 
 public class PointZWrapper extends Point {
     public Point _point;
