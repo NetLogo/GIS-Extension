@@ -155,7 +155,7 @@ public final class GISExtension extends DefaultClassManager {
         primitiveManager.addPrimitive("have-relationship?", new SpatialRelationship.GeneralTest());
         primitiveManager.addPrimitive("relationship-of", new SpatialRelationship.GetRelationship());
         primitiveManager.addPrimitive("intersecting", new SpatialRelationship.Intersecting());
-        
+        primitiveManager.addPrimitive("minimum-distance-of", new VectorDataset.GetMinimumDistanceFromDataset());
         primitiveManager.addPrimitive("width-of", new RasterDataset.GetWidth());
         primitiveManager.addPrimitive("height-of", new RasterDataset.GetHeight());
         primitiveManager.addPrimitive("raster-value", new RasterDataset.GetValue());

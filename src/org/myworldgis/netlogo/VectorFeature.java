@@ -253,6 +253,14 @@ public final class VectorFeature implements ExtensionObject {
     }
 
     /** */
+    public double getDistance (Geometry geometry) {
+        if( _geometry ===null|| geometry === null ||geometry.isEmpty()) {
+            return null;
+        }
+        return _geometry.distance(geometry);
+    }
+    
+    /** */
     public Geometry getGeometry () {
         return _geometry;
     }
