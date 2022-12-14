@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Iterator;
 import org.nlogo.api.Agent;
 import org.nlogo.api.AgentSet;
 import org.nlogo.api.Argument;
@@ -63,7 +64,7 @@ public final class VectorDataset extends Dataset {
     }
 
     /** */
-    public static final strictfp class GetMinimumDistanceFromDataset extends GISExtension.Reporter {
+    public static final class GetMinimumDistanceFromDataset extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
