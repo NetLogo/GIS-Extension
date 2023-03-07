@@ -1,18 +1,17 @@
 enablePlugins(org.nlogo.build.NetLogoExtension, org.nlogo.build.ExtensionDocumentationPlugin)
 
-
 name := "gis"
-version := "1.3.2"
+version := "1.3.3"
 isSnapshot := true
 
-javaSource in Compile := baseDirectory.value / "src" / "org"
+Compile / javaSource := baseDirectory.value / "src" / "org"
 javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xlint:-path", "-encoding", "us-ascii", "--release", "11")
 
 scalaVersion := "2.12.12"
-scalaSource in Test := baseDirectory.value / "src" / "test"
+Test / scalaSource := baseDirectory.value / "src" / "test"
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-feature", "-encoding", "us-ascii", "-release", "11")
 
-netLogoVersion := "6.2.2"
+netLogoVersion := "6.3.0"
 netLogoClassManager := "org.myworldgis.netlogo.GISExtension"
 netLogoTestExtras += (baseDirectory.value / "examples")
 

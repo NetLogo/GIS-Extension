@@ -1,4 +1,5 @@
 .bundledFiles
+.bsp/
 target/
 extensions/
 /*.jar
