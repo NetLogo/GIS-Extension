@@ -5,6 +5,9 @@
 
 package org.myworldgis.util;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
@@ -19,44 +22,45 @@ public final class StringUtils {
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class WildcardMatcher {
-        
-        private final String[] _subpatterns;
-        
+
+        private final Pattern _regEx;
+
         public WildcardMatcher (String pattern) {
-            _subpatterns = pattern.split("\\*");
-        }
-        
-        public boolean matches (String str) {
-            int lastIndex = 0;
-            for (int i = 0; i < _subpatterns.length; i += 1) {
-                int index = str.indexOf(_subpatterns[i], lastIndex);
-                if (index < lastIndex) {
-                    return false;
-                } else {
-                    lastIndex = index + _subpatterns[i].length();
-                }
+            // `-1` retains empty cells for the split value itself.
+            String[] splits = pattern.split("\\*", -1);
+            String[] subpatterns = new String[splits.length];
+            for (int i = 0; i < splits.length; i++) {
+                // `Pattern.quote()` makes sure nothing in the splits are treated as regex syntax.
+                // `.*` should match anything, any number of times.
+                subpatterns[i] = "".equals(splits[i]) ? ".*" : Pattern.quote(splits[i]);
             }
-            return true;
+            String newPattern = String.join("", subpatterns);
+            _regEx = Pattern.compile(newPattern);
+        }
+
+        public boolean matches (String str) {
+            Matcher m = _regEx.matcher(str);
+            return m.matches();
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** See http://www.ietf.org/rfc/rfc2396.txt */
     private static final String RESERVED_URI_CHARS = ";/?:@&=+$,%#";
-    
+
     /** See http://www.ietf.org/rfc/rfc2396.txt */
     private static final String UNRESERVED_URI_CHARS = "-_.!~*'()";
-        
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static boolean startsWithIgnoreCase (String str1, String str2) {
         if (str1.length() >= str2.length()) {
@@ -65,7 +69,7 @@ public final class StringUtils {
             return(false);
         }
     }
-    
+
     /** */
     public static boolean endsWithIgnoreCase (String str1, String str2) {
         if (str1.length() >= str2.length()) {
@@ -74,7 +78,7 @@ public final class StringUtils {
             return(false);
         }
     }
-    
+
     /** */
     public static String stripNonAlphanumeric (String string) {
         for (int i = 0; i < string.length(); i += 1) {
@@ -91,18 +95,18 @@ public final class StringUtils {
         }
         return(string);
     }
-    
+
     /** */
     public static boolean hasFileExtension (String fileName, String extension) {
         return (fileName.length() >= (extension.length() + 1)) &&
                (fileName.charAt(fileName.length() - extension.length() - 1) == '.') &&
-               fileName.regionMatches(true, 
-                                      (fileName.length() - extension.length()), 
-                                      extension, 
-                                      0, 
+               fileName.regionMatches(true,
+                                      (fileName.length() - extension.length()),
+                                      extension,
+                                      0,
                                       extension.length());
     }
-    
+
     /** */
     public static String getFileExtension (String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
@@ -111,7 +115,7 @@ public final class StringUtils {
         }
         return null;
     }
-    
+
     /** */
     public static String stripFileExtension (String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
@@ -120,7 +124,7 @@ public final class StringUtils {
         }
         return fileName;
     }
-    
+
     /** */
     public static String changeFileExtension (String fileName, String extension) {
         if (hasFileExtension(fileName, extension)) {
@@ -129,7 +133,7 @@ public final class StringUtils {
             return stripFileExtension(fileName) + "." + extension;
         }
     }
-    
+
     /** */
     public static void writeDelimited (String string, char delimiter, Writer out) throws IOException {
         if (delimiter == '\"') {
@@ -154,7 +158,7 @@ public final class StringUtils {
             out.write(string);
         }
     }
-    
+
     /** */
     public static String readDelimited (Reader in, char delimiter) throws IOException {
         if (delimiter == '\"') {
@@ -207,7 +211,7 @@ public final class StringUtils {
         }
         return(resultBuffer.toString());
     }
-    
+
     /** */
     public static boolean isHexDigit (char c) {
         return ((c >= 0x30) && (c <= 0x39)) || // 0-9

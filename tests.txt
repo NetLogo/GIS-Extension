@@ -7,7 +7,7 @@ TestSetPropertyValue
   OPEN> extensions/gis/examples/set_property.nlogo
   O> setup
   O> test
- 
+
 TestProjectLatLon-wgs84-wgs84
   OPEN> extensions/gis/examples/project-lat-lon.nlogo
   O> run-test-wgs84-wgs84
@@ -49,19 +49,19 @@ TestGeoJSONImport_DC_Metro
 TestGeoJSONImport_Point
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-Point
-  
+
 TestGeoJSONImport_MultiPoint
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-MultiPoint
-  
+
 TestGeoJSONImport_LineString
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-LineString
-  
+
 TestGeoJSONImport_MutliLineString
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-MultiLineString
-  
+
 TestGeoJSONImport_Polygon
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-Polygon
@@ -73,7 +73,7 @@ TestGeoJSONImport_Polygon_with_hole
 TestGeoJSONImport_MultiPolygon
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-MultiPolygon
-  
+
 TestGeoJSONImport_Feature
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-Feature
@@ -81,7 +81,7 @@ TestGeoJSONImport_Feature
 testGeoJSONImport_FeatureCollectionHomogenous
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-FeatureCollectionHomogenous
-  
+
 TestGeoJSONImport_FeatureCollectionHeterogenous
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   test-FeatureCollectionHeterogenous => true
@@ -89,11 +89,11 @@ TestGeoJSONImport_FeatureCollectionHeterogenous
 testGeoJSONImport_FeatureCollectionDefaultFilling
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   O> test-FeatureCollectionDefaultFilling
-  
-TestGeoJSONImport_GeometryCollection 
+
+TestGeoJSONImport_GeometryCollection
   OPEN> extensions/gis/examples/geojson/geojson_import_test.nlogo
   test-GeometryCollection => true
-  
+
 TestGeoJSONExport_DC_Metro
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-metro
@@ -101,19 +101,19 @@ TestGeoJSONExport_DC_Metro
 TestGeoJSONExport_Point
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-Point
-  
+
 TestGeoJSONExport_MultiPoint
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-MultiPoint
-  
+
 TestGeoJSONExport_LineString
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-LineString
-  
+
 TestGeoJSONExport_MutliLineString
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-MultiLineString
-  
+
 TestGeoJSONExport_Polygon
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-Polygon
@@ -125,7 +125,7 @@ TestGeoJSONExport_Polygon_with_hole
 TestGeoJSONExport_MultiPolygon
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-MultiPolygon
-  
+
 TestGeoJSONExport_Feature
   OPEN> extensions/gis/examples/geojson/geojson_export_test.nlogo
   O> test-Feature
@@ -245,3 +245,18 @@ testCreateTurtlesInsidePolygon_turtles_as_agentset
 testCreateTurtlesInsidePolygon_num_turtles_created
   OPEN> extensions/gis/examples/create-turtles-inside-polygon.nlogo
   O> test-num-agents-created
+
+FindFeaturesSearch
+  extensions [gis]
+  globals [ciudades]
+  O> clear-all
+  O> set ciudades gis:load-dataset "./examples/shared-datasets/cities.geojson"
+  length (gis:find-features ciudades "NAME" "San") => 0
+  length (gis:find-features ciudades "NAME" "*San") => 0
+  length (gis:find-features ciudades "NAME" "San*") => 15
+  length (gis:find-features ciudades "NAME" "*San*") => 15
+  length (gis:find-features ciudades "NAME" "*san*") => 2
+  length (gis:find-features ciudades "NAME" "San Juan") => 1
+  length (gis:find-features ciudades "NAME" "San Juan*") => 1
+  length (gis:find-features ciudades "NAME" "*San Juan") => 1
+  length (gis:find-features ciudades "NAME" "*San Juan*") => 1
