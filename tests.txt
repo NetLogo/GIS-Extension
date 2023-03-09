@@ -250,7 +250,7 @@ FindFeaturesSearch
   extensions [gis]
   globals [ciudades]
   O> clear-all
-  O> set ciudades gis:load-dataset "./examples/shared-datasets/cities.geojson"
+  O> set ciudades gis:load-dataset "extensions/gis/examples/shared-datasets/cities.geojson"
   length (gis:find-features ciudades "NAME" "San") => 0
   length (gis:find-features ciudades "NAME" "*San") => 0
   length (gis:find-features ciudades "NAME" "San*") => 15
