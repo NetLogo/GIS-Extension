@@ -15,7 +15,7 @@ import org.nlogo.core.LogoList;
 import org.nlogo.core.Syntax;
 import scala.Option;
 import scala.Some;
-import scala.collection.JavaConverters;
+import scala.jdk.javaapi.CollectionConverters;
 
 import java.util.*;
 
@@ -35,7 +35,7 @@ public class VectorFeaturesToTurtlesUtil {
     // Syntax.commandSyntax procedure to make the proper syntax for an observer primitive that creates a turtle
     // scope inside its command block. - James Hovet 3/15/21
     public static Syntax makeTurtleCreationCommandSyntax(Object[] syntaxTokens) {
-        scala.collection.immutable.List<Object> list = JavaConverters.asScalaBuffer(Arrays.asList(syntaxTokens)).toList();
+        scala.collection.immutable.List<Object> list = CollectionConverters.asScala(Arrays.asList(syntaxTokens)).toList();
         return Syntax.commandSyntax(list, Option.empty(), Option.empty(), "O---", Some.apply("-T--"), false, true);
     }
 
