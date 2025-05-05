@@ -11,7 +11,7 @@ scalaVersion := "2.13.16"
 Test / scalaSource := baseDirectory.value / "src" / "test"
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-feature", "-encoding", "us-ascii", "-release", "11")
 
-netLogoVersion := "7.0.0-internal1"
+netLogoVersion := "7.0.0-internal1-df97144"
 netLogoClassManager := "org.myworldgis.netlogo.GISExtension"
 netLogoTestExtras += (baseDirectory.value / "examples")
 
