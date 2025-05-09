@@ -2,7 +2,7 @@ The GIS extension comes bundled with NetLogo, but versions of the extension rele
 
 ### 1.3.0
 
-See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/hexy/README.md) for more information on using the new and updated primitives.
+See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/main/README.md) for more information on using the new and updated primitives.
 
 - Add `gis:create-turtles-from-points` to quickly make turtles from a point dataset.
 - Add `gis:random-point-inside` to get a random point from inside a polygon shape.
@@ -13,7 +13,7 @@ See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/hexy/READ
 
 ### 1.2.0
 
-See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/hexy/README.md) for more information on using the new and updated primitives.
+See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/main/README.md) for more information on using the new and updated primitives.
 
 - Add the ability to use GeoJSON with `gis:load-dataset` and `gis:store-dataset`
 - Add `gis:set-property-value` to change values in a dataset.
