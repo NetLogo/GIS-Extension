@@ -192,16 +192,4 @@ public final class GISExtension extends DefaultClassManager {
         //return new LogoArray ( (LogoList) em.readFromString( "[" + value + "]" ) );
     }
 
-    @Override
-    public java.util.List<String> additionalJars() {
-		return java.util.Arrays.asList( new String[] {
-            "jai_codec-1.1.3.jar",
-            "jai_core-1.1.3.jar",
-            "ngunits-1.0.jar",
-            "jts-1.9.jar",
-            "commons-codec-1.3.jar",
-            "commons-logging-1.1.jar",
-            "commons-httpclient-3.0.1.jar"
-			});
-    }
 }
