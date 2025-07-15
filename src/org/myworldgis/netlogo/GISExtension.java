@@ -18,20 +18,20 @@ import org.nlogo.api.PrimitiveManager;
 
 
 /**
- * 
+ *
  */
 public final class GISExtension extends DefaultClassManager {
 
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static abstract class Reporter implements org.nlogo.api.Reporter {
-        
+
         public abstract Object reportInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, IOException, LogoException, ParseException;
-        
+
         public Object report (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             try {
@@ -48,13 +48,13 @@ public final class GISExtension extends DefaultClassManager {
             }
         }
     }
-    
+
     /** */
     public static abstract class Command implements org.nlogo.api.Command {
-        
+
         public abstract void performInternal (Argument args[], Context context)
                 throws AgentException, ExtensionException, IOException, LogoException, ParseException;
-        
+
         public void perform (Argument args[], Context context)
                 throws ExtensionException, LogoException {
             try {
@@ -71,39 +71,39 @@ public final class GISExtension extends DefaultClassManager {
             }
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final Double MISSING_VALUE = Double.valueOf(Double.NaN);
-    
+
     /** */
     private static GISExtensionState _state;
 
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static GISExtensionState getState () {
         return _state;
     }
-    
+
     //--------------------------------------------------------------------------
     // DefaultClassManager implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public void runOnce (ExtensionManager em) throws ExtensionException {
         super.runOnce(em);
         _state = new GISExtensionState(em);
     }
-    
+
     /** */
     public void load (PrimitiveManager primitiveManager) {
-        
+
         primitiveManager.addPrimitive("set-transformation", new SetTransformation.Linked());
         primitiveManager.addPrimitive("set-transformation-ds", new SetTransformation.Independent());
         primitiveManager.addPrimitive("set-world-envelope", new SetTransformation.WorldLinked());
@@ -113,7 +113,7 @@ public final class GISExtension extends DefaultClassManager {
         primitiveManager.addPrimitive("envelope-union-of", new EnvelopeUnion());
         primitiveManager.addPrimitive("load-coordinate-system", new LoadCoordinateSystem());
         primitiveManager.addPrimitive("set-coordinate-system", new SetCoordinateSystem());
-        
+
         primitiveManager.addPrimitive("load-dataset", new LoadDataset());
         primitiveManager.addPrimitive("store-dataset", new StoreDataset());
         primitiveManager.addPrimitive("type-of", new Dataset.GetDatasetType());
@@ -155,7 +155,7 @@ public final class GISExtension extends DefaultClassManager {
         primitiveManager.addPrimitive("have-relationship?", new SpatialRelationship.GeneralTest());
         primitiveManager.addPrimitive("relationship-of", new SpatialRelationship.GetRelationship());
         primitiveManager.addPrimitive("intersecting", new SpatialRelationship.Intersecting());
-        
+
         primitiveManager.addPrimitive("width-of", new RasterDataset.GetWidth());
         primitiveManager.addPrimitive("height-of", new RasterDataset.GetHeight());
         primitiveManager.addPrimitive("raster-value", new RasterDataset.GetValue());
@@ -170,15 +170,15 @@ public final class GISExtension extends DefaultClassManager {
         primitiveManager.addPrimitive("resample", new RasterDatasetMath.Resample());
         primitiveManager.addPrimitive("convolve", new RasterDatasetMath.Convolve());
         primitiveManager.addPrimitive("apply-raster", new ApplyRaster());
-        
+
         primitiveManager.addPrimitive("drawing-color", new Painting.GetColor());
         primitiveManager.addPrimitive("set-drawing-color", new Painting.SetColor());
         primitiveManager.addPrimitive("draw", new Painting.DrawVector());
         primitiveManager.addPrimitive("fill", new Painting.FillVector());
         primitiveManager.addPrimitive("paint", new Painting.PaintRaster());
-        
+
         primitiveManager.addPrimitive("import-wms-drawing", new LoadWMSImage());
-        
+
         primitiveManager.addPrimitive("myworld-layers", new MyWorld.GetLayers());
         primitiveManager.addPrimitive("myworld-get-dataset", new MyWorld.GetDataset());
         primitiveManager.addPrimitive("myworld-send-dataset", new MyWorld.PutDataset());
@@ -187,7 +187,7 @@ public final class GISExtension extends DefaultClassManager {
     /** */
     public ExtensionObject readExtensionObject (ExtensionManager em, String typeName, String value)
             throws ExtensionException {
-        
+
         return null;
         //return new LogoArray ( (LogoList) em.readFromString( "[" + value + "]" ) );
     }
