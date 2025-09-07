@@ -11,6 +11,4 @@ object Tests {
   val testFiles     = testFileNames.map( (f) => (new File(f)).getCanonicalFile )
 }
 
-class Tests extends TestLanguage(Tests.testFiles) {
-  System.setProperty("org.nlogo.preferHeadless", "true")
-}
+class Tests extends TestLanguage(Tests.testFiles)
