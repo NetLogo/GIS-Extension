@@ -92,14 +92,14 @@ public class GeoJsonReader implements GeoJsonConstants {
         this.geometries[featureIndex] = parseCoordinates(coordinates, this.geojsonShapeType);
     }
 
-    private void extractSchemaFromFeatures(JSONArray features) throws ExtensionException {
+    private final void extractSchemaFromFeatures(JSONArray features) throws ExtensionException {
         for (Object featureObj : features) {
             JSONObject feature = (JSONObject) featureObj;
             parseSchemaOfSingleFeature(feature);
         }
     }
 
-    public void parseSchemaOfSingleFeature(JSONObject feature) throws ExtensionException {
+    public final void parseSchemaOfSingleFeature(JSONObject feature) throws ExtensionException {
         JSONObject properties = (JSONObject) feature.get("properties");
         for (Object entryObj : properties.entrySet()) {
             @SuppressWarnings("unchecked")
@@ -132,7 +132,7 @@ public class GeoJsonReader implements GeoJsonConstants {
         }
     }
 
-    public void parseFeatureObject(JSONObject feature, int featureIndex) throws ExtensionException {
+    public final void parseFeatureObject(JSONObject feature, int featureIndex) throws ExtensionException {
         JSONObject geometry = (JSONObject) feature.get("geometry");
         parseGeometryObject(geometry, featureIndex);
 
@@ -165,7 +165,7 @@ public class GeoJsonReader implements GeoJsonConstants {
         this.propertyValues[featureIndex] = thesePropertyValues;
     }
 
-    public void parseFeatureCollection() throws ExtensionException {
+    public final void parseFeatureCollection() throws ExtensionException {
         JSONArray features = (JSONArray) geojson.get("features");
 
         if (features.size() < 1) {
@@ -190,7 +190,7 @@ public class GeoJsonReader implements GeoJsonConstants {
         }
     }
 
-    public void parseSingleFeatureDataset() throws ExtensionException {
+    public final void parseSingleFeatureDataset() throws ExtensionException {
         this.size = 1;
         this.geometries = new Geometry[size];
         this.propertyValues = new Object[size][];
@@ -204,7 +204,7 @@ public class GeoJsonReader implements GeoJsonConstants {
         parseFeatureObject(firstFeature, 0);
     }
 
-    public void parseSingleGeometryDataset() throws ExtensionException {
+    public final void parseSingleGeometryDataset() throws ExtensionException {
         this.size = 1;
         this.geometries = new Geometry[size];
         this.propertyValues = new Object[size][0];
