@@ -15,6 +15,8 @@ netLogoVersion      := "7.0.0-424b50b"
 netLogoClassManager := "org.myworldgis.netlogo.GISExtension"
 netLogoTestExtras += (baseDirectory.value / "examples")
 
+resolvers += "jitpack" at "https://jitpack.io"
+
 libraryDependencies ++= Seq(
   "org.locationtech.jts"       % "jts-core"           % "1.19.0",
   "commons-httpclient"         % "commons-httpclient" % "3.1",
