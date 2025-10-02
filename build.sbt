@@ -11,11 +11,9 @@ scalaVersion := "3.7.0"
 Test / scalaSource := baseDirectory.value / "src" / "test"
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-feature", "-encoding", "us-ascii", "-release", "11")
 
-netLogoVersion      := "7.0.0-424b50b"
+netLogoVersion      := "7.0.0-2486d1e"
 netLogoClassManager := "org.myworldgis.netlogo.GISExtension"
 netLogoTestExtras += (baseDirectory.value / "examples")
-
-resolvers += "jitpack" at "https://jitpack.io"
 
 libraryDependencies ++= Seq(
   "org.locationtech.jts"       % "jts-core"           % "1.19.0",
