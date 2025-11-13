@@ -17,28 +17,28 @@ import org.nlogo.core.SyntaxJ;
 
 
 /**
- * 
+ *
  */
 public abstract class VectorDatasetSearch {
-    
+
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final class FindOne extends GISExtension.Reporter {
-        
+
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
                                                      Syntax.StringType() | Syntax.NumberType()},
                                          Syntax.WildcardType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
@@ -66,14 +66,14 @@ public abstract class VectorDatasetSearch {
             return Nobody$.MODULE$;
         }
     }
-    
+
     /** */
     public static final class FindAll extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
@@ -109,21 +109,21 @@ public abstract class VectorDatasetSearch {
             return result.toLogoList();
         }
     }
-        
+
     /** */
     public static final class FindLessThan extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
                                                      Syntax.StringType() | Syntax.NumberType() },
                                          Syntax.ListType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
@@ -141,21 +141,21 @@ public abstract class VectorDatasetSearch {
             return result.toLogoList();
         }
     }
-        
+
     /** */
     public static final class FindGreaterThan extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
                                                      Syntax.StringType() | Syntax.NumberType() },
                                          Syntax.ListType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
@@ -173,14 +173,14 @@ public abstract class VectorDatasetSearch {
             return result.toLogoList();
         }
     }
-        
+
     /** */
     public static final class FindInRange extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType(),
@@ -188,7 +188,7 @@ public abstract class VectorDatasetSearch {
                                                      Syntax.StringType() | Syntax.NumberType() },
                                          Syntax.ListType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
@@ -207,20 +207,20 @@ public abstract class VectorDatasetSearch {
             return result.toLogoList();
         }
     }
-        
+
     /** */
     public static final class GetMinimum extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType() },
                                          Syntax.NumberType() | Syntax.StringType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
@@ -241,20 +241,20 @@ public abstract class VectorDatasetSearch {
             return result;
         }
     }
-        
+
     /** */
     public static final class GetMaximum extends GISExtension.Reporter {
 
         public String getAgentClassString() {
             return "OTPL";
         }
-        
+
         public Syntax getSyntax() {
             return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType(),
                                                      Syntax.StringType() },
                                          Syntax.NumberType() | Syntax.StringType());
         }
-        
+
         @SuppressWarnings("unchecked")
         public Object reportInternal (Argument args[], Context context)
                 throws ExtensionException, LogoException {
@@ -279,9 +279,9 @@ public abstract class VectorDatasetSearch {
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
-    static String getPropertyName (VectorDataset dataset, Argument arg) 
+    static String getPropertyName (VectorDataset dataset, Argument arg)
             throws ExtensionException, LogoException {
         String propertyName = arg.getString().toUpperCase();
         if (dataset.isValidPropertyName(propertyName)) {

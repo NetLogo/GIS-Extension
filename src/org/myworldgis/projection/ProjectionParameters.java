@@ -17,32 +17,32 @@ import org.ngs.ngunits.quantity.Length;
 
 /** */
 public final class ProjectionParameters {
-    
+
     //-------------------------------------------------------------------------
     // Instance variables
     //-------------------------------------------------------------------------
-    
+
     /** */
     private final Map<String,Number> _parameters;
-    
+
     /** */
     private final Unit<Angle> _angularUnits;
-    
+
     /** */
     private final UnitConverter _toRadians;
-    
+
     /** */
     private final Unit<Length> _linearUnits;
-    
+
     /** */
     private final UnitConverter _toMeters;
-    
+
     //-------------------------------------------------------------------------
     // Constructors
     //-------------------------------------------------------------------------
-    
+
     /** */
-    public ProjectionParameters (Unit<Angle> angularUnits, 
+    public ProjectionParameters (Unit<Angle> angularUnits,
                                  Unit<Length> linearUnits) {
         _parameters = new HashMap<String,Number>();
         _angularUnits = angularUnits;
@@ -54,7 +54,7 @@ public final class ProjectionParameters {
     //-------------------------------------------------------------------------
     // Instance methods
     //-------------------------------------------------------------------------
-    
+
     /** */
     public Unit<Angle> getAngularUnits () {
         return _angularUnits;
@@ -64,39 +64,39 @@ public final class ProjectionParameters {
     public Unit<Length> getLinearUnits () {
         return _linearUnits;
     }
-    
+
     /** */
     public Iterator<String> propertyNameIterator () {
         return _parameters.keySet().iterator();
     }
-    
+
     /** */
     public void addParameter (String name, Number value) {
         _parameters.put(name.toLowerCase(), value);
     }
-    
+
     /** */
     public Number getParameter (String name) {
         return _parameters.get(name.toLowerCase());
     }
-    
+
     /** */
     public void addAngularParameter (String name, double angle, Unit<Angle> units) {
         UnitConverter converter = units.getConverterTo(_angularUnits);
         _parameters.put(name.toLowerCase(), Double.valueOf(converter.convert(angle)));
     }
-    
+
     /** */
     public void addLinearParameter (String name, double length, Unit<Length> units) {
         UnitConverter converter = units.getConverterTo(_linearUnits);
         _parameters.put(name.toLowerCase(), Double.valueOf(converter.convert(length)));
     }
-    
+
     /** */
     public void addDimensionlessParameter (String name, double k) {
         _parameters.put(name.toLowerCase(), Double.valueOf(k));
     }
-    
+
     /** Returns the parameter value in RADIANS */
     public double getAngularParameter (String name) throws ParseException {
         Number value = _parameters.get(name.toLowerCase());
@@ -106,26 +106,26 @@ public final class ProjectionParameters {
             throw new ParseException("missing required parameter '"+name+"'", 0);
         }
     }
-    
+
     /** Returns the parameter value in RADIANS */
     public double getCenterLongitude () throws ParseException {
         Number value = _parameters.get("longitude_of_center");
         if (value != null) {
             return _toRadians.convert(value.doubleValue());
-        } 
+        }
         value = _parameters.get("central_meridian");
         if (value != null) {
             return _toRadians.convert(value.doubleValue());
         }
         throw new ParseException("unable to find parameter for center longitude", 0);
     }
-    
+
     /** Returns the parameter value in RADIANS */
     public double getCenterLatitude () throws ParseException {
         Number value = _parameters.get("latitude_of_center");
         if (value != null) {
             return _toRadians.convert(value.doubleValue());
-        } 
+        }
         value = _parameters.get("latitude_of_origin");
         if (value != null) {
             return _toRadians.convert(value.doubleValue());
@@ -146,7 +146,7 @@ public final class ProjectionParameters {
             throw new ParseException("missing required parameter '"+name+"'", 0);
         }
     }
-    
+
     /** */
     public double getDimensionlessParameter (String name) throws ParseException {
         Number value = _parameters.get(name.toLowerCase());

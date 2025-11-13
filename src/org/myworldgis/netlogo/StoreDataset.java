@@ -31,16 +31,16 @@ import org.nlogo.core.SyntaxJ;
 
 
 /**
- * 
+ *
  */
 public final class StoreDataset extends GISExtension.Command {
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
-    private static String storeAsciiGrid (RasterDataset dataset, String file) 
+    private static String storeAsciiGrid (RasterDataset dataset, String file)
             throws IOException {
         String ascFile = StringUtils.changeFileExtension(file, AsciiGridFileWriter.ASCII_GRID_FILE_EXTENSION_1);
         AsciiGridFileWriter asc = new AsciiGridFileWriter(new FileWriter(new File(ascFile)));
@@ -53,10 +53,10 @@ public final class StoreDataset extends GISExtension.Command {
         }
         return ascFile;
     }
-    
+
 
     /** */
-    private static String storeShapefile (VectorDataset dataset,String file) 
+    private static String storeShapefile (VectorDataset dataset,String file)
             throws IOException {
         String shpFile = StringUtils.changeFileExtension(file, ESRIShapefileWriter.SHAPEFILE_EXTENSION);
         String shxFile = StringUtils.changeFileExtension(file, ESRIShapeIndexWriter.SHAPE_INDEX_EXTENSION);
@@ -66,13 +66,13 @@ public final class StoreDataset extends GISExtension.Command {
                                                           esriShapeType(dataset),
                                                           AbstractUnitConverter.IDENTITY,
                                                           GISExtension.getState().factory());
-        ESRIShapeIndexWriter shx = new ESRIShapeIndexWriter(new RandomAccessFile(shxFile, "rw"), 
+        ESRIShapeIndexWriter shx = new ESRIShapeIndexWriter(new RandomAccessFile(shxFile, "rw"),
                                                             dataset.getEnvelope(),
                                                             esriShapeType(dataset),
                                                             AbstractUnitConverter.IDENTITY,
                                                             GISExtension.getState().factory());
-        DBaseFileWriter dbf = new DBaseFileWriter(new RandomAccessFile(dbfFile, "rw"), 
-                                                  dBaseFieldDescriptors(dataset)); 
+        DBaseFileWriter dbf = new DBaseFileWriter(new RandomAccessFile(dbfFile, "rw"),
+                                                  dBaseFieldDescriptors(dataset));
         try {
             int recordIndex = 0;
             VectorDataset.Property[] props = dataset.getProperties();
@@ -99,8 +99,8 @@ public final class StoreDataset extends GISExtension.Command {
         }
         return shpFile;
     }
-    
-    
+
+
     /** */
     public static int esriShapeType (VectorDataset dataset) {
         switch (dataset.getShapeType()) {
@@ -119,7 +119,7 @@ public final class StoreDataset extends GISExtension.Command {
                 return ESRIShapefileWriter.SHAPE_TYPE_NULL;
         }
     }
-    
+
     /** */
     private static DBaseFieldDescriptor[] dBaseFieldDescriptors (VectorDataset dataset) {
         VectorDataset.Property[] props = dataset.getProperties();
@@ -168,14 +168,14 @@ public final class StoreDataset extends GISExtension.Command {
         }
         DBaseFieldDescriptor[] result = new DBaseFieldDescriptor[fieldNames.length];
         for (int i = 0; i < result.length; i += 1) {
-            result[i] = new DBaseFieldDescriptor(fieldTypes[i], 
+            result[i] = new DBaseFieldDescriptor(fieldTypes[i],
                                                  fieldNames[i],
                                                  fieldLengths[i],
                                                  fieldDecimals[i]);
         }
         return result;
     }
-    
+
     /** */
     private static void storeProjection (Projection projection,
                                          String prjFile) throws IOException {
@@ -192,11 +192,11 @@ public final class StoreDataset extends GISExtension.Command {
                                                   dataset);
         return filename;
     }
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Command implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "OTPL";
@@ -207,9 +207,9 @@ public final class StoreDataset extends GISExtension.Command {
         return SyntaxJ.commandSyntax(new int[] { Syntax.WildcardType(),
                                                 Syntax.StringType() });
     }
-    
+
     /** */
-    public void performInternal (Argument args[], Context context) 
+    public void performInternal (Argument args[], Context context)
             throws ExtensionException, IOException, LogoException {
         Object arg0 = args[0].get();
         String fileName = args[1].getString();

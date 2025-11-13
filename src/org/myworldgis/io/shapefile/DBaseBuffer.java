@@ -19,36 +19,36 @@ import org.myworldgis.util.Buffer;
  * Utilities for reading & writing dBase files
  */
 public final class DBaseBuffer extends Buffer implements DBaseConstants {
-    
+
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US);
-    
+
     /** */
     private static final NumberFormat YEAR_FORMAT = new DecimalFormat("0000", SYMBOLS);
-    
+
     /** */
     private static final NumberFormat MONTH_DAY_FORMAT = new DecimalFormat("00", SYMBOLS);
-    
+
     /** */
     public static final NumberFormat FLOAT_FORMAT = new DecimalFormat("0.###########E000", SYMBOLS);
-    
+
     /** */
     public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("###################0.##################", SYMBOLS);
-    
+
     /** */
     private static final NumberFormat DECIMAL_PRINT_FORMAT = (NumberFormat)DECIMAL_FORMAT.clone();
-    
+
     /** */
     public static final double MAX_DECIMAL_VALUE = 9.99999999999E19;
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     static String formatDatum (Object datum) {
         if ((datum instanceof Integer) || (datum instanceof Long)) {
@@ -59,20 +59,20 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
             return datum.toString();
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public DBaseBuffer () {
         super(254, Buffer.ByteOrder.LITTLE_ENDIAN);
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     @SuppressWarnings("deprecation")
     public Date getDate (int offset) throws IOException {
@@ -90,7 +90,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
         }
         return(new Date(year, month, day));
     }
-    
+
     /** */
     @SuppressWarnings("deprecation")
     public int putDate (int offset, Date date) {
@@ -101,7 +101,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
         putCString(offset, 8, output.toString());
         return(8);
     }
-    
+
     /** */
     @SuppressWarnings("deprecation")
     public int putHeaderDate (int offset, Date date) {
@@ -110,7 +110,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
         putByte(offset + 2, (byte)(date.getDay()));
         return(6);
     }
-    
+
     /** */
     public DBaseFieldDescriptor getFieldDescriptor (int offset) {
         return new DBaseFieldDescriptor(getChar(offset + DBF_FIELD_DESCRIPTOR_TYPE_OFFSET),
@@ -118,7 +118,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
                                         getUnsignedByte(offset + DBF_FIELD_DESCRIPTOR_LENGTH_OFFSET),
                                         getUnsignedByte(offset + DBF_FIELD_DESCRIPTOR_DECIMAL_COUNT_OFFSET));
     }
-    
+
     /** */
     public int putFieldDescriptor (int offset, DBaseFieldDescriptor field) {
         putCString(offset + DBF_FIELD_DESCRIPTOR_NAME_OFFSET, DBF_FIELD_DESCRIPTOR_NAME_LENGTH, field.getName());
@@ -127,7 +127,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
         putUnsignedByte(offset + DBF_FIELD_DESCRIPTOR_DECIMAL_COUNT_OFFSET, (short)field.getDecimalCount());
         return DBF_FIELD_DESCRIPTOR_SIZE;
     }
-    
+
     /** */
     public Object[] getRecord (int initialOffset, DBaseFieldDescriptor[] fields) throws IOException {
         Object[] result = new Object[fields.length];
@@ -138,7 +138,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
         }
         return result;
     }
-    
+
     /** */
     public int putRecord (int initialOffset, DBaseFieldDescriptor[] fieldDescriptors, Object[] record) {
         int offset = initialOffset;
@@ -148,7 +148,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
         }
         return offset - initialOffset;
     }
-    
+
     /** */
     @SuppressWarnings("deprecation")
     private Object getFieldContents (int offset, DBaseFieldDescriptor field) throws IOException {
@@ -180,7 +180,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
                     return null;
                 }
                 try {
-                    // Make sure the "e" is upper-case, and don't allow any plus signs, 
+                    // Make sure the "e" is upper-case, and don't allow any plus signs,
                     // because our float format won't parse "1.0e+00x" correctly.
                     return Double.valueOf(FLOAT_FORMAT.parse(fStr.replace('e', 'E').replaceAll("\\+", "")).doubleValue());
                 } catch (ParseException e) {
@@ -201,7 +201,7 @@ public final class DBaseBuffer extends Buffer implements DBaseConstants {
                 return null;
         }
     }
-    
+
     /** */
     private int putFieldContents (int offset, DBaseFieldDescriptor field, Object datum) {
         if (datum == null) {

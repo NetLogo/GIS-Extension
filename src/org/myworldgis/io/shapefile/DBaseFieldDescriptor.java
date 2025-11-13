@@ -13,11 +13,11 @@ import org.myworldgis.util.StringUtils;
  * Class representing a field in a dBase file.
  */
 public final class DBaseFieldDescriptor implements DBaseConstants {
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static String makeLegalFieldName (String name) {
         StringBuffer result = new StringBuffer();
@@ -40,9 +40,9 @@ public final class DBaseFieldDescriptor implements DBaseConstants {
         }
         return result.toString();
     }
-    
+
     /**
-     * Process a bunch of field names at once so that we can remove common 
+     * Process a bunch of field names at once so that we can remove common
      * substrings at the front, ensuring the field names will be more readable
      * in ArcView/ArcGIS.
      */
@@ -88,34 +88,34 @@ public final class DBaseFieldDescriptor implements DBaseConstants {
         for (int i = 0; i < result.length; i += 1) {
             if (result[i].length() > maxLen) {
                 result[i] = result[i].substring(0, maxLen);
-            } else if ((work[i].length() > maxLen) && 
+            } else if ((work[i].length() > maxLen) &&
                        (result[i].length() < maxLen)) {
                 result[i] = work[i].substring(0, maxLen - result[i].length()) + result[i];
             }
         }
         return(result);
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private final char _type;
-    
+
     /** */
     private final String _name;
-    
+
     /** */
     private final int _length;
-    
+
     /** */
     private final int _decimalCount;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public DBaseFieldDescriptor (char type, String name, int length, int decimalCount) {
         _type = type;
@@ -123,31 +123,31 @@ public final class DBaseFieldDescriptor implements DBaseConstants {
         _length = length;
         _decimalCount = decimalCount;
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public char getType () {
         return(_type);
     }
-    
+
     /** */
     public String getName () {
         return(_name);
     }
-    
+
     /** */
     public int getLength () {
         return(_length);
     }
-    
+
     /** */
     public int getDecimalCount () {
         return(_decimalCount);
     }
-    
+
     /** */
     public boolean equals (Object obj) {
         if (obj instanceof DBaseFieldDescriptor) {

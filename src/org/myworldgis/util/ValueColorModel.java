@@ -18,33 +18,33 @@ import java.awt.image.WritableRaster;
 
 
 /**
- * This color model is only be used for performing transformations on a 
+ * This color model is only be used for performing transformations on a
  * dataset's raster. It is NOT CAPABLE of drawing.
  */
 public final class ValueColorModel extends ColorModel {
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private final double _min;
-    
+
     /** */
     private final double _scale;
 
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public ValueColorModel (Raster raster) {
-        super(DataBuffer.getDataTypeSize(DataBuffer.TYPE_DOUBLE), 
+        super(DataBuffer.getDataTypeSize(DataBuffer.TYPE_DOUBLE),
               new int[] { DataBuffer.getDataTypeSize(DataBuffer.TYPE_DOUBLE) },
-              new ICC_ColorSpace(ICC_Profile.getInstance(ColorSpace.CS_GRAY)), 
+              new ICC_ColorSpace(ICC_Profile.getInstance(ColorSpace.CS_GRAY)),
               false,
               false,
-              Transparency.OPAQUE, 
+              Transparency.OPAQUE,
               DataBuffer.TYPE_DOUBLE);
         double min = Double.MAX_VALUE;
         double max = -Double.MAX_VALUE;
@@ -65,13 +65,13 @@ public final class ValueColorModel extends ColorModel {
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public boolean isCompatibleRaster (Raster raster) {
         return (raster.getDataBuffer().getDataType() == DataBuffer.TYPE_DOUBLE) &&
                (raster.getNumBands() == 1);
     }
-    
+
     /** */
     public float[] getNormalizedComponents (Object pixel,
                                             float[] normComponents,
@@ -87,10 +87,10 @@ public final class ValueColorModel extends ColorModel {
             float min = cs.getMinValue(0);
             float max = cs.getMaxValue(0);
             normComponents[normOffset] = (float)((((value - _min) * _scale) * (max - min)) + min);
-        }   
+        }
         return normComponents;
     }
-    
+
     /** */
     public Object getDataElements (int rgb, Object pixel) {
         if (pixel == null) {
@@ -104,14 +104,14 @@ public final class ValueColorModel extends ColorModel {
         }
         return pixel;
     }
-    
+
     /** */
     public WritableRaster createCompatibleWritableRaster (int w, int h) {
-        return Raster.createWritableRaster(createCompatibleSampleModel(w, h), 
+        return Raster.createWritableRaster(createCompatibleSampleModel(w, h),
                                            new DataBufferDouble(w * h),
                                            null);
     }
-    
+
     /** */
     public SampleModel createCompatibleSampleModel (int w, int h) {
         return new BandedSampleModel(DataBuffer.TYPE_DOUBLE, w, h, 1);
@@ -122,28 +122,28 @@ public final class ValueColorModel extends ColorModel {
         return (sm.getDataType() == DataBuffer.TYPE_DOUBLE) &&
                (sm.getNumBands() == 1);
     }
-    
+
     //--------------------------------------------------------------------------
     // ColorModel implementation
     //--------------------------------------------------------------------------
 
     /** */
-    public int getRed (int pixel) { 
+    public int getRed (int pixel) {
         throw new IllegalArgumentException("values not representable as int");
     }
 
     /** */
-    public int getGreen (int pixel)  { 
+    public int getGreen (int pixel)  {
         throw new IllegalArgumentException("values not representable as int");
     }
 
     /** */
-    public int getBlue (int pixel)  { 
+    public int getBlue (int pixel)  {
         throw new IllegalArgumentException("values not representable as int");
     }
 
     /** */
-    public int getAlpha (int pixel)  { 
+    public int getAlpha (int pixel)  {
         throw new IllegalArgumentException("values not representable as int");
     }
 }

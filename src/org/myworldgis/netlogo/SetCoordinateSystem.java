@@ -16,14 +16,14 @@ import org.nlogo.core.SyntaxJ;
 
 
 /**
- * 
+ *
  */
 public final class SetCoordinateSystem extends GISExtension.Command {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Command implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "O";
@@ -35,7 +35,7 @@ public final class SetCoordinateSystem extends GISExtension.Command {
     }
 
     /** */
-    public void performInternal (Argument args[], Context context) 
+    public void performInternal (Argument args[], Context context)
             throws ExtensionException, LogoException, ParseException {
         Object projArg = args[0].get();
         if (projArg instanceof String) {

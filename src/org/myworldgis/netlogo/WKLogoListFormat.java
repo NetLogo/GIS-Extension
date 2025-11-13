@@ -14,21 +14,21 @@ import org.nlogo.api.LogoListBuilder;
 
 
 /**
- * 
+ *
  */
 public final class WKLogoListFormat {
 
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private static final WKLogoListFormat _instance = new WKLogoListFormat();
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static WKLogoListFormat getInstance () {
         return _instance;
@@ -37,19 +37,19 @@ public final class WKLogoListFormat {
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     private WKLogoListFormat () { }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public Projection parseProjection (LogoList wkList) throws ParseException {
         return ProjectionFormat.getInstance().parseProjection(parseWKT(wkList));
     }
-    
+
     /** */
     @SuppressWarnings("unchecked")
     public WKTElement parseWKT (LogoList wkList) throws ParseException {
@@ -64,12 +64,12 @@ public final class WKLogoListFormat {
         }
         return result;
     }
-    
+
     /** */
     public LogoList format (Projection proj) {
         return format(ProjectionFormat.getInstance().toWKT(proj));
     }
-    
+
     /** */
     @SuppressWarnings("unchecked")
     public LogoList format (WKTElement wkt) {

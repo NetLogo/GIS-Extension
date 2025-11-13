@@ -20,14 +20,14 @@ import org.nlogo.core.SyntaxJ;
 
 
 /**
- * 
+ *
  */
 public final class LoadCoordinateSystem extends GISExtension.Command {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Command implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "O";
@@ -39,7 +39,7 @@ public final class LoadCoordinateSystem extends GISExtension.Command {
     }
 
     /** */
-    public void performInternal (Argument args[], Context context) 
+    public void performInternal (Argument args[], Context context)
             throws ExtensionException, IOException, LogoException, ParseException {
         String filePath = args[0].getString();
         File prjFile = GISExtension.getState().getFile(filePath);

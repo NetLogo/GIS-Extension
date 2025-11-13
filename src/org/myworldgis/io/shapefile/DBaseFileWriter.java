@@ -13,7 +13,7 @@ import java.util.Date;
  * Class for writing a dBASE file.
  */
 public final class DBaseFileWriter implements DBaseConstants {
-    
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
@@ -64,7 +64,7 @@ public final class DBaseFileWriter implements DBaseConstants {
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     private void writeHeader () throws IOException {
         _headerSize = DBF_HEADER_SIZE + (DBF_FIELD_DESCRIPTOR_SIZE * _fieldDescriptors.length) + 1;
@@ -108,7 +108,7 @@ public final class DBaseFileWriter implements DBaseConstants {
     }
 
     /** */
-    public void close () throws IOException { 
+    public void close () throws IOException {
         writeHeader();
         writeFileTerminator();
         _raf.close();

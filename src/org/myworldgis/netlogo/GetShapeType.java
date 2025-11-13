@@ -13,27 +13,27 @@ import org.nlogo.core.SyntaxJ;
 
 
 /**
- * 
+ *
  */
 public final class GetShapeType extends GISExtension.Reporter {
-    
+
     //--------------------------------------------------------------------------
     // GISExtension.Reporter implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getAgentClassString() {
         return "OTPL";
     }
-    
+
     /** */
     public Syntax getSyntax() {
         return SyntaxJ.reporterSyntax(new int[] { Syntax.WildcardType() },
                                      Syntax.StringType());
     }
-    
+
     /** */
-    public Object reportInternal (Argument args[], Context context) 
+    public Object reportInternal (Argument args[], Context context)
             throws ExtensionException , LogoException {
         Object arg = args[0].get();
         if (arg instanceof VectorDataset) {

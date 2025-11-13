@@ -16,35 +16,35 @@ import org.nlogo.core.Syntax;
  * Class for reading a dBASE file.
  */
 public final class DBaseFileReader implements DBaseConstants {
-        
+
     //--------------------------------------------------------------------------
     // Instance variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     private InputStream _in;
-    
+
     /** */
     private DBaseBuffer _buffer;
-    
+
     /** */
     private DBaseFieldDescriptor[] _fieldDescriptors;
-    
+
     /** */
     private int _recordCount;
-    
+
     /** */
     private int _recordLength;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public DBaseFileReader (InputStream in) throws IOException {
         _in = in;
         _buffer = new DBaseBuffer();
-        
+
         // read the whole header
         _buffer.read(_in, 0, DBF_HEADER_SIZE_OFFSET + 2);
         int headerSize = _buffer.getShort(DBF_HEADER_SIZE_OFFSET);
@@ -59,7 +59,7 @@ public final class DBaseFileReader implements DBaseConstants {
         }
         _recordCount = _buffer.getInt(DBF_RECORD_COUNT_OFFSET);
         _recordLength = _buffer.getShort(DBF_RECORD_SIZE_OFFSET);
-        
+
         // parse the field descriptors out of the header
         List<DBaseFieldDescriptor> fieldList = new ArrayList<DBaseFieldDescriptor>();
         for (int offset = DBF_HEADER_SIZE; offset < headerSize; offset += DBF_FIELD_DESCRIPTOR_SIZE) {
@@ -72,26 +72,26 @@ public final class DBaseFileReader implements DBaseConstants {
         _fieldDescriptors = fieldList.toArray(new DBaseFieldDescriptor[fieldList.size()]);
         _buffer.ensureCapacity(_recordLength);
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public int getFieldCount () {
         return _fieldDescriptors.length;
     }
-    
+
     /** */
     public String getFieldName (int index) {
         return _fieldDescriptors[index].getName();
     }
-    
+
     /** */
     public DBaseFieldDescriptor getField (int index) {
         return _fieldDescriptors[index];
     }
-    
+
     /** */
     public int getFieldDataType (int index) {
         switch (_fieldDescriptors[index].getType()) {
@@ -103,22 +103,22 @@ public final class DBaseFileReader implements DBaseConstants {
                 return Syntax.NumberType();
             case DBaseConstants.FIELD_TYPE_LOGICAL:
                 return Syntax.BooleanType();
-            default:    
+            default:
                 return Syntax.NobodyType();
         }
     }
-    
+
     /** */
     public int getRecordCount () {
         return _recordCount;
     }
-    
+
     /** */
     public Object[] getNextRecord () throws IOException {
         _buffer.read(_in, 0, _recordLength);
         return _buffer.getRecord(0, _fieldDescriptors);
     }
-    
+
     /** */
     public void close () throws IOException {
         _in.close();

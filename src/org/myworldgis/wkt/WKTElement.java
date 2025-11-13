@@ -12,25 +12,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-/** 
- * 
+/**
+ *
  */
 public final class WKTElement {
-    
+
     //--------------------------------------------------------------------------
     // Inner classes
     //--------------------------------------------------------------------------
-    
+
     /** */
     private final String _keyword;
-    
+
     /** */
     private List<Object> _contents;
-    
+
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
-    
+
     /** */
     public WKTElement (String keyword) {
         _keyword = keyword.toUpperCase();
@@ -52,22 +52,22 @@ public final class WKTElement {
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String getKeyword () {
         return _keyword;
     }
-    
+
     /** */
     public void addContent (Object newContent) {
         _contents.add(newContent);
     }
-    
+
     /** */
     public Iterator<Object> iterator () {
         return Collections.unmodifiableCollection(_contents).iterator();
     }
-    
+
     /** */
     public Number nextNumber (boolean required) throws ParseException {
         for (Iterator<Object> iterator = _contents.iterator(); iterator.hasNext();) {
@@ -83,13 +83,13 @@ public final class WKTElement {
             return null;
         }
     }
-    
+
     /** */
     public String nextString (boolean required) throws ParseException {
         for (Iterator<Object> iterator = _contents.iterator(); iterator.hasNext();) {
             final Object object = iterator.next();
             if (object instanceof String) {
-                iterator.remove();                
+                iterator.remove();
                 return (String)object;
             }
         }

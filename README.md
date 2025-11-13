@@ -65,9 +65,9 @@ characters). If the VectorFeatures are polygons, you can also apply
 the values of a particular property of the dataset's features to
 a given patch variable.
 
-For the common use case of converting a VectorDataset of points into 
-a corresponding set of turtles with the same attributes, the 
-[gis:create-turtles-from-points](#giscreate-turtles-from-points) 
+For the common use case of converting a VectorDataset of points into
+a corresponding set of turtles with the same attributes, the
+[gis:create-turtles-from-points](#giscreate-turtles-from-points)
 primitive should be used.
 
 There are also several things you can do with a VectorFeature from a
@@ -82,12 +82,12 @@ the first and last vertex of the list will be the same. The vertex
 lists are made up of values of type Vertex, and the centroid will be
 a value of type Vertex as well.
 
-For the common use case of spawning a number of turtles inside the 
-bounds of a Polygon VectorFeature, the 
-[gis:create-turtles-inside-polygon](#giscreate-turtles-inside-polygon) 
-primitive should be used. Though the 
-[gis:random-point-inside](#gisrandom-point-inside) primitive can 
-also be used if you don't want the spawned turtles to take on 
+For the common use case of spawning a number of turtles inside the
+bounds of a Polygon VectorFeature, the
+[gis:create-turtles-inside-polygon](#giscreate-turtles-inside-polygon)
+primitive should be used. Though the
+[gis:random-point-inside](#gisrandom-point-inside) primitive can
+also be used if you don't want the spawned turtles to take on
 the attributes of the Polygon.
 
 There are a number of operations defined for RasterDatasets as well.
@@ -544,21 +544,21 @@ gis:load-dataset *file*
 ```
 
 
-Loads the given data file, re-projecting the data as necessary. 
+Loads the given data file, re-projecting the data as necessary.
 
 Relative paths are resolved relative to the location of the current
 model, or the user's home directory if the current model
 hasn't been saved yet.
 
-For ESRI shapefiles and ESRI grid files, if there is a ".prj" file 
+For ESRI shapefiles and ESRI grid files, if there is a ".prj" file
 associated with the file, then `load-datset` will consult that file
 and re-project to the current global projection if needed. If no ".prj"
 file is found, then the data is assumed to use the same projection as
 the current global coordinate system.
 
-For GeoJSON files, as per the most-recent specification (RFC 7946), 
-the coordinate system for GeoJSON files is always WGS84 and will be 
-imported accordingly. 
+For GeoJSON files, as per the most-recent specification (RFC 7946),
+the coordinate system for GeoJSON files is always WGS84 and will be
+imported accordingly.
 
 Currently, three types of data file are supported:
 
@@ -569,18 +569,18 @@ Currently, three types of data file are supported:
   contains raster data, consisting of a grid of values. When
   the target file is an ASCII grid file, `load-dataset`
   reports a RasterDataset.
-* "**.geojson**" or "**.json**" (GeoJSON): contains vector data 
-  similar to shapefiles and similarly reports a VectorDataset. 
+* "**.geojson**" or "**.json**" (GeoJSON): contains vector data
+  similar to shapefiles and similarly reports a VectorDataset.
 
-Note that not all aspects of the GeoJSON standard are supported. 
-In particular, to be properly imported, a GeoJSON file must 
-satisfy the following: 
+Note that not all aspects of the GeoJSON standard are supported.
+In particular, to be properly imported, a GeoJSON file must
+satisfy the following:
 
-* It only contain numeric or string data within the properties. 
-  all other json data will be stringified. 
+* It only contain numeric or string data within the properties.
+  all other json data will be stringified.
 * All "Features" within a "FeatureCollection" must be of the same
   shape type ("Point", "LineString", etc.) Additionally, if not all
-  the "Features" in the "FeatureCollection" have the same set of 
+  the "Features" in the "FeatureCollection" have the same set of
   property names, default values will be supplied where there
   are missing entries (0 for numbers and "" for strings.)
 * It must not use "GeometryCollection", which is not supported
@@ -600,20 +600,20 @@ gis:store-dataset *dataset* *file*
 ```
 
 
-Exports the given dataset to the given file. 
+Exports the given dataset to the given file.
 
 For VectorDatasets, two file formats are supported, ESRI shapefiles
-and GeoJSON. If the given file name ends in ".geojson" or ".json", 
+and GeoJSON. If the given file name ends in ".geojson" or ".json",
 then the file will be exported as a GeoJSON file. If the file name
 ends in any other extension or no extension at all, the dataset
 will be exported as a shapefile and the associated file extensions
 will be supplied (".shp", ".prj", etc.)
 
-For RasterDatasets, only ESRI ASCII grid files are supported and 
+For RasterDatasets, only ESRI ASCII grid files are supported and
 the associated file extensions will be automatically supplied.
 
-Relative paths are resolved relative to the location of the current 
-model, or the user's home directory if the current model hasn't 
+Relative paths are resolved relative to the location of the current
+model, or the user's home directory if the current model hasn't
 been saved yet.
 
 
@@ -753,7 +753,7 @@ gis:random-point-inside *VectorFeature*
 
 Reports a single randomly-generated Vertex that lies within the
 given feature polygon. Generated points are uniformly
-distributed within the polygon and both polygon holes and 
+distributed within the polygon and both polygon holes and
 multi-polygon features are supported.
 
 ```
@@ -788,11 +788,11 @@ gis:set-property-value *VectorFeature* *property-name* *value*
 ```
 
 
-Sets the value of the given property of the given VectorFeature. The 
+Sets the value of the given property of the given VectorFeature. The
 type of the given value (string or number) must match the property
-type of the VectorFeature. This command may be used in conjunction 
-with store-dataset to make changes to VectorFeatures and export 
-them back as GIS datasets. 
+type of the VectorFeature. This command may be used in conjunction
+with store-dataset to make changes to VectorFeatures and export
+them back as GIS datasets.
 
 
 
@@ -1038,7 +1038,7 @@ to setup
   ]
 end
 ```
-    
+
 
 
 ### `gis:create-turtles-from-points-manual`
@@ -1082,7 +1082,7 @@ to setup
   ;; Each city turtle still has a name, country, and population set just like the non-manual version.
 end
 ```
-    
+
 
 
 ### `gis:create-turtles-inside-polygon`
@@ -1140,7 +1140,7 @@ to setup
   ]
 end
 ```
-        
+
 
 
 ### `gis:create-turtles-inside-polygon-manual`
@@ -1165,7 +1165,7 @@ the rest of the mappings will be untouched.
 
 See the `create-turtles-from-points-manual` entry for an example of
 how to override default mappings with manual ones.
-      
+
 
 
 ### `gis:coverage-minimum-threshold`

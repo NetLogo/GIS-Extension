@@ -9,17 +9,17 @@ package org.myworldgis.io.shapefile;
  *
  */
 public interface ESRIShapeConstants {
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** Filename extension for spatial index files */
     public final static String SHAPE_INDEX_EXTENSION = "shx";
-    
+
     /** Filename extension for shape files */
     public static final String SHAPEFILE_EXTENSION = "shp";
-    
+
     /** A Shape File's magic number. */
     public static final int SHAPE_FILE_CODE = 9994;
 
@@ -28,7 +28,7 @@ public interface ESRIShapeConstants {
 
     /** A default record size.  Automatically increased on demand. */
     public static final int DEFAULT_BUFFER_SIZE = 50000;
-    
+
     /** The length of a shape file header in bytes.  (100) */
     public static final int SHAPE_FILE_HEADER_LENGTH = 100;
 

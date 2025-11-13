@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.Locale;
 
 
-/** 
- * 
+/**
+ *
  */
 public final class WKTFormat extends Format {
 
     //--------------------------------------------------------------------------
     // Class variables
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(Locale.US);
     static {
@@ -32,22 +32,22 @@ public final class WKTFormat extends Format {
         NUMBER_FORMAT.setMinimumFractionDigits(1);
         NUMBER_FORMAT.setMaximumFractionDigits(12);
     }
-    
+
     /** */
     static final long serialVersionUID = 1L;
-    
+
     /** */
     private static final WKTFormat _instance = new WKTFormat();
-    
+
     /** */
     private static final String OPEN_BRACKETS = "[(";
-    
+
     /** */
     private static final String QUOTE = "\"";
-    
+
     /** */
     private static final String CLOSE_BRACKETS = "])";
-    
+
     /** */
     private static final String SEPARATORS;
     static {
@@ -58,16 +58,16 @@ public final class WKTFormat extends Format {
                 SEPARATORS = ";,";
             } else {
                 SEPARATORS = ",;";
-            }   
+            }
         } else {
             SEPARATORS = ",;";
         }
     }
-    
+
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public static WKTFormat getInstance () {
         return _instance;
@@ -87,11 +87,11 @@ public final class WKTFormat extends Format {
         position.setIndex(index);
         return separatorIndex;
     }
-    
+
     //--------------------------------------------------------------------------
     // Instance methods
     //--------------------------------------------------------------------------
-    
+
     /** */
     public String formatWKT (WKTElement wkt) {
         StringBuffer str = new StringBuffer();
@@ -111,7 +111,7 @@ public final class WKTFormat extends Format {
                     NUMBER_FORMAT.format(obj, str, new FieldPosition(0));
                 } else {
                     throw new IllegalArgumentException("unexpected type " +obj.getClass().getName());
-                }   
+                }
                 if (iterator.hasNext()) {
                     str.append(SEPARATORS.charAt(0));
                 }
@@ -120,7 +120,7 @@ public final class WKTFormat extends Format {
         }
         return str.toString();
     }
-    
+
     /** */
     public WKTElement parseWKT (String text, ParsePosition pos) throws ParseException {
         int keywordStart = pos.getIndex();
@@ -175,26 +175,26 @@ public final class WKTFormat extends Format {
             }
             // Otherwise, recursively parse the child element.
             contents.add(parseWKT(text, pos));
-            
+
         } while (parseOptionalSeparator(text, pos, SEPARATORS) >= 0);
         int closeBracketType = parseOptionalSeparator(text, pos, CLOSE_BRACKETS);
         if (closeBracketType == openBracketType) {
             return new WKTElement(keyword, contents);
         } else {
             throw new ParseException("invalid close bracket at position "+pos.getIndex()+" of '"+text+"'", pos.getIndex());
-        } 
+        }
     }
-    
+
     //--------------------------------------------------------------------------
     // Format implementation
     //--------------------------------------------------------------------------
-    
+
     /** */
     public StringBuffer format (Object obj, StringBuffer buf, FieldPosition pos) {
         buf.append(formatWKT((WKTElement)obj));
         return buf;
     }
-    
+
     /** */
     public Object parseObject (String str, ParsePosition pos) {
         try {
