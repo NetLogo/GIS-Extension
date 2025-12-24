@@ -109,6 +109,7 @@ public abstract class Painting extends GISExtension.Command {
             } finally {
                 g.dispose();
             }
+            context.workspace().syncDrawing(drawing);
         }
 
         protected abstract void paint (Geometry geom, Graphics2D g, double thickness);
@@ -228,6 +229,7 @@ public abstract class Painting extends GISExtension.Command {
             } finally {
                 g.dispose();
             }
+            context.workspace().syncDrawing(drawing);
         }
     }
 
