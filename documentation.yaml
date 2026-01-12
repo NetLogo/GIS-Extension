@@ -1266,7 +1266,7 @@
   "description": |-
     Randomly create "n" turtles of the given breed within
     the given VectorFeature and for each agent variable
-    (as defined in <breeds>-own), if there is a property with the same
+    (as defined in `<breeds>-own`), if there is a property with the same
     name in the dataset, set that variable's value to be the value of
     that property. Finally, execute any commands in the optional
     command block. To use generic turtles as the chosen breed, simply
@@ -1666,9 +1666,7 @@
 
 
     For example, the two polygons x and y shown here:
-    <center>
-      <img alt="" src="images/intersecting-polygons.png">
-    </center>
+    <img alt="" src="images/intersecting-polygons.png">
 
     have the following DE-9IM matrix:
     <table width="50%" border="1" style="text-align: center; margin: 0 auto;" align="center">
