@@ -31,7 +31,7 @@ extension will assume that the dataset already uses the current
 projection, regardless of what that projection is.
 
 Once the coordinate system is defined, you can load datasets using
-[gis:load-dataset](#gisload-dataset). This primitive
+[gis:load-dataset](https://docs.netlogo.org/gis#load-dataset). This primitive
 reports either a VectorDataset or a RasterDataset, depending on what
 type of file you pass it.
 
@@ -54,7 +54,7 @@ a given patch variable.
 
 For the common use case of converting a VectorDataset of points into
 a corresponding set of turtles with the same attributes, the
-[gis:create-turtles-from-points](#giscreate-turtles-from-points)
+[gis:create-turtles-from-points](https://docs.netlogo.org/gis#create-turtles-from-points)
 primitive should be used.
 
 There are also several things you can do with a VectorFeature from a
@@ -71,9 +71,9 @@ a value of type Vertex as well.
 
 For the common use case of spawning a number of turtles inside the
 bounds of a Polygon VectorFeature, the
-[gis:create-turtles-inside-polygon](#giscreate-turtles-inside-polygon)
+[gis:create-turtles-inside-polygon](https://docs.netlogo.org/gis#create-turtles-inside-polygon)
 primitive should be used. Though the
-[gis:random-point-inside](#gisrandom-point-inside) primitive can
+[gis:random-point-inside](https://docs.netlogo.org/gis#random-point-inside) primitive can
 also be used if you don't want the spawned turtles to take on
 the attributes of the Polygon.
 

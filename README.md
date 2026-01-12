@@ -44,7 +44,7 @@ extension will assume that the dataset already uses the current
 projection, regardless of what that projection is.
 
 Once the coordinate system is defined, you can load datasets using
-[gis:load-dataset](#gisload-dataset). This primitive
+[gis:load-dataset](https://docs.netlogo.org/gis#load-dataset). This primitive
 reports either a VectorDataset or a RasterDataset, depending on what
 type of file you pass it.
 
@@ -67,7 +67,7 @@ a given patch variable.
 
 For the common use case of converting a VectorDataset of points into
 a corresponding set of turtles with the same attributes, the
-[gis:create-turtles-from-points](#giscreate-turtles-from-points)
+[gis:create-turtles-from-points](https://docs.netlogo.org/gis#create-turtles-from-points)
 primitive should be used.
 
 There are also several things you can do with a VectorFeature from a
@@ -84,9 +84,9 @@ a value of type Vertex as well.
 
 For the common use case of spawning a number of turtles inside the
 bounds of a Polygon VectorFeature, the
-[gis:create-turtles-inside-polygon](#giscreate-turtles-inside-polygon)
+[gis:create-turtles-inside-polygon](https://docs.netlogo.org/gis#create-turtles-inside-polygon)
 primitive should be used. Though the
-[gis:random-point-inside](#gisrandom-point-inside) primitive can
+[gis:random-point-inside](https://docs.netlogo.org/gis#random-point-inside) primitive can
 also be used if you don't want the spawned turtles to take on
 the attributes of the Polygon.
 
@@ -139,86 +139,86 @@ and comments at the
 
 ### RasterDataset Primitives
 
-[`gis:width-of`](#giswidth-of)
-[`gis:height-of`](#gisheight-of)
-[`gis:raster-value`](#gisraster-value)
-[`gis:set-raster-value`](#gisset-raster-value)
-[`gis:minimum-of`](#gisminimum-of)
-[`gis:maximum-of`](#gismaximum-of)
-[`gis:sampling-method-of`](#gissampling-method-of)
-[`gis:set-sampling-method`](#gisset-sampling-method)
-[`gis:raster-sample`](#gisraster-sample)
-[`gis:raster-world-envelope`](#gisraster-world-envelope)
-[`gis:create-raster`](#giscreate-raster)
-[`gis:resample`](#gisresample)
-[`gis:convolve`](#gisconvolve)
-[`gis:apply-raster`](#gisapply-raster)
+[`gis:width-of`](https://docs.netlogo.org/gis#width-of)
+[`gis:height-of`](https://docs.netlogo.org/gis#height-of)
+[`gis:raster-value`](https://docs.netlogo.org/gis#raster-value)
+[`gis:set-raster-value`](https://docs.netlogo.org/gis#set-raster-value)
+[`gis:minimum-of`](https://docs.netlogo.org/gis#minimum-of)
+[`gis:maximum-of`](https://docs.netlogo.org/gis#maximum-of)
+[`gis:sampling-method-of`](https://docs.netlogo.org/gis#sampling-method-of)
+[`gis:set-sampling-method`](https://docs.netlogo.org/gis#set-sampling-method)
+[`gis:raster-sample`](https://docs.netlogo.org/gis#raster-sample)
+[`gis:raster-world-envelope`](https://docs.netlogo.org/gis#raster-world-envelope)
+[`gis:create-raster`](https://docs.netlogo.org/gis#create-raster)
+[`gis:resample`](https://docs.netlogo.org/gis#resample)
+[`gis:convolve`](https://docs.netlogo.org/gis#convolve)
+[`gis:apply-raster`](https://docs.netlogo.org/gis#apply-raster)
 
 ### Dataset Primitives
 
-[`gis:load-dataset`](#gisload-dataset)
-[`gis:store-dataset`](#gisstore-dataset)
-[`gis:type-of`](#gistype-of)
-[`gis:patch-dataset`](#gispatch-dataset)
-[`gis:turtle-dataset`](#gisturtle-dataset)
-[`gis:link-dataset`](#gislink-dataset)
+[`gis:load-dataset`](https://docs.netlogo.org/gis#load-dataset)
+[`gis:store-dataset`](https://docs.netlogo.org/gis#store-dataset)
+[`gis:type-of`](https://docs.netlogo.org/gis#type-of)
+[`gis:patch-dataset`](https://docs.netlogo.org/gis#patch-dataset)
+[`gis:turtle-dataset`](https://docs.netlogo.org/gis#turtle-dataset)
+[`gis:link-dataset`](https://docs.netlogo.org/gis#link-dataset)
 
 ### VectorDataset Primitives
 
-[`gis:shape-type-of`](#gisshape-type-of)
-[`gis:property-names`](#gisproperty-names)
-[`gis:feature-list-of`](#gisfeature-list-of)
-[`gis:vertex-lists-of`](#gisvertex-lists-of)
-[`gis:centroid-of`](#giscentroid-of)
-[`gis:random-point-inside`](#gisrandom-point-inside)
-[`gis:location-of`](#gislocation-of)
-[`gis:set-property-value`](#gisset-property-value)
-[`gis:property-value`](#gisproperty-value)
-[`gis:find-features`](#gisfind-features)
-[`gis:find-one-feature`](#gisfind-one-feature)
-[`gis:find-less-than`](#gisfind-less-than)
-[`gis:find-greater-than`](#gisfind-greater-than)
-[`gis:find-range`](#gisfind-range)
-[`gis:property-minimum`](#gisproperty-minimum)
-[`gis:property-maximum`](#gisproperty-maximum)
-[`gis:apply-coverage`](#gisapply-coverage)
-[`gis:create-turtles-from-points`](#giscreate-turtles-from-points)
-[`gis:create-turtles-from-points-manual`](#giscreate-turtles-from-points-manual)
-[`gis:create-turtles-inside-polygon`](#giscreate-turtles-inside-polygon)
-[`gis:create-turtles-inside-polygon-manual`](#giscreate-turtles-inside-polygon-manual)
-[`gis:coverage-minimum-threshold`](#giscoverage-minimum-threshold)
-[`gis:set-coverage-minimum-threshold`](#gisset-coverage-minimum-threshold)
-[`gis:coverage-maximum-threshold`](#giscoverage-maximum-threshold)
-[`gis:set-coverage-maximum-threshold`](#gisset-coverage-maximum-threshold)
-[`gis:intersects?`](#gisintersects?)
-[`gis:contains?`](#giscontains?)
-[`gis:contained-by?`](#giscontained-by?)
-[`gis:have-relationship?`](#gishave-relationship?)
-[`gis:relationship-of`](#gisrelationship-of)
-[`gis:intersecting`](#gisintersecting)
+[`gis:shape-type-of`](https://docs.netlogo.org/gis#shape-type-of)
+[`gis:property-names`](https://docs.netlogo.org/gis#property-names)
+[`gis:feature-list-of`](https://docs.netlogo.org/gis#feature-list-of)
+[`gis:vertex-lists-of`](https://docs.netlogo.org/gis#vertex-lists-of)
+[`gis:centroid-of`](https://docs.netlogo.org/gis#centroid-of)
+[`gis:random-point-inside`](https://docs.netlogo.org/gis#random-point-inside)
+[`gis:location-of`](https://docs.netlogo.org/gis#location-of)
+[`gis:set-property-value`](https://docs.netlogo.org/gis#set-property-value)
+[`gis:property-value`](https://docs.netlogo.org/gis#property-value)
+[`gis:find-features`](https://docs.netlogo.org/gis#find-features)
+[`gis:find-one-feature`](https://docs.netlogo.org/gis#find-one-feature)
+[`gis:find-less-than`](https://docs.netlogo.org/gis#find-less-than)
+[`gis:find-greater-than`](https://docs.netlogo.org/gis#find-greater-than)
+[`gis:find-range`](https://docs.netlogo.org/gis#find-range)
+[`gis:property-minimum`](https://docs.netlogo.org/gis#property-minimum)
+[`gis:property-maximum`](https://docs.netlogo.org/gis#property-maximum)
+[`gis:apply-coverage`](https://docs.netlogo.org/gis#apply-coverage)
+[`gis:create-turtles-from-points`](https://docs.netlogo.org/gis#create-turtles-from-points)
+[`gis:create-turtles-from-points-manual`](https://docs.netlogo.org/gis#create-turtles-from-points-manual)
+[`gis:create-turtles-inside-polygon`](https://docs.netlogo.org/gis#create-turtles-inside-polygon)
+[`gis:create-turtles-inside-polygon-manual`](https://docs.netlogo.org/gis#create-turtles-inside-polygon-manual)
+[`gis:coverage-minimum-threshold`](https://docs.netlogo.org/gis#coverage-minimum-threshold)
+[`gis:set-coverage-minimum-threshold`](https://docs.netlogo.org/gis#set-coverage-minimum-threshold)
+[`gis:coverage-maximum-threshold`](https://docs.netlogo.org/gis#coverage-maximum-threshold)
+[`gis:set-coverage-maximum-threshold`](https://docs.netlogo.org/gis#set-coverage-maximum-threshold)
+[`gis:intersects?`](https://docs.netlogo.org/gis#intersects?)
+[`gis:contains?`](https://docs.netlogo.org/gis#contains?)
+[`gis:contained-by?`](https://docs.netlogo.org/gis#contained-by?)
+[`gis:have-relationship?`](https://docs.netlogo.org/gis#have-relationship?)
+[`gis:relationship-of`](https://docs.netlogo.org/gis#relationship-of)
+[`gis:intersecting`](https://docs.netlogo.org/gis#intersecting)
 
 ### Coordinate System Primitives
 
-[`gis:set-transformation`](#gisset-transformation)
-[`gis:set-transformation-ds`](#gisset-transformation-ds)
-[`gis:set-world-envelope`](#gisset-world-envelope)
-[`gis:set-world-envelope-ds`](#gisset-world-envelope-ds)
-[`gis:world-envelope`](#gisworld-envelope)
-[`gis:envelope-of`](#gisenvelope-of)
-[`gis:envelope-union-of`](#gisenvelope-union-of)
-[`gis:load-coordinate-system`](#gisload-coordinate-system)
-[`gis:set-coordinate-system`](#gisset-coordinate-system)
-[`gis:project-lat-lon`](#gisproject-lat-lon)
-[`gis:project-lat-lon-from-ellipsoid`](#gisproject-lat-lon-from-ellipsoid)
+[`gis:set-transformation`](https://docs.netlogo.org/gis#set-transformation)
+[`gis:set-transformation-ds`](https://docs.netlogo.org/gis#set-transformation-ds)
+[`gis:set-world-envelope`](https://docs.netlogo.org/gis#set-world-envelope)
+[`gis:set-world-envelope-ds`](https://docs.netlogo.org/gis#set-world-envelope-ds)
+[`gis:world-envelope`](https://docs.netlogo.org/gis#world-envelope)
+[`gis:envelope-of`](https://docs.netlogo.org/gis#envelope-of)
+[`gis:envelope-union-of`](https://docs.netlogo.org/gis#envelope-union-of)
+[`gis:load-coordinate-system`](https://docs.netlogo.org/gis#load-coordinate-system)
+[`gis:set-coordinate-system`](https://docs.netlogo.org/gis#set-coordinate-system)
+[`gis:project-lat-lon`](https://docs.netlogo.org/gis#project-lat-lon)
+[`gis:project-lat-lon-from-ellipsoid`](https://docs.netlogo.org/gis#project-lat-lon-from-ellipsoid)
 
 ### Drawing Primitives
 
-[`gis:drawing-color`](#gisdrawing-color)
-[`gis:set-drawing-color`](#gisset-drawing-color)
-[`gis:draw`](#gisdraw)
-[`gis:fill`](#gisfill)
-[`gis:paint`](#gispaint)
-[`gis:import-wms-drawing`](#gisimport-wms-drawing)
+[`gis:drawing-color`](https://docs.netlogo.org/gis#drawing-color)
+[`gis:set-drawing-color`](https://docs.netlogo.org/gis#set-drawing-color)
+[`gis:draw`](https://docs.netlogo.org/gis#draw)
+[`gis:fill`](https://docs.netlogo.org/gis#fill)
+[`gis:paint`](https://docs.netlogo.org/gis#paint)
+[`gis:import-wms-drawing`](https://docs.netlogo.org/gis#import-wms-drawing)
 
 
 
@@ -252,7 +252,7 @@ regardless of the current dimensions of the NetLogo world:
 ```
 
 However, if you're setting the envelope of the NetLogo world,
-you should probably be using [set-world-envelope](#gisset-world-envelope).
+you should probably be using [set-world-envelope](https://docs.netlogo.org/gis#set-world-envelope).
 
 
 
@@ -263,14 +263,14 @@ gis:set-transformation-ds *gis-envelope* *netlogo-envelope*
 ```
 
 
-Does the same thing as [set-transformation](#gisset-transformation) above, except that
+Does the same thing as [set-transformation](https://docs.netlogo.org/gis#set-transformation) above, except that
 it allows the scale for mapping the range of x values to be
 different than the scale for y values. The "-ds" on the
 end stands for "different scales". Using different scales
 will cause distortion of the shape of GIS features, and so it is
 generally not recommended, but it may be useful for some models.
 
-Here is an example of the difference between [set-transformation](#gisset-transformation) and [set-transformation-ds](#gisset-transformation-ds):
+Here is an example of the difference between [set-transformation](https://docs.netlogo.org/gis#set-transformation) and [set-transformation-ds](https://docs.netlogo.org/gis#set-transformation-ds):
 
 <table width="80%" border="1" rules="cols" style="border-collaps: separate; border-spacing: 4px; text-align: center; margin: 0 auto;">
 <tr>
@@ -280,11 +280,11 @@ Here is an example of the difference between [set-transformation](#gisset-transf
     <img alt="" src="images/set-transformation-ds.png" width="200">
   <tr>
   <td style="padding: 8px">
-    Using [set-transformation](#gisset-transformation),
+    Using [set-transformation](https://docs.netlogo.org/gis#set-transformation),
     the scale along the x and y axis is the same, preserving the
     round shape of the Earth in this Orthographic projection.
   <td style="padding: 8px">
-    Using [set-transformation-ds](#gisset-transformation-ds), the
+    Using [set-transformation-ds](https://docs.netlogo.org/gis#set-transformation-ds), the
     scale along the x axis is stretched so that the earth covers
     the entire NetLogo View, which in this case distorts the shape
     of the Earth.
@@ -458,7 +458,7 @@ associated brackets and putting quotes around it. The latter is
 preferred because it makes the code much more readable.
 
 The same limitations on WKT support apply as described above in the
-documentation for [load-coordinate-system](#gisload-coordinate-system)
+documentation for [load-coordinate-system](https://docs.netlogo.org/gis#load-coordinate-system)
 
 
 
@@ -636,7 +636,7 @@ gis:patch-dataset *patch-variable*
 
 Reports a new raster whose cells correspond directly to NetLogo
 patches, and whose cell values consist of the values of the given
-patch variable. This primitive is basically the inverse of [apply-raster](#gisapply-raster);
+patch variable. This primitive is basically the inverse of [apply-raster](https://docs.netlogo.org/gis#apply-raster);
 `apply-raster` copies values from a raster dataset to a patch variable, while this
 primitive copies values from a patch variable to a raster dataset.
 
@@ -694,7 +694,7 @@ gis:property-names *VectorDataset*
 
 Reports a list of strings where each string is the name of a
 property possessed by each VectorFeature in the given
-VectorDataset, suitable for use in [gis:property-value](#gisproperty-value).
+VectorDataset, suitable for use in [gis:property-value](https://docs.netlogo.org/gis#property-value).
 
 
 
@@ -1174,7 +1174,7 @@ how to override default mappings with manual ones.
 gis:coverage-minimum-threshold
 ```
 
-Reports the current coverage minimum threshold used by [gis:apply-coverage](#gisapply-coverage).
+Reports the current coverage minimum threshold used by [gis:apply-coverage](https://docs.netlogo.org/gis#apply-coverage).
 
 
 ### `gis:set-coverage-minimum-threshold`
@@ -1183,7 +1183,7 @@ Reports the current coverage minimum threshold used by [gis:apply-coverage](#gis
 gis:set-coverage-minimum-threshold *new-threshold*
 ```
 
-Sets the current coverage minimum threshold to be used by [gis:apply-coverage](#gisapply-coverage).
+Sets the current coverage minimum threshold to be used by [gis:apply-coverage](https://docs.netlogo.org/gis#apply-coverage).
 
 
 ### `gis:coverage-maximum-threshold`
@@ -1192,7 +1192,7 @@ Sets the current coverage minimum threshold to be used by [gis:apply-coverage](#
 gis:coverage-maximum-threshold
 ```
 
-Reports the current coverage maximum threshold used by [gis:apply-coverage](#gisapply-coverage).
+Reports the current coverage maximum threshold used by [gis:apply-coverage](https://docs.netlogo.org/gis#apply-coverage).
 
 
 ### `gis:set-coverage-maximum-threshold`
@@ -1201,7 +1201,7 @@ Reports the current coverage maximum threshold used by [gis:apply-coverage](#gis
 gis:set-coverage-maximum-threshold *new-threshold*
 ```
 
-Sets the current coverage maximum threshold to be used by [gis:apply-coverage](#gisapply-coverage).
+Sets the current coverage maximum threshold to be used by [gis:apply-coverage](https://docs.netlogo.org/gis#apply-coverage).
 
 
 ### `gis:intersects?`
@@ -1555,8 +1555,8 @@ gis:sampling-method-of *RasterDataset*
 Reports the sampling method used to compute the value of the given
 raster dataset at a single point, or over an area smaller than a
 single raster cell. Sampling is performed by the GIS extension
-primitives [raster-sample](#gisraster-sample), [resample](#gisresample), [convolve](#gisconvolve),
-and [apply-raster](#gisapply-raster). The sampling
+primitives [raster-sample](https://docs.netlogo.org/gis#raster-sample), [resample](https://docs.netlogo.org/gis#resample), [convolve](https://docs.netlogo.org/gis#convolve),
+and [apply-raster](https://docs.netlogo.org/gis#apply-raster). The sampling
 method will be one of the following:
 
 * `"NEAREST_NEIGHBOR"`: the value of the cell
@@ -1590,8 +1590,8 @@ gis:set-sampling-method *RasterDataset* *sampling-method*
 
 Sets the sampling method used by the given raster dataset at a
 single point, or over an area smaller than a single raster cell.
-Sampling is performed by the GIS extension primitives [raster-sample](#gisraster-sample), [resample](#gisresample), [convolve](#gisconvolve),
-and [apply-raster](#gisapply-raster). The sampling
+Sampling is performed by the GIS extension primitives [raster-sample](https://docs.netlogo.org/gis#raster-sample), [resample](https://docs.netlogo.org/gis#resample), [convolve](https://docs.netlogo.org/gis#convolve),
+and [apply-raster](https://docs.netlogo.org/gis#apply-raster). The sampling
 method must be one of the following:
 
 *  `"NEAREST_NEIGHBOR"`
@@ -1599,7 +1599,7 @@ method must be one of the following:
 *  `"BICUBIC"`
 *  `"BICUBIC_2"`
 
-See [sampling-method-of](#gissampling-method-of) above
+See [sampling-method-of](https://docs.netlogo.org/gis#sampling-method-of) above
 for a more specific description of each sampling method.
 
 
@@ -1616,10 +1616,10 @@ location may be any of the following:
 
 * A list of length 2, which is taken to represent a point in
   netlogo space (`[xcor ycor]`) of the sort reported by
-  [location-of](#gislocation-of) Vertex. The raster
+  [location-of](https://docs.netlogo.org/gis#location-of) Vertex. The raster
   dataset is sampled at the point of that location.
 * A list of length 4, which is taken to represent an envelope in
-  GIS space, of the sort reported by [envelope-of](#gisenvelope-of). The raster dataset is sampled
+  GIS space, of the sort reported by [envelope-of](https://docs.netlogo.org/gis#envelope-of). The raster dataset is sampled
   over the area of that envelope.
 * A patch, in which case the raster dataset is sampled over the
   area of the patch.
@@ -1648,7 +1648,7 @@ ifelse (value <= 0) or (value >= 0)
 ```
 
 If the requested location is a point, the sample is always computed
-using the method set by [set-sampling-method](#gisset-sampling-method). If the
+using the method set by [set-sampling-method](https://docs.netlogo.org/gis#set-sampling-method). If the
 requested location is an area (i.e., an envelope or patch), the
 sample is computed by taking the average of all raster cells
 covered by the requested area.
@@ -1664,7 +1664,7 @@ gis:raster-world-envelope *RasterDataset* *x* *y*
 
 Reports the GIS envelope needed to match the boundaries of NetLogo
 patches with the boundaries of cells in the given raster dataset.
-This envelope could then be used as an argument to [set-transformation-ds](#gisset-transformation-ds).
+This envelope could then be used as an argument to [set-transformation-ds](https://docs.netlogo.org/gis#set-transformation-ds).
 
 There may be more cells in the dataset than there are patches in
 the NetLogo world. In that case, you will need to select a subset
@@ -1699,7 +1699,7 @@ Reports a new dataset that consists of the given RasterDataset
 resampled to cover the given envelope and to contain the given
 number of columns and rows. If the new raster's cells are
 smaller than the existing raster's cells, they will be
-resampled using the method set by [set-sampling-method](#gisset-sampling-method). If the new
+resampled using the method set by [set-sampling-method](https://docs.netlogo.org/gis#set-sampling-method). If the new
 cells are larger than the original cells, they will be sampled
 using the `"NEAREST_NEIGHBOR"` method.
 
@@ -1763,11 +1763,11 @@ gis:apply-raster *RasterDataset* *patch-variable*
 Copies values from the given raster dataset to the given patch
 variable, resampling the raster as necessary so that its cell
 boundaries match up with NetLogo patch boundaries. This resampling
-is done as if using [resample](#gisresample) rather
-than [raster-sample](#gisraster-sample), for the sake
+is done as if using [resample](https://docs.netlogo.org/gis#resample) rather
+than [raster-sample](https://docs.netlogo.org/gis#raster-sample), for the sake
 of efficiency. However, patches not covered by the raster are
 assigned values of "not a number" in the same way that
-[raster-sample](#gisraster-sample) reports values for
+[raster-sample](https://docs.netlogo.org/gis#raster-sample) reports values for
 locations outside the raster.
 
 
