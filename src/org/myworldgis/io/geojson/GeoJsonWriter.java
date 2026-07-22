@@ -28,14 +28,23 @@ public class GeoJsonWriter implements GeoJsonConstants {
     private JSONArray features;
 
     public GeoJsonWriter(RandomAccessFile file, VectorDataset dataset) throws IOException {
+        this(dataset);
         this.file = file;
+        writeToFile();
+    }
+
+    public GeoJsonWriter(VectorDataset dataset) throws IOException {
         this.dataset = dataset;
         this.root = new JSONObject();
         this.features = new JSONArray();
 
         setupJsonObject();
         processVectorFeatures();
-        writeToFile();
+        this.root.put("features", this.features);
+    }
+
+    public String getJsonString() {
+        return root.toJSONString();
     }
 
     private void setupJsonObject() {
@@ -65,9 +74,8 @@ public class GeoJsonWriter implements GeoJsonConstants {
     }
 
     private void writeToFile() throws IOException {
-        root.put("features", this.features);
         this.file.setLength(0);
-        this.file.writeBytes(root.toJSONString());
+        this.file.writeBytes(getJsonString());
     }
 
     private JSONObject createGeometryObject(Geometry geom) {

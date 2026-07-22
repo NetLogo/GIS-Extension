@@ -34,7 +34,7 @@ public final class LoadDatasetFromString extends GISExtension.Reporter {
     //--------------------------------------------------------------------------
 
     /** */
-    private static String normalizeFormat (String format) {
+    static String normalizeFormat (String format) {
         String result = format.trim().toLowerCase(Locale.ENGLISH);
         if (result.startsWith(".")) {
             result = result.substring(1);

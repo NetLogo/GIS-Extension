@@ -8,7 +8,7 @@ import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import org.myworldgis.io.RandomAccessSink;
 import org.ngs.ngunits.UnitConverter;
 
 
@@ -22,7 +22,7 @@ public final class ESRIShapefileWriter implements ESRIShapeConstants {
     //--------------------------------------------------------------------------
 
     /** */
-    private RandomAccessFile _raf;
+    private RandomAccessSink _raf;
 
     /** */
     private ESRIShapeBuffer _buffer;
@@ -41,7 +41,7 @@ public final class ESRIShapefileWriter implements ESRIShapeConstants {
     //--------------------------------------------------------------------------
 
     /** */
-    public ESRIShapefileWriter (RandomAccessFile file,
+    public ESRIShapefileWriter (RandomAccessSink file,
                                 Envelope envelope,
                                 int esriShapeType,
                                 UnitConverter outputConverter,

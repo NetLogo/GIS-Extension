@@ -5,8 +5,8 @@
 package org.myworldgis.io.shapefile;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.Date;
+import org.myworldgis.io.RandomAccessSink;
 
 
 /**
@@ -19,7 +19,7 @@ public final class DBaseFileWriter implements DBaseConstants {
     //--------------------------------------------------------------------------
 
     /** */
-    private RandomAccessFile _raf;
+    private RandomAccessSink _raf;
 
     /** */
     private DBaseBuffer _buffer;
@@ -41,7 +41,7 @@ public final class DBaseFileWriter implements DBaseConstants {
     //--------------------------------------------------------------------------
 
     /** */
-    public DBaseFileWriter (RandomAccessFile file, DBaseFieldDescriptor[] fieldDescriptors) throws IOException {
+    public DBaseFileWriter (RandomAccessSink file, DBaseFieldDescriptor[] fieldDescriptors) throws IOException {
         _raf = file;
         _buffer = new DBaseBuffer();
         String[] fieldNames = new String[fieldDescriptors.length];

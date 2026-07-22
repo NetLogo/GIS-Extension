@@ -117,6 +117,8 @@ public final class GISExtension extends DefaultClassManager {
         primitiveManager.addPrimitive("load-dataset", new LoadDataset());
         primitiveManager.addPrimitive("load-dataset-from-string", new LoadDatasetFromString());
         primitiveManager.addPrimitive("store-dataset", new StoreDataset());
+        primitiveManager.addPrimitive("store-dataset-to-string", new StoreDatasetToString());
+        primitiveManager.addPrimitive("store-dataset-to-strings", new StoreDatasetToStrings());
         primitiveManager.addPrimitive("type-of", new Dataset.GetDatasetType());
         primitiveManager.addPrimitive("patch-dataset", new PatchDataset());
         primitiveManager.addPrimitive("turtle-dataset", new TurtleDataset());

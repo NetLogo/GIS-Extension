@@ -8,8 +8,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.Iterator;
+import org.myworldgis.io.FileRandomAccessSink;
+import org.myworldgis.io.RandomAccessSink;
 import org.myworldgis.io.asciigrid.AsciiGridFileWriter;
 import org.myworldgis.io.geojson.GeoJsonWriter;
 import org.myworldgis.io.shapefile.DBaseBuffer;
@@ -43,7 +46,14 @@ public final class StoreDataset extends GISExtension.Command {
     private static String storeAsciiGrid (RasterDataset dataset, String file)
             throws IOException {
         String ascFile = StringUtils.changeFileExtension(file, AsciiGridFileWriter.ASCII_GRID_FILE_EXTENSION_1);
-        AsciiGridFileWriter asc = new AsciiGridFileWriter(new FileWriter(new File(ascFile)));
+        storeAsciiGrid(dataset, new FileWriter(new File(ascFile)));
+        return ascFile;
+    }
+
+    /** */
+    static void storeAsciiGrid (RasterDataset dataset, Writer out)
+            throws IOException {
+        AsciiGridFileWriter asc = new AsciiGridFileWriter(out);
         try {
             GridDimensions dimensions = dataset.getDimensions();
             asc.writeGridInfo(dimensions.getGridSize(), dimensions.getEnvelope(), Double.NaN);
@@ -51,7 +61,6 @@ public final class StoreDataset extends GISExtension.Command {
         } finally {
             asc.close();
         }
-        return ascFile;
     }
 
 
@@ -61,17 +70,30 @@ public final class StoreDataset extends GISExtension.Command {
         String shpFile = StringUtils.changeFileExtension(file, ESRIShapefileWriter.SHAPEFILE_EXTENSION);
         String shxFile = StringUtils.changeFileExtension(file, ESRIShapeIndexWriter.SHAPE_INDEX_EXTENSION);
         String dbfFile = StringUtils.changeFileExtension(file, DBaseFileWriter.DBASE_FILE_EXTENSION);
-        ESRIShapefileWriter shp = new ESRIShapefileWriter(new RandomAccessFile(shpFile, "rw"),
+        storeShapefile(dataset,
+                       new FileRandomAccessSink(new RandomAccessFile(shpFile, "rw")),
+                       new FileRandomAccessSink(new RandomAccessFile(shxFile, "rw")),
+                       new FileRandomAccessSink(new RandomAccessFile(dbfFile, "rw")));
+        return shpFile;
+    }
+
+    /** */
+    static void storeShapefile (VectorDataset dataset,
+                                RandomAccessSink shpSink,
+                                RandomAccessSink shxSink,
+                                RandomAccessSink dbfSink)
+            throws IOException {
+        ESRIShapefileWriter shp = new ESRIShapefileWriter(shpSink,
                                                           dataset.getEnvelope(),
                                                           esriShapeType(dataset),
                                                           AbstractUnitConverter.IDENTITY,
                                                           GISExtension.getState().factory());
-        ESRIShapeIndexWriter shx = new ESRIShapeIndexWriter(new RandomAccessFile(shxFile, "rw"),
+        ESRIShapeIndexWriter shx = new ESRIShapeIndexWriter(shxSink,
                                                             dataset.getEnvelope(),
                                                             esriShapeType(dataset),
                                                             AbstractUnitConverter.IDENTITY,
                                                             GISExtension.getState().factory());
-        DBaseFileWriter dbf = new DBaseFileWriter(new RandomAccessFile(dbfFile, "rw"),
+        DBaseFileWriter dbf = new DBaseFileWriter(dbfSink,
                                                   dBaseFieldDescriptors(dataset));
         try {
             int recordIndex = 0;
@@ -97,7 +119,6 @@ public final class StoreDataset extends GISExtension.Command {
                 dbf.close();
             }
         }
-        return shpFile;
     }
 
 
