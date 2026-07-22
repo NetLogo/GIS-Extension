@@ -5,13 +5,13 @@ version := "1.6.0"
 isSnapshot := true
 
 Compile / javaSource := baseDirectory.value / "src" / "org"
-javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xlint:-path", "-encoding", "us-ascii", "--release", "11")
+javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xlint:-path", "-encoding", "us-ascii", "--release", "21")
 
 scalaVersion := "3.7.0"
 Test / scalaSource := baseDirectory.value / "src" / "test"
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-feature", "-encoding", "us-ascii", "-release", "11")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-feature", "-encoding", "us-ascii", "-release", "21")
 
-netLogoVersion      := "7.0.4-dd5baf4"
+netLogoVersion      := "7.1.0-internal1"
 netLogoClassManager := "org.myworldgis.netlogo.GISExtension"
 netLogoTestExtras += (baseDirectory.value / "examples")
 
