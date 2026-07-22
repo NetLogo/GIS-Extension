@@ -520,6 +520,59 @@
     with [[gis:property-value|gis#property-value]] like any other property. Any Z
     information for other shape types will be discarded upon import.
 - "name": |-
+    load-dataset-from-string
+  "type": |-
+    reporter
+  "reports": |-
+    Vector or raster dataset
+  "tags":
+  - |-
+    data
+  "arguments":
+  - "name": |-
+      format
+    "type": |-
+      string
+  - "name": |-
+      data
+    "type": |-
+      string or list
+  "description": |2-
+    Like [[gis:load-dataset|gis#load-dataset]], but reads the dataset from the given string
+    instead of from a file. This is primarily intended for NetLogo Web,
+    which has no file system; there, data can come from an embedded
+    resource in the model or from a remote source using the fetch
+    extension.
+
+    The format argument determines how the data is interpreted:
+
+    * "**shp**" (ESRI shapefile): `data` must be a list of two-element
+      [extension content] lists. The "shp" and "dbf" entries are
+      required and must contain the base64-encoded content of the
+      corresponding files. A "prj" entry is optional and holds plain
+      projection text (the content of a ".prj" file); when present, the
+      data is re-projected to the current global projection as needed,
+      just as [[gis:load-dataset|gis#load-dataset]] does with an associated ".prj" file. Any
+      other entries (like "shx") are ignored. Reports a VectorDataset.
+    * "**asc**" or "**grd**" (ESRI ASCII grid): `data` is the text
+      content of an ASCII grid file. The data is assumed to use the same
+      projection as the current global coordinate system. Reports a
+      RasterDataset.
+    * "**geojson**" or "**json**" (GeoJSON): `data` is GeoJSON text. As
+      with [[gis:load-dataset|gis#load-dataset]], the coordinate system is always WGS84.
+      Reports a VectorDataset. The GeoJSON limitations described for
+      [[gis:load-dataset|gis#load-dataset]] apply here as well.
+
+    For example, to load a shapefile from embedded resources named
+    "cities.shp", "cities.dbf", and "cities.prj" using the resource
+    extension:
+
+    ```
+    let dataset gis:load-dataset-from-string "shp" (map [ ext ->
+      (list ext (resource:get (word "cities." ext)))
+    ] ["shp" "dbf" "prj"])
+    ```
+- "name": |-
     store-dataset
   "type": |-
     command
@@ -551,6 +604,75 @@
     Relative paths are resolved relative to the location of the current
     model, or the user's home directory if the current model hasn't
     been saved yet.
+- "name": |-
+    store-dataset-to-string
+  "type": |-
+    reporter
+  "returns": |-
+    string
+  "tags":
+  - |-
+    data
+  "arguments":
+  - "name": |-
+      dataset
+    "type": |-
+      Dataset
+  - "name": |-
+      format
+    "type": |-
+      string
+  "description": |2-
+    Like [[gis:store-dataset|gis#store-dataset]], but reports the dataset's contents as a string
+    instead of writing to a file, for formats that fit in a single file:
+    "geojson" (or "json") for VectorDatasets and "asc" (or "grd") for
+    RasterDatasets. For shapefiles, which are made up of multiple files,
+    use [[gis:store-dataset-to-strings|gis#store-dataset-to-strings]] instead.
+
+    This is primarily intended for NetLogo Web, which has no file
+    system. For example, the send-to extension can be used there to
+    download the result as a file:
+
+    ```
+    send-to:file "cities.geojson" (gis:store-dataset-to-string dataset "geojson")
+    ```
+- "name": |-
+    store-dataset-to-strings
+  "type": |-
+    reporter
+  "returns": |-
+    list
+  "tags":
+  - |-
+    data
+  "arguments":
+  - "name": |-
+      dataset
+    "type": |-
+      Dataset
+  - "name": |-
+      format
+    "type": |-
+      string
+  "description": |2-
+    Like [[gis:store-dataset-to-string|gis#store-dataset-to-string]], but for formats that consist of
+    multiple files. The only such format currently supported is "shp"
+    (ESRI shapefile), for VectorDatasets.
+
+    Reports a list of two-element [extension content] lists, one for
+    each file that [[gis:store-dataset|gis#store-dataset]] would have written: "shp", "shx",
+    and "dbf" entries with base64-encoded content, plus a "prj" entry
+    with plain projection text if a global projection is set. The
+    reported list can be loaded back with [[gis:load-dataset-from-string|gis#load-dataset-from-string]].
+
+    For example, on NetLogo Web the send-to extension can be used to
+    download each part of the shapefile as a file:
+
+    ```
+    foreach (gis:store-dataset-to-strings dataset "shp") [ part ->
+      send-to:file (word "cities." (first part)) (last part)
+    ]
+    ```
 - "name": |-
     type-of
   "type": |-

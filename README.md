@@ -139,86 +139,89 @@ and comments at the
 
 ### RasterDataset Primitives
 
-[`gis:width-of`](https://docs.netlogo.org/gis#width-of)
-[`gis:height-of`](https://docs.netlogo.org/gis#height-of)
-[`gis:raster-value`](https://docs.netlogo.org/gis#raster-value)
-[`gis:set-raster-value`](https://docs.netlogo.org/gis#set-raster-value)
-[`gis:minimum-of`](https://docs.netlogo.org/gis#minimum-of)
-[`gis:maximum-of`](https://docs.netlogo.org/gis#maximum-of)
-[`gis:sampling-method-of`](https://docs.netlogo.org/gis#sampling-method-of)
-[`gis:set-sampling-method`](https://docs.netlogo.org/gis#set-sampling-method)
-[`gis:raster-sample`](https://docs.netlogo.org/gis#raster-sample)
-[`gis:raster-world-envelope`](https://docs.netlogo.org/gis#raster-world-envelope)
-[`gis:create-raster`](https://docs.netlogo.org/gis#create-raster)
-[`gis:resample`](https://docs.netlogo.org/gis#resample)
-[`gis:convolve`](https://docs.netlogo.org/gis#convolve)
-[`gis:apply-raster`](https://docs.netlogo.org/gis#apply-raster)
+[`gis:width-of`](#giswidth-of)
+[`gis:height-of`](#gisheight-of)
+[`gis:raster-value`](#gisraster-value)
+[`gis:set-raster-value`](#gisset-raster-value)
+[`gis:minimum-of`](#gisminimum-of)
+[`gis:maximum-of`](#gismaximum-of)
+[`gis:sampling-method-of`](#gissampling-method-of)
+[`gis:set-sampling-method`](#gisset-sampling-method)
+[`gis:raster-sample`](#gisraster-sample)
+[`gis:raster-world-envelope`](#gisraster-world-envelope)
+[`gis:create-raster`](#giscreate-raster)
+[`gis:resample`](#gisresample)
+[`gis:convolve`](#gisconvolve)
+[`gis:apply-raster`](#gisapply-raster)
 
 ### Dataset Primitives
 
-[`gis:load-dataset`](https://docs.netlogo.org/gis#load-dataset)
-[`gis:store-dataset`](https://docs.netlogo.org/gis#store-dataset)
-[`gis:type-of`](https://docs.netlogo.org/gis#type-of)
-[`gis:patch-dataset`](https://docs.netlogo.org/gis#patch-dataset)
-[`gis:turtle-dataset`](https://docs.netlogo.org/gis#turtle-dataset)
-[`gis:link-dataset`](https://docs.netlogo.org/gis#link-dataset)
+[`gis:load-dataset`](#gisload-dataset)
+[`gis:load-dataset-from-string`](#gisload-dataset-from-string)
+[`gis:store-dataset`](#gisstore-dataset)
+[`gis:store-dataset-to-string`](#gisstore-dataset-to-string)
+[`gis:store-dataset-to-strings`](#gisstore-dataset-to-strings)
+[`gis:type-of`](#gistype-of)
+[`gis:patch-dataset`](#gispatch-dataset)
+[`gis:turtle-dataset`](#gisturtle-dataset)
+[`gis:link-dataset`](#gislink-dataset)
 
 ### VectorDataset Primitives
 
-[`gis:shape-type-of`](https://docs.netlogo.org/gis#shape-type-of)
-[`gis:property-names`](https://docs.netlogo.org/gis#property-names)
-[`gis:feature-list-of`](https://docs.netlogo.org/gis#feature-list-of)
-[`gis:vertex-lists-of`](https://docs.netlogo.org/gis#vertex-lists-of)
-[`gis:centroid-of`](https://docs.netlogo.org/gis#centroid-of)
-[`gis:random-point-inside`](https://docs.netlogo.org/gis#random-point-inside)
-[`gis:location-of`](https://docs.netlogo.org/gis#location-of)
-[`gis:set-property-value`](https://docs.netlogo.org/gis#set-property-value)
-[`gis:property-value`](https://docs.netlogo.org/gis#property-value)
-[`gis:find-features`](https://docs.netlogo.org/gis#find-features)
-[`gis:find-one-feature`](https://docs.netlogo.org/gis#find-one-feature)
-[`gis:find-less-than`](https://docs.netlogo.org/gis#find-less-than)
-[`gis:find-greater-than`](https://docs.netlogo.org/gis#find-greater-than)
-[`gis:find-range`](https://docs.netlogo.org/gis#find-range)
-[`gis:property-minimum`](https://docs.netlogo.org/gis#property-minimum)
-[`gis:property-maximum`](https://docs.netlogo.org/gis#property-maximum)
-[`gis:apply-coverage`](https://docs.netlogo.org/gis#apply-coverage)
-[`gis:create-turtles-from-points`](https://docs.netlogo.org/gis#create-turtles-from-points)
-[`gis:create-turtles-from-points-manual`](https://docs.netlogo.org/gis#create-turtles-from-points-manual)
-[`gis:create-turtles-inside-polygon`](https://docs.netlogo.org/gis#create-turtles-inside-polygon)
-[`gis:create-turtles-inside-polygon-manual`](https://docs.netlogo.org/gis#create-turtles-inside-polygon-manual)
-[`gis:coverage-minimum-threshold`](https://docs.netlogo.org/gis#coverage-minimum-threshold)
-[`gis:set-coverage-minimum-threshold`](https://docs.netlogo.org/gis#set-coverage-minimum-threshold)
-[`gis:coverage-maximum-threshold`](https://docs.netlogo.org/gis#coverage-maximum-threshold)
-[`gis:set-coverage-maximum-threshold`](https://docs.netlogo.org/gis#set-coverage-maximum-threshold)
-[`gis:intersects?`](https://docs.netlogo.org/gis#intersects?)
-[`gis:contains?`](https://docs.netlogo.org/gis#contains?)
-[`gis:contained-by?`](https://docs.netlogo.org/gis#contained-by?)
-[`gis:have-relationship?`](https://docs.netlogo.org/gis#have-relationship?)
-[`gis:relationship-of`](https://docs.netlogo.org/gis#relationship-of)
-[`gis:intersecting`](https://docs.netlogo.org/gis#intersecting)
+[`gis:shape-type-of`](#gisshape-type-of)
+[`gis:property-names`](#gisproperty-names)
+[`gis:feature-list-of`](#gisfeature-list-of)
+[`gis:vertex-lists-of`](#gisvertex-lists-of)
+[`gis:centroid-of`](#giscentroid-of)
+[`gis:random-point-inside`](#gisrandom-point-inside)
+[`gis:location-of`](#gislocation-of)
+[`gis:set-property-value`](#gisset-property-value)
+[`gis:property-value`](#gisproperty-value)
+[`gis:find-features`](#gisfind-features)
+[`gis:find-one-feature`](#gisfind-one-feature)
+[`gis:find-less-than`](#gisfind-less-than)
+[`gis:find-greater-than`](#gisfind-greater-than)
+[`gis:find-range`](#gisfind-range)
+[`gis:property-minimum`](#gisproperty-minimum)
+[`gis:property-maximum`](#gisproperty-maximum)
+[`gis:apply-coverage`](#gisapply-coverage)
+[`gis:create-turtles-from-points`](#giscreate-turtles-from-points)
+[`gis:create-turtles-from-points-manual`](#giscreate-turtles-from-points-manual)
+[`gis:create-turtles-inside-polygon`](#giscreate-turtles-inside-polygon)
+[`gis:create-turtles-inside-polygon-manual`](#giscreate-turtles-inside-polygon-manual)
+[`gis:coverage-minimum-threshold`](#giscoverage-minimum-threshold)
+[`gis:set-coverage-minimum-threshold`](#gisset-coverage-minimum-threshold)
+[`gis:coverage-maximum-threshold`](#giscoverage-maximum-threshold)
+[`gis:set-coverage-maximum-threshold`](#gisset-coverage-maximum-threshold)
+[`gis:intersects?`](#gisintersects?)
+[`gis:contains?`](#giscontains?)
+[`gis:contained-by?`](#giscontained-by?)
+[`gis:have-relationship?`](#gishave-relationship?)
+[`gis:relationship-of`](#gisrelationship-of)
+[`gis:intersecting`](#gisintersecting)
 
 ### Coordinate System Primitives
 
-[`gis:set-transformation`](https://docs.netlogo.org/gis#set-transformation)
-[`gis:set-transformation-ds`](https://docs.netlogo.org/gis#set-transformation-ds)
-[`gis:set-world-envelope`](https://docs.netlogo.org/gis#set-world-envelope)
-[`gis:set-world-envelope-ds`](https://docs.netlogo.org/gis#set-world-envelope-ds)
-[`gis:world-envelope`](https://docs.netlogo.org/gis#world-envelope)
-[`gis:envelope-of`](https://docs.netlogo.org/gis#envelope-of)
-[`gis:envelope-union-of`](https://docs.netlogo.org/gis#envelope-union-of)
-[`gis:load-coordinate-system`](https://docs.netlogo.org/gis#load-coordinate-system)
-[`gis:set-coordinate-system`](https://docs.netlogo.org/gis#set-coordinate-system)
-[`gis:project-lat-lon`](https://docs.netlogo.org/gis#project-lat-lon)
-[`gis:project-lat-lon-from-ellipsoid`](https://docs.netlogo.org/gis#project-lat-lon-from-ellipsoid)
+[`gis:set-transformation`](#gisset-transformation)
+[`gis:set-transformation-ds`](#gisset-transformation-ds)
+[`gis:set-world-envelope`](#gisset-world-envelope)
+[`gis:set-world-envelope-ds`](#gisset-world-envelope-ds)
+[`gis:world-envelope`](#gisworld-envelope)
+[`gis:envelope-of`](#gisenvelope-of)
+[`gis:envelope-union-of`](#gisenvelope-union-of)
+[`gis:load-coordinate-system`](#gisload-coordinate-system)
+[`gis:set-coordinate-system`](#gisset-coordinate-system)
+[`gis:project-lat-lon`](#gisproject-lat-lon)
+[`gis:project-lat-lon-from-ellipsoid`](#gisproject-lat-lon-from-ellipsoid)
 
 ### Drawing Primitives
 
-[`gis:drawing-color`](https://docs.netlogo.org/gis#drawing-color)
-[`gis:set-drawing-color`](https://docs.netlogo.org/gis#set-drawing-color)
-[`gis:draw`](https://docs.netlogo.org/gis#draw)
-[`gis:fill`](https://docs.netlogo.org/gis#fill)
-[`gis:paint`](https://docs.netlogo.org/gis#paint)
-[`gis:import-wms-drawing`](https://docs.netlogo.org/gis#import-wms-drawing)
+[`gis:drawing-color`](#gisdrawing-color)
+[`gis:set-drawing-color`](#gisset-drawing-color)
+[`gis:draw`](#gisdraw)
+[`gis:fill`](#gisfill)
+[`gis:paint`](#gispaint)
+[`gis:import-wms-drawing`](#gisimport-wms-drawing)
 
 
 
@@ -252,7 +255,7 @@ regardless of the current dimensions of the NetLogo world:
 ```
 
 However, if you're setting the envelope of the NetLogo world,
-you should probably be using [set-world-envelope](https://docs.netlogo.org/gis#set-world-envelope).
+you should probably be using [set-world-envelope](#gisset-world-envelope).
 
 
 
@@ -263,14 +266,14 @@ gis:set-transformation-ds *gis-envelope* *netlogo-envelope*
 ```
 
 
-Does the same thing as [set-transformation](https://docs.netlogo.org/gis#set-transformation) above, except that
+Does the same thing as [set-transformation](#gisset-transformation) above, except that
 it allows the scale for mapping the range of x values to be
 different than the scale for y values. The "-ds" on the
 end stands for "different scales". Using different scales
 will cause distortion of the shape of GIS features, and so it is
 generally not recommended, but it may be useful for some models.
 
-Here is an example of the difference between [set-transformation](https://docs.netlogo.org/gis#set-transformation) and [set-transformation-ds](https://docs.netlogo.org/gis#set-transformation-ds):
+Here is an example of the difference between [set-transformation](#gisset-transformation) and [set-transformation-ds](#gisset-transformation-ds):
 
 <table width="80%" border="1" rules="cols" style="border-collaps: separate; border-spacing: 4px; text-align: center; margin: 0 auto;">
 <tr>
@@ -280,11 +283,11 @@ Here is an example of the difference between [set-transformation](https://docs.n
     <img alt="" src="images/set-transformation-ds.png" width="200">
   <tr>
   <td style="padding: 8px">
-    Using [set-transformation](https://docs.netlogo.org/gis#set-transformation),
+    Using [set-transformation](#gisset-transformation),
     the scale along the x and y axis is the same, preserving the
     round shape of the Earth in this Orthographic projection.
   <td style="padding: 8px">
-    Using [set-transformation-ds](https://docs.netlogo.org/gis#set-transformation-ds), the
+    Using [set-transformation-ds](#gisset-transformation-ds), the
     scale along the x axis is stretched so that the earth covers
     the entire NetLogo View, which in this case distorts the shape
     of the Earth.
@@ -404,7 +407,7 @@ gis:load-coordinate-system *file*
 
 Loads a new global projection used for projecting or re- projecting
 GIS data as it is loaded from a file. The file must contain a valid
-<a href="http://geoapi.sourceforge.net/2.0/javadoc/org/opengis/referencing/doc-files/WKT.html" target="_blank">
+<a href="https://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html" target="_blank">
 Well-Known Text (WKT)</a> projection description.
 
 WKT projection files are frequently distributed alongside GIS data
@@ -451,14 +454,14 @@ gis:set-coordinate-system *system*
 
 Sets the global projection used for projecting or re- projecting
 GIS data as it is loaded. The *system* must be either a string
-in <a href="http://geoapi.sourceforge.net/2.0/javadoc/org/opengis/referencing/doc-files/WKT.html" target="_blank">
+in <a href="http://www.geoapi.org/3.0/javadoc/org/opengis/referencing/doc-files/WKT.html" target="_blank">
 Well-Known Text (WKT) format</a>, or a NetLogo list that consists
 of WKT converted to a list by moving each keyword inside its
 associated brackets and putting quotes around it. The latter is
 preferred because it makes the code much more readable.
 
 The same limitations on WKT support apply as described above in the
-documentation for [load-coordinate-system](https://docs.netlogo.org/gis#load-coordinate-system)
+documentation for [load-coordinate-system](#gisload-coordinate-system)
 
 
 
@@ -544,21 +547,21 @@ gis:load-dataset *file*
 ```
 
 
-Loads the given data file, re-projecting the data as necessary.
+Loads the given data file, re-projecting the data as necessary. 
 
 Relative paths are resolved relative to the location of the current
 model, or the user's home directory if the current model
 hasn't been saved yet.
 
-For ESRI shapefiles and ESRI grid files, if there is a ".prj" file
+For ESRI shapefiles and ESRI grid files, if there is a ".prj" file 
 associated with the file, then `load-datset` will consult that file
 and re-project to the current global projection if needed. If no ".prj"
 file is found, then the data is assumed to use the same projection as
 the current global coordinate system.
 
-For GeoJSON files, as per the most-recent specification (RFC 7946),
-the coordinate system for GeoJSON files is always WGS84 and will be
-imported accordingly.
+For GeoJSON files, as per the most-recent specification (RFC 7946), 
+the coordinate system for GeoJSON files is always WGS84 and will be 
+imported accordingly. 
 
 Currently, three types of data file are supported:
 
@@ -569,18 +572,18 @@ Currently, three types of data file are supported:
   contains raster data, consisting of a grid of values. When
   the target file is an ASCII grid file, `load-dataset`
   reports a RasterDataset.
-* "**.geojson**" or "**.json**" (GeoJSON): contains vector data
-  similar to shapefiles and similarly reports a VectorDataset.
+* "**.geojson**" or "**.json**" (GeoJSON): contains vector data 
+  similar to shapefiles and similarly reports a VectorDataset. 
 
-Note that not all aspects of the GeoJSON standard are supported.
-In particular, to be properly imported, a GeoJSON file must
-satisfy the following:
+Note that not all aspects of the GeoJSON standard are supported. 
+In particular, to be properly imported, a GeoJSON file must 
+satisfy the following: 
 
-* It only contain numeric or string data within the properties.
-  all other json data will be stringified.
+* It only contain numeric or string data within the properties. 
+  all other json data will be stringified. 
 * All "Features" within a "FeatureCollection" must be of the same
   shape type ("Point", "LineString", etc.) Additionally, if not all
-  the "Features" in the "FeatureCollection" have the same set of
+  the "Features" in the "FeatureCollection" have the same set of 
   property names, default values will be supplied where there
   are missing entries (0 for numbers and "" for strings.)
 * It must not use "GeometryCollection", which is not supported
@@ -593,6 +596,50 @@ information for other shape types will be discarded upon import.
 
 
 
+### `gis:load-dataset-from-string`
+
+```NetLogo
+gis:load-dataset-from-string *format* *data*
+```
+
+
+Like `load-dataset`, but reads the dataset from the given string
+instead of from a file. This is primarily intended for NetLogo Web,
+which has no file system; there, data can come from an embedded
+resource in the model or from a remote source using the fetch
+extension.
+
+The format argument determines how the data is interpreted:
+
+* "**shp**" (ESRI shapefile): `data` must be a list of two-element
+  [extension content] lists. The "shp" and "dbf" entries are
+  required and must contain the base64-encoded content of the
+  corresponding files. A "prj" entry is optional and holds plain
+  projection text (the content of a ".prj" file); when present, the
+  data is re-projected to the current global projection as needed,
+  just as `load-dataset` does with an associated ".prj" file. Any
+  other entries (like "shx") are ignored. Reports a VectorDataset.
+* "**asc**" or "**grd**" (ESRI ASCII grid): `data` is the text
+  content of an ASCII grid file. The data is assumed to use the same
+  projection as the current global coordinate system. Reports a
+  RasterDataset.
+* "**geojson**" or "**json**" (GeoJSON): `data` is GeoJSON text. As
+  with `load-dataset`, the coordinate system is always WGS84.
+  Reports a VectorDataset. The GeoJSON limitations described for
+  `load-dataset` apply here as well.
+
+For example, to load a shapefile from embedded resources named
+"cities.shp", "cities.dbf", and "cities.prj" using the resource
+extension:
+
+```
+let dataset gis:load-dataset-from-string "shp" (map [ ext ->
+  (list ext (resource:get (word "cities." ext)))
+] ["shp" "dbf" "prj"])
+```
+
+
+
 ### `gis:store-dataset`
 
 ```NetLogo
@@ -600,10 +647,10 @@ gis:store-dataset *dataset* *file*
 ```
 
 
-Exports the given dataset to the given file.
+Exports the given dataset to the given file. 
 
 For VectorDatasets, two file formats are supported, ESRI shapefiles
-and GeoJSON. If the given file name ends in ".geojson" or ".json",
+and GeoJSON. If the given file name ends in ".geojson" or ".json", 
 then the file will be exported as a GeoJSON file. If the file name
 ends in any other extension or no extension at all, the dataset
 will be exported as a shapefile and the associated file extensions
@@ -615,6 +662,57 @@ the associated file extensions will be automatically supplied.
 Relative paths are resolved relative to the location of the current
 model, or the user's home directory if the current model hasn't
 been saved yet.
+
+
+
+### `gis:store-dataset-to-string`
+
+```NetLogo
+gis:store-dataset-to-string *dataset* *format*
+```
+
+
+Like `store-dataset`, but reports the dataset's contents as a string
+instead of writing to a file, for formats that fit in a single file:
+"geojson" (or "json") for VectorDatasets and "asc" (or "grd") for
+RasterDatasets. For shapefiles, which are made up of multiple files,
+use `store-dataset-to-strings` instead.
+
+This is primarily intended for NetLogo Web, which has no file
+system. For example, the send-to extension can be used there to
+download the result as a file:
+
+```
+send-to:file "cities.geojson" (gis:store-dataset-to-string dataset "geojson")
+```
+
+
+
+### `gis:store-dataset-to-strings`
+
+```NetLogo
+gis:store-dataset-to-strings *dataset* *format*
+```
+
+
+Like `store-dataset-to-string`, but for formats that consist of
+multiple files. The only such format currently supported is "shp"
+(ESRI shapefile), for VectorDatasets.
+
+Reports a list of two-element [extension content] lists, one for
+each file that `store-dataset` would have written: "shp", "shx",
+and "dbf" entries with base64-encoded content, plus a "prj" entry
+with plain projection text if a global projection is set. The
+reported list can be loaded back with `load-dataset-from-string`.
+
+For example, on NetLogo Web the send-to extension can be used to
+download each part of the shapefile as a file:
+
+```
+foreach (gis:store-dataset-to-strings dataset "shp") [ part ->
+  send-to:file (word "cities." (first part)) (last part)
+]
+```
 
 
 
@@ -636,7 +734,7 @@ gis:patch-dataset *patch-variable*
 
 Reports a new raster whose cells correspond directly to NetLogo
 patches, and whose cell values consist of the values of the given
-patch variable. This primitive is basically the inverse of [apply-raster](https://docs.netlogo.org/gis#apply-raster);
+patch variable. This primitive is basically the inverse of [apply-raster](#gisapply-raster);
 `apply-raster` copies values from a raster dataset to a patch variable, while this
 primitive copies values from a patch variable to a raster dataset.
 
@@ -694,7 +792,7 @@ gis:property-names *VectorDataset*
 
 Reports a list of strings where each string is the name of a
 property possessed by each VectorFeature in the given
-VectorDataset, suitable for use in [gis:property-value](https://docs.netlogo.org/gis#property-value).
+VectorDataset, suitable for use in [gis:property-value](#gisproperty-value).
 
 
 
@@ -753,7 +851,7 @@ gis:random-point-inside *VectorFeature*
 
 Reports a single randomly-generated Vertex that lies within the
 given feature polygon. Generated points are uniformly
-distributed within the polygon and both polygon holes and
+distributed within the polygon and both polygon holes and 
 multi-polygon features are supported.
 
 ```
@@ -788,11 +886,11 @@ gis:set-property-value *VectorFeature* *property-name* *value*
 ```
 
 
-Sets the value of the given property of the given VectorFeature. The
+Sets the value of the given property of the given VectorFeature. The 
 type of the given value (string or number) must match the property
-type of the VectorFeature. This command may be used in conjunction
-with store-dataset to make changes to VectorFeatures and export
-them back as GIS datasets.
+type of the VectorFeature. This command may be used in conjunction 
+with store-dataset to make changes to VectorFeatures and export 
+them back as GIS datasets. 
 
 
 
@@ -1038,7 +1136,7 @@ to setup
   ]
 end
 ```
-
+    
 
 
 ### `gis:create-turtles-from-points-manual`
@@ -1082,7 +1180,7 @@ to setup
   ;; Each city turtle still has a name, country, and population set just like the non-manual version.
 end
 ```
-
+    
 
 
 ### `gis:create-turtles-inside-polygon`
@@ -1140,7 +1238,7 @@ to setup
   ]
 end
 ```
-
+        
 
 
 ### `gis:create-turtles-inside-polygon-manual`
@@ -1165,7 +1263,7 @@ the rest of the mappings will be untouched.
 
 See the `create-turtles-from-points-manual` entry for an example of
 how to override default mappings with manual ones.
-
+      
 
 
 ### `gis:coverage-minimum-threshold`
@@ -1174,7 +1272,7 @@ how to override default mappings with manual ones.
 gis:coverage-minimum-threshold
 ```
 
-Reports the current coverage minimum threshold used by [gis:apply-coverage](https://docs.netlogo.org/gis#apply-coverage).
+Reports the current coverage minimum threshold used by [gis:apply-coverage](#gisapply-coverage).
 
 
 ### `gis:set-coverage-minimum-threshold`
@@ -1183,7 +1281,7 @@ Reports the current coverage minimum threshold used by [gis:apply-coverage](http
 gis:set-coverage-minimum-threshold *new-threshold*
 ```
 
-Sets the current coverage minimum threshold to be used by [gis:apply-coverage](https://docs.netlogo.org/gis#apply-coverage).
+Sets the current coverage minimum threshold to be used by [gis:apply-coverage](#gisapply-coverage).
 
 
 ### `gis:coverage-maximum-threshold`
@@ -1192,7 +1290,7 @@ Sets the current coverage minimum threshold to be used by [gis:apply-coverage](h
 gis:coverage-maximum-threshold
 ```
 
-Reports the current coverage maximum threshold used by [gis:apply-coverage](https://docs.netlogo.org/gis#apply-coverage).
+Reports the current coverage maximum threshold used by [gis:apply-coverage](#gisapply-coverage).
 
 
 ### `gis:set-coverage-maximum-threshold`
@@ -1201,7 +1299,7 @@ Reports the current coverage maximum threshold used by [gis:apply-coverage](http
 gis:set-coverage-maximum-threshold *new-threshold*
 ```
 
-Sets the current coverage maximum threshold to be used by [gis:apply-coverage](https://docs.netlogo.org/gis#apply-coverage).
+Sets the current coverage maximum threshold to be used by [gis:apply-coverage](#gisapply-coverage).
 
 
 ### `gis:intersects?`
@@ -1555,8 +1653,8 @@ gis:sampling-method-of *RasterDataset*
 Reports the sampling method used to compute the value of the given
 raster dataset at a single point, or over an area smaller than a
 single raster cell. Sampling is performed by the GIS extension
-primitives [raster-sample](https://docs.netlogo.org/gis#raster-sample), [resample](https://docs.netlogo.org/gis#resample), [convolve](https://docs.netlogo.org/gis#convolve),
-and [apply-raster](https://docs.netlogo.org/gis#apply-raster). The sampling
+primitives [raster-sample](#gisraster-sample), [resample](#gisresample), [convolve](#gisconvolve),
+and [apply-raster](#gisapply-raster). The sampling
 method will be one of the following:
 
 * `"NEAREST_NEIGHBOR"`: the value of the cell
@@ -1590,8 +1688,8 @@ gis:set-sampling-method *RasterDataset* *sampling-method*
 
 Sets the sampling method used by the given raster dataset at a
 single point, or over an area smaller than a single raster cell.
-Sampling is performed by the GIS extension primitives [raster-sample](https://docs.netlogo.org/gis#raster-sample), [resample](https://docs.netlogo.org/gis#resample), [convolve](https://docs.netlogo.org/gis#convolve),
-and [apply-raster](https://docs.netlogo.org/gis#apply-raster). The sampling
+Sampling is performed by the GIS extension primitives [raster-sample](#gisraster-sample), [resample](#gisresample), [convolve](#gisconvolve),
+and [apply-raster](#gisapply-raster). The sampling
 method must be one of the following:
 
 *  `"NEAREST_NEIGHBOR"`
@@ -1599,7 +1697,7 @@ method must be one of the following:
 *  `"BICUBIC"`
 *  `"BICUBIC_2"`
 
-See [sampling-method-of](https://docs.netlogo.org/gis#sampling-method-of) above
+See [sampling-method-of](#gissampling-method-of) above
 for a more specific description of each sampling method.
 
 
@@ -1616,10 +1714,10 @@ location may be any of the following:
 
 * A list of length 2, which is taken to represent a point in
   netlogo space (`[xcor ycor]`) of the sort reported by
-  [location-of](https://docs.netlogo.org/gis#location-of) Vertex. The raster
+  [location-of](#gislocation-of) Vertex. The raster
   dataset is sampled at the point of that location.
 * A list of length 4, which is taken to represent an envelope in
-  GIS space, of the sort reported by [envelope-of](https://docs.netlogo.org/gis#envelope-of). The raster dataset is sampled
+  GIS space, of the sort reported by [envelope-of](#gisenvelope-of). The raster dataset is sampled
   over the area of that envelope.
 * A patch, in which case the raster dataset is sampled over the
   area of the patch.
@@ -1648,7 +1746,7 @@ ifelse (value <= 0) or (value >= 0)
 ```
 
 If the requested location is a point, the sample is always computed
-using the method set by [set-sampling-method](https://docs.netlogo.org/gis#set-sampling-method). If the
+using the method set by [set-sampling-method](#gisset-sampling-method). If the
 requested location is an area (i.e., an envelope or patch), the
 sample is computed by taking the average of all raster cells
 covered by the requested area.
@@ -1664,7 +1762,7 @@ gis:raster-world-envelope *RasterDataset* *x* *y*
 
 Reports the GIS envelope needed to match the boundaries of NetLogo
 patches with the boundaries of cells in the given raster dataset.
-This envelope could then be used as an argument to [set-transformation-ds](https://docs.netlogo.org/gis#set-transformation-ds).
+This envelope could then be used as an argument to [set-transformation-ds](#gisset-transformation-ds).
 
 There may be more cells in the dataset than there are patches in
 the NetLogo world. In that case, you will need to select a subset
@@ -1699,7 +1797,7 @@ Reports a new dataset that consists of the given RasterDataset
 resampled to cover the given envelope and to contain the given
 number of columns and rows. If the new raster's cells are
 smaller than the existing raster's cells, they will be
-resampled using the method set by [set-sampling-method](https://docs.netlogo.org/gis#set-sampling-method). If the new
+resampled using the method set by [set-sampling-method](#gisset-sampling-method). If the new
 cells are larger than the original cells, they will be sampled
 using the `"NEAREST_NEIGHBOR"` method.
 
@@ -1763,11 +1861,11 @@ gis:apply-raster *RasterDataset* *patch-variable*
 Copies values from the given raster dataset to the given patch
 variable, resampling the raster as necessary so that its cell
 boundaries match up with NetLogo patch boundaries. This resampling
-is done as if using [resample](https://docs.netlogo.org/gis#resample) rather
-than [raster-sample](https://docs.netlogo.org/gis#raster-sample), for the sake
+is done as if using [resample](#gisresample) rather
+than [raster-sample](#gisraster-sample), for the sake
 of efficiency. However, patches not covered by the raster are
 assigned values of "not a number" in the same way that
-[raster-sample](https://docs.netlogo.org/gis#raster-sample) reports values for
+[raster-sample](#gisraster-sample) reports values for
 locations outside the raster.
 
 
