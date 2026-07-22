@@ -14,7 +14,9 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.text.ParseException;
 import java.util.Arrays;
 
@@ -53,8 +55,6 @@ public final class LoadDataset extends GISExtension.Reporter {
 
     private static final String ADDED_Z_FIELD = "_Z";
 
-    private static Context _context;
-
     //--------------------------------------------------------------------------
     // Class methods
     //--------------------------------------------------------------------------
@@ -63,6 +63,24 @@ public final class LoadDataset extends GISExtension.Reporter {
     private static Dataset loadShapefile (String shpFilePath,
                                           Projection srcProj,
                                           Projection dstProj) throws ExtensionException, IOException {
+        File shpFile = GISExtension.getState().getFile(shpFilePath);
+        if (shpFile == null) {
+            throw new ExtensionException("shapefile " + shpFilePath + " not found");
+        }
+        String dbfFilePath = StringUtils.changeFileExtension(shpFilePath, "dbf");
+        File dbfFile = GISExtension.getState().getFile(dbfFilePath);
+        if (dbfFile == null) {
+            throw new ExtensionException("dbf file " + dbfFilePath + " not found");
+        }
+        return loadShapefile(shpFile.getInputStream(), dbfFile.getInputStream(), shpFilePath, srcProj, dstProj);
+    }
+
+    /** */
+    static Dataset loadShapefile (InputStream shpStream,
+                                  InputStream dbfStream,
+                                  String sourceName,
+                                  Projection srcProj,
+                                  Projection dstProj) throws ExtensionException, IOException {
         GeometryTransformer inverse = null;
         GeometryTransformer forward = null;
         boolean reproject = false;
@@ -76,19 +94,10 @@ public final class LoadDataset extends GISExtension.Reporter {
         ESRIShapefileReader shp = null;
         DBaseFileReader dbf = null;
         try {
-            File shpFile = GISExtension.getState().getFile(shpFilePath);
-            if (shpFile == null) {
-                throw new ExtensionException("shapefile " + shpFilePath + " not found");
-            }
-            shp = new ESRIShapefileReader(shpFile.getInputStream(),
+            shp = new ESRIShapefileReader(shpStream,
                                           AbstractUnitConverter.IDENTITY,
                                           GISExtension.getState().factory());
-            String dbfFilePath = StringUtils.changeFileExtension(shpFilePath, "dbf");
-            File dbfFile = GISExtension.getState().getFile(dbfFilePath);
-            if (dbfFile == null) {
-                throw new ExtensionException("dbf file " + dbfFilePath + " not found");
-            }
-            dbf = new DBaseFileReader(dbfFile.getInputStream());
+            dbf = new DBaseFileReader(dbfStream);
 
             VectorDataset.ShapeType shapeType = null;
             boolean shouldAddZField = false;
@@ -125,7 +134,7 @@ public final class LoadDataset extends GISExtension.Reporter {
             }
 
             if (shouldWarnPartiallySupportedZ) {
-                GISExtension.getState().displayWarning("The shapefile " + shpFilePath + " contains MultiPointZ, PolyLineZ, or PolygonZ features. "
+                GISExtension.getState().displayWarning("The shapefile " + sourceName + " contains MultiPointZ, PolyLineZ, or PolygonZ features. "
                         + "Upon import, the Z information from these features will be stripped out and they will be "
                         + "treated as 2D Point, Line, and Polygon features.");
             }
@@ -188,6 +197,21 @@ public final class LoadDataset extends GISExtension.Reporter {
 
     private static VectorDataset loadGeoJson (String geojsonFilePath,
                                               Projection dstProj) throws ExtensionException, IOException {
+        File geojsonFile = GISExtension.getState().getFile(geojsonFilePath);
+        if (geojsonFile == null){
+            throw new ExtensionException("Geojson file " + geojsonFilePath + " not found");
+        }
+        try {
+            return loadGeoJson(new InputStreamReader(geojsonFile.getInputStream()), geojsonFilePath, dstProj);
+        } finally {
+            try { geojsonFile.close(true); } catch (IOException e) { }
+        }
+    }
+
+    /** */
+    static VectorDataset loadGeoJson (Reader dataReader,
+                                      String sourceName,
+                                      Projection dstProj) throws ExtensionException, IOException {
         Projection srcProj = new Geographic(Ellipsoid.WGS_84, Projection.DEFAULT_CENTER, NonSI.DEGREE_ANGLE);
         GeometryTransformer inverse = srcProj.getInverseTransformer();
         GeometryTransformer forward = null;
@@ -198,90 +222,86 @@ public final class LoadDataset extends GISExtension.Reporter {
             reproject = true;
         }
 
-        File geojsonFile = null;
+        GeoJsonReader reader;
         try {
-            GeoJsonReader reader;
-            geojsonFile = GISExtension.getState().getFile(geojsonFilePath);
-            if (geojsonFile == null){
-                throw new ExtensionException("Geojson file " + geojsonFilePath + " not found");
-            }
-            try {
-                reader = new GeoJsonReader(geojsonFile, GISExtension.getState().factory());
-            } catch (org.json.simple.parser.ParseException e){
-                throw new ExtensionException("Error parsing " + geojsonFilePath);
-            }
-
-            String[] propertyNames;
-            VectorDataset.PropertyType[] propertyTypes;
-
-            if (reader.getShouldAddZField()) {
-                propertyNames = new String[reader.getPropertyNames().length + 1];
-                propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
-                System.arraycopy(reader.getPropertyNames(), 0, propertyNames, 0, reader.getPropertyNames().length);
-                System.arraycopy(reader.getPropertyTypes(), 0, propertyTypes, 0, reader.getPropertyTypes().length);
-                propertyNames[propertyNames.length - 1] = ADDED_Z_FIELD;
-                propertyTypes[propertyTypes.length - 1] = VectorDataset.PropertyType.NUMBER;
-            } else {
-                propertyNames = reader.getPropertyNames();
-                propertyTypes = reader.getPropertyTypes();
-            }
-
-            if (reader.getContainsDefaultValues()) {
-                GISExtension.getState().displayWarning("Warning: Not all the features in " + geojsonFilePath + " have the same set of properties. "
-                        + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.");
-            }
-
-            if (reader.getShouldWarnUnusedZ() && !reader.getShouldAddZField()) {
-                GISExtension.getState().displayWarning("The file " + geojsonFilePath + " contains non-single-point Z values in some features. "
-                        + "Upon import, the Z information from these features will be stripped out and they will be "
-                        + "treated as 2D features.");
-            }
-
-            VectorDataset result = new VectorDataset(reader.getShapeType(), propertyNames, propertyTypes);
-
-            Geometry[] geometries = reader.getGeometries();
-            Object[][] propertyValues = reader.getPropertyValues();
-            for (int i = 0; i < reader.size(); i++) {
-                double z = 0.0;
-                boolean shouldAddZ = false;
-                if (geometries[i] instanceof PointZWrapper) {
-                    shouldAddZ = true;
-                    z = ((PointZWrapper) geometries[i]).getZ();
-                    geometries[i] = ((PointZWrapper) geometries[i]).getPoint();
-                }
-
-                if (reproject) {
-                    geometries[i] = forward.transform(inverse.transform(geometries[i]));
-                }
-
-                if (shouldAddZ) {
-                    Object[] newValues = new Object[propertyTypes.length];
-                    System.arraycopy(propertyValues[i], 0, newValues, 0, propertyValues[i].length);
-                    newValues[newValues.length - 1] = z;
-                    propertyValues[i] = newValues;
-                }
-                result.add(geometries[i], propertyValues[i]);
-            }
-
-            return result;
-        } finally {
-            if (geojsonFile != null) {
-                try {geojsonFile.close(true); } catch (IOException e) { }
-            }
+            reader = new GeoJsonReader(dataReader, GISExtension.getState().factory());
+        } catch (org.json.simple.parser.ParseException e){
+            throw new ExtensionException("Error parsing " + sourceName);
         }
+
+        String[] propertyNames;
+        VectorDataset.PropertyType[] propertyTypes;
+
+        if (reader.getShouldAddZField()) {
+            propertyNames = new String[reader.getPropertyNames().length + 1];
+            propertyTypes = new VectorDataset.PropertyType[propertyNames.length];
+            System.arraycopy(reader.getPropertyNames(), 0, propertyNames, 0, reader.getPropertyNames().length);
+            System.arraycopy(reader.getPropertyTypes(), 0, propertyTypes, 0, reader.getPropertyTypes().length);
+            propertyNames[propertyNames.length - 1] = ADDED_Z_FIELD;
+            propertyTypes[propertyTypes.length - 1] = VectorDataset.PropertyType.NUMBER;
+        } else {
+            propertyNames = reader.getPropertyNames();
+            propertyTypes = reader.getPropertyTypes();
+        }
+
+        if (reader.getContainsDefaultValues()) {
+            GISExtension.getState().displayWarning("Warning: Not all the features in " + sourceName + " have the same set of properties. "
+                    + "Default values (0 for numbers and \"\" for strings) will be supplied where there are missing entries.");
+        }
+
+        if (reader.getShouldWarnUnusedZ() && !reader.getShouldAddZField()) {
+            GISExtension.getState().displayWarning("The file " + sourceName + " contains non-single-point Z values in some features. "
+                    + "Upon import, the Z information from these features will be stripped out and they will be "
+                    + "treated as 2D features.");
+        }
+
+        VectorDataset result = new VectorDataset(reader.getShapeType(), propertyNames, propertyTypes);
+
+        Geometry[] geometries = reader.getGeometries();
+        Object[][] propertyValues = reader.getPropertyValues();
+        for (int i = 0; i < reader.size(); i++) {
+            double z = 0.0;
+            boolean shouldAddZ = false;
+            if (geometries[i] instanceof PointZWrapper) {
+                shouldAddZ = true;
+                z = ((PointZWrapper) geometries[i]).getZ();
+                geometries[i] = ((PointZWrapper) geometries[i]).getPoint();
+            }
+
+            if (reproject) {
+                geometries[i] = forward.transform(inverse.transform(geometries[i]));
+            }
+
+            if (shouldAddZ) {
+                Object[] newValues = new Object[propertyTypes.length];
+                System.arraycopy(propertyValues[i], 0, newValues, 0, propertyValues[i].length);
+                newValues[newValues.length - 1] = z;
+                propertyValues[i] = newValues;
+            }
+            result.add(geometries[i], propertyValues[i]);
+        }
+
+        return result;
     }
 
     /** */
     private static RasterDataset loadAsciiGrid (String ascFilePath,
                                                 Projection srcProj,
                                                 Projection dstProj) throws ExtensionException, IOException {
+        File ascFile = GISExtension.getState().getFile(ascFilePath);
+        if (ascFile == null) {
+            throw new ExtensionException("ascii file " + ascFilePath + " not found");
+        }
+        return loadAsciiGrid(new BufferedReader(new InputStreamReader(ascFile.getInputStream())), srcProj, dstProj);
+    }
+
+    /** */
+    static RasterDataset loadAsciiGrid (BufferedReader in,
+                                        Projection srcProj,
+                                        Projection dstProj) throws ExtensionException, IOException {
         AsciiGridFileReader asc = null;
         try {
-            File ascFile = GISExtension.getState().getFile(ascFilePath);
-            if (ascFile == null) {
-                throw new ExtensionException("ascii file " + ascFilePath + " not found");
-            }
-            asc = new AsciiGridFileReader(new BufferedReader(new InputStreamReader(ascFile.getInputStream())));
+            asc = new AsciiGridFileReader(in);
             GridDimensions dimensions = new GridDimensions(asc.getSize(), asc.getEnvelope());
             DataBuffer data = asc.getData();
             BandedSampleModel sampleModel = new BandedSampleModel(data.getDataType(),
@@ -321,7 +341,6 @@ public final class LoadDataset extends GISExtension.Reporter {
     /** */
     public Object reportInternal (Argument[] args, Context context)
             throws ExtensionException, IOException, LogoException, ParseException {
-        _context = context;
         String dataFilePath = args[0].getString();
         Projection netLogoProjection = GISExtension.getState().getProjection();
         Projection datasetProjection = null;
@@ -347,8 +366,13 @@ public final class LoadDataset extends GISExtension.Reporter {
         } else {
             throw new ExtensionException("unsupported file type "+extension);
         }
-        // If the transformation hasn't been set yet, set it to map this
-        // dataset's envelope to the NetLogo world using constant scale.
+        setDefaultTransformationIfUnset(result, context);
+        return result;
+    }
+
+    // If the transformation hasn't been set yet, set it to map the given
+    // dataset's envelope to the NetLogo world using constant scale.
+    static void setDefaultTransformationIfUnset (Dataset result, Context context) {
         if (!GISExtension.getState().isTransformationSet()) {
             World w = context.getAgent().world();
             GISExtension.getState().setTransformation(new CoordinateTransformation
@@ -356,6 +380,5 @@ public final class LoadDataset extends GISExtension.Reporter {
                                                        new Envelope(w.minPxcor(), w.maxPxcor(), w.minPycor(), w.maxPycor()),
                                                        true));
         }
-        return result;
     }
 }

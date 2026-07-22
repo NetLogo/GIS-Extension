@@ -2,6 +2,7 @@ package org.myworldgis.io.geojson;
 
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,13 +52,16 @@ public class GeoJsonReader implements GeoJsonConstants {
 
 
     public GeoJsonReader(File file, GeometryFactory factory) throws IOException, ParseException, ExtensionException {
+        this(new InputStreamReader(file.getInputStream()), factory);
+    }
+
+    public GeoJsonReader(Reader dataReader, GeometryFactory factory) throws IOException, ParseException, ExtensionException {
         this.factory = factory;
         this.containsDefaultValues = false;
         this.propertyNamesToDatatypes = new HashMap<String, PropertyType>();
 
-        InputStreamReader reader = new InputStreamReader(file.getInputStream());
         JSONParser parser = new JSONParser();
-        this.geojson = (JSONObject) parser.parse(reader);
+        this.geojson = (JSONObject) parser.parse(dataReader);
 
         String topLevelType = geojson.get("type").toString();
 

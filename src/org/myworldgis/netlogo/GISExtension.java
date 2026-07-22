@@ -115,6 +115,7 @@ public final class GISExtension extends DefaultClassManager {
         primitiveManager.addPrimitive("set-coordinate-system", new SetCoordinateSystem());
 
         primitiveManager.addPrimitive("load-dataset", new LoadDataset());
+        primitiveManager.addPrimitive("load-dataset-from-string", new LoadDatasetFromString());
         primitiveManager.addPrimitive("store-dataset", new StoreDataset());
         primitiveManager.addPrimitive("type-of", new Dataset.GetDatasetType());
         primitiveManager.addPrimitive("patch-dataset", new PatchDataset());
