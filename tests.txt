@@ -260,3 +260,31 @@ FindFeaturesSearch
   length (gis:find-features ciudades "NAME" "San Juan*") => 1
   length (gis:find-features ciudades "NAME" "*San Juan") => 1
   length (gis:find-features ciudades "NAME" "*San Juan*") => 1
+
+TestLoadGeoJsonFromString
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-load-geojson-from-string
+
+TestLoadAscFromString
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-load-asc-from-string
+
+TestRoundTripGeoJsonString
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-round-trip-geojson
+
+TestRoundTripAscString
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-round-trip-asc
+
+TestRoundTripShapefileStrings
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-round-trip-shp
+
+TestRoundTripShapefileStringsPrj
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-round-trip-shp-prj
+
+TestDatasetStringErrors
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-errors
