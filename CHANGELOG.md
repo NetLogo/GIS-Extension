@@ -4,9 +4,9 @@ The GIS extension comes bundled with NetLogo, but versions of the extension rele
 
 See [the README.md file](https://github.com/NetLogo/GIS-Extension/blob/main/README.md) for more information on using the new and updated primitives.
 
-- Add `gis:load-dataset-from-string` to load a dataset from a string instead of a file, so environments without a file system (like NetLogo Web) can load data from embedded resources or remote sources.
-- Add `gis:store-dataset-to-string` to export a dataset as a GeoJSON or ASCII grid string.
-- Add `gis:store-dataset-to-strings` to export a dataset as the parts of a shapefile.
+- Add `gis:load-dataset-from-string` to load a dataset from a string instead of a file, so environments without a file system (like NetLogo Web) can load data from embedded resources or remote sources. Shapefiles can be provided either as the base64-encoded content of a zip archive of their parts or as a list of the parts as separate strings.
+- Add `gis:store-dataset-to-string` to export a dataset as a GeoJSON or ASCII grid string, or as a base64-encoded zip archive string for shapefiles.
+- Add `gis:store-dataset-to-strings` to export a shapefile's parts as separate strings.
 
 ### 1.3.0
 

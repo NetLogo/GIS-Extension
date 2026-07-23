@@ -2,13 +2,18 @@ package org.myworldgis.netlogo;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.myworldgis.io.asciigrid.AsciiGridFileReader;
 import org.myworldgis.io.geojson.GeoJsonReader;
@@ -51,12 +56,12 @@ public final class LoadDatasetFromString extends GISExtension.Reporter {
     }
 
     /** */
-    private static byte[] decodeBase64 (String content, String extension) throws ExtensionException {
+    private static byte[] decodeBase64 (String content, String sourceName) throws ExtensionException {
         try {
             // the MIME decoder tolerates the line breaks often found in base64 text
             return Base64.getMimeDecoder().decode(content);
         } catch (IllegalArgumentException e) {
-            throw new ExtensionException("invalid base64 content for \"" + extension + "\" entry: " + e.getMessage());
+            throw new ExtensionException("invalid base64 content for " + sourceName + ": " + e.getMessage());
         }
     }
 
@@ -80,9 +85,9 @@ public final class LoadDatasetFromString extends GISExtension.Reporter {
             String extension = normalizeFormat((String) entry.get(0));
             String content = (String) entry.get(1);
             if (extension.equals(ESRIShapefileReader.SHAPEFILE_EXTENSION)) {
-                shpBytes = decodeBase64(content, extension);
+                shpBytes = decodeBase64(content, "\"" + extension + "\" entry");
             } else if (extension.equals("dbf")) {
-                dbfBytes = decodeBase64(content, extension);
+                dbfBytes = decodeBase64(content, "\"" + extension + "\" entry");
             } else if (extension.equals("prj")) {
                 prjText = content;
             }
@@ -101,6 +106,64 @@ public final class LoadDatasetFromString extends GISExtension.Reporter {
         return LoadDataset.loadShapefile(new ByteArrayInputStream(shpBytes),
                                          new ByteArrayInputStream(dbfBytes),
                                          "shapefile data string",
+                                         datasetProjection,
+                                         dstProj);
+    }
+
+    // metadata entries that macOS's built-in zip tool adds and that should
+    // never be treated as shapefile contents
+    private static boolean isMetadataEntry (String name) {
+        String baseName = name.substring(name.lastIndexOf('/') + 1);
+        return name.startsWith("__MACOSX/") || baseName.startsWith(".");
+    }
+
+    /** */
+    private static Dataset loadShapefileFromZip (String base64, Projection dstProj)
+            throws ExtensionException, IOException, ParseException {
+        Map<String, byte[]> entries = new HashMap<String, byte[]>();
+        ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(decodeBase64(base64, "shapefile zip data")));
+        try {
+            ZipEntry entry;
+            while ((entry = zip.getNextEntry()) != null) {
+                if (entry.isDirectory() || isMetadataEntry(entry.getName())) {
+                    continue;
+                }
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                zip.transferTo(bytes);
+                entries.put(entry.getName().toLowerCase(Locale.ENGLISH), bytes.toByteArray());
+            }
+        } finally {
+            zip.close();
+        }
+        if (entries.isEmpty()) {
+            throw new ExtensionException("shapefile data is not a zip archive or the zip is empty");
+        }
+        String shpName = null;
+        for (String name : entries.keySet()) {
+            if (name.endsWith("." + ESRIShapefileReader.SHAPEFILE_EXTENSION)) {
+                if (shpName != null) {
+                    throw new ExtensionException("found more than one \".shp\" file in the shapefile zip data");
+                }
+                shpName = name;
+            }
+        }
+        if (shpName == null) {
+            throw new ExtensionException("no \".shp\" file found in the shapefile zip data");
+        }
+        String baseName = shpName.substring(0, shpName.length() - ESRIShapefileReader.SHAPEFILE_EXTENSION.length());
+        byte[] dbfBytes = entries.get(baseName + "dbf");
+        if (dbfBytes == null) {
+            throw new ExtensionException("no \".dbf\" file matching \"" + shpName + "\" found in the shapefile zip data");
+        }
+        Projection datasetProjection = null;
+        byte[] prjBytes = entries.get(baseName + "prj");
+        if (prjBytes != null) {
+            datasetProjection = ProjectionFormat.getInstance().parseProjection(
+                new String(prjBytes, StandardCharsets.UTF_8));
+        }
+        return LoadDataset.loadShapefile(new ByteArrayInputStream(entries.get(shpName)),
+                                         new ByteArrayInputStream(dbfBytes),
+                                         "shapefile zip data",
                                          datasetProjection,
                                          dstProj);
     }
@@ -128,7 +191,13 @@ public final class LoadDatasetFromString extends GISExtension.Reporter {
         Projection netLogoProjection = GISExtension.getState().getProjection();
         Dataset result;
         if (format.equals(ESRIShapefileReader.SHAPEFILE_EXTENSION)) {
-            result = loadShapefileFromParts(args[1].getList(), netLogoProjection);
+            // a shapefile can come in as either a base64 zip string of its files
+            // or a list of [extension content] pairs
+            if (args[1].get() instanceof LogoList) {
+                result = loadShapefileFromParts(args[1].getList(), netLogoProjection);
+            } else {
+                result = loadShapefileFromZip(args[1].getString(), netLogoProjection);
+            }
         } else if (format.equals(GeoJsonReader.GEOJSON_EXTENSION) ||
                    format.equals(GeoJsonReader.JSON_EXTENSION)) {
             result = LoadDataset.loadGeoJson(readerForString(args[1].getString()),

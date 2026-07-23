@@ -546,14 +546,23 @@
 
     The format argument determines how the data is interpreted:
 
-    * "**shp**" (ESRI shapefile): `data` must be a list of two-element
-      [extension content] lists. The "shp" and "dbf" entries are
-      required and must contain the base64-encoded content of the
-      corresponding files. A "prj" entry is optional and holds plain
-      projection text (the content of a ".prj" file); when present, the
-      data is re-projected to the current global projection as needed,
-      just as [[gis:load-dataset|gis#load-dataset]] does with an associated ".prj" file. Any
-      other entries (like "shx") are ignored. Reports a VectorDataset.
+    * "**shp**" (ESRI shapefile): `data` can take either of two forms.
+      As a string, it must be the base64-encoded content of a zip
+      archive holding the shapefile's parts. The zip must contain
+      exactly one ".shp" file, along with a ".dbf" file with the same
+      base name (so "cities.shp" and "cities.dbf"). A ".prj" file with
+      the same base name is optional; when present, the data is
+      re-projected to the current global projection as needed, just as
+      [[gis:load-dataset|gis#load-dataset]] does with an associated ".prj" file. Any other
+      files (like ".shx") are ignored, as are the hidden metadata files
+      that macOS adds to zip archives. If the files sit inside a folder
+      within the zip, as often happens when a zip is made by compressing
+      a folder, they are still found. As a list, `data` must hold
+      two-element [extension content] lists: the "shp" and "dbf" entries
+      are required and contain the base64-encoded content of the
+      corresponding files, an optional "prj" entry holds plain
+      projection text, and any other entries (like "shx") are ignored.
+      Either form reports a VectorDataset.
     * "**asc**" or "**grd**" (ESRI ASCII grid): `data` is the text
       content of an ASCII grid file. The data is assumed to use the same
       projection as the current global coordinate system. Reports a
@@ -563,15 +572,34 @@
       Reports a VectorDataset. The GeoJSON limitations described for
       [[gis:load-dataset|gis#load-dataset]] apply here as well.
 
-    For example, to load a shapefile from embedded resources named
-    "cities.shp", "cities.dbf", and "cities.prj" using the resource
-    extension:
+    For example, to load a shapefile from an embedded resource named
+    "cities.zip" using the resource extension:
+
+    ```
+    let dataset gis:load-dataset-from-string "shp" resource:get "cities.zip"
+    ```
+
+    Or to load one from separate embedded resources named "cities.shp",
+    "cities.dbf", and "cities.prj":
 
     ```
     let dataset gis:load-dataset-from-string "shp" (map [ ext ->
       (list ext (resource:get (word "cities." ext)))
     ] ["shp" "dbf" "prj"])
     ```
+
+    To make a shapefile zip archive with your operating system's
+    built-in tools:
+
+    * On Windows, select the shapefile's files (".shp", ".dbf", and so
+      on) in File Explorer, then right-click the selection and choose
+      "Compress to ZIP file" (on Windows 10, "Send to" and then
+      "Compressed (zipped) folder").
+    * On macOS, select the files in the Finder, then right-click
+      (Control-click) the selection and choose "Compress".
+
+    Zipping a folder containing the files, rather than the files
+    themselves, also works.
 - "name": |-
     store-dataset
   "type": |-
@@ -624,10 +652,17 @@
       string
   "description": |2-
     Like [[gis:store-dataset|gis#store-dataset]], but reports the dataset's contents as a string
-    instead of writing to a file, for formats that fit in a single file:
-    "geojson" (or "json") for VectorDatasets and "asc" (or "grd") for
-    RasterDatasets. For shapefiles, which are made up of multiple files,
-    use [[gis:store-dataset-to-strings|gis#store-dataset-to-strings]] instead.
+    instead of writing to a file. The formats supported for
+    VectorDatasets are "geojson" (or "json"), which reports GeoJSON
+    text, and "shp", which reports the base64-encoded content of a zip
+    archive holding the files [[gis:store-dataset|gis#store-dataset]] would have written:
+    "dataset.shp", "dataset.shx", and "dataset.dbf", plus "dataset.prj"
+    if a global projection is set. To get a shapefile's parts as
+    separate strings instead of a single zip, use
+    [[gis:store-dataset-to-strings|gis#store-dataset-to-strings]]. For RasterDatasets, "asc" (or "grd")
+    reports the text content of an ESRI ASCII grid file. A reported
+    string can be loaded back with [[gis:load-dataset-from-string|gis#load-dataset-from-string]] using
+    the same format.
 
     This is primarily intended for NetLogo Web, which has no file
     system. For example, the send-to extension can be used there to
@@ -655,8 +690,9 @@
     "type": |-
       string
   "description": |2-
-    Like [[gis:store-dataset-to-string|gis#store-dataset-to-string]], but for formats that consist of
-    multiple files. The only such format currently supported is "shp"
+    Like [[gis:store-dataset-to-string|gis#store-dataset-to-string]], but reports the parts of a
+    multi-file format as separate strings instead of a single zip
+    archive string. The only such format currently supported is "shp"
     (ESRI shapefile), for VectorDatasets.
 
     Reports a list of two-element [extension content] lists, one for

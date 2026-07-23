@@ -105,6 +105,17 @@ end
 
 to test-round-trip-shp
   clear-all
+  ;; with no projection set the round trip is exact, and no ".prj" entry is produced
+  let ds gis:load-dataset "shared-datasets/cities.shp"
+  gis:set-world-envelope gis:envelope-of ds
+  let ds2 gis:load-dataset-from-string "shp" gis:store-dataset-to-string ds "shp"
+  if vector-signature ds != vector-signature ds2 [
+    error "shapefile dataset does not survive a round trip through a zip string"
+  ]
+end
+
+to test-round-trip-shp-parts
+  clear-all
   ;; with no projection set the round trip is exact, and no "prj" entry is produced
   let ds gis:load-dataset "shared-datasets/cities.shp"
   gis:set-world-envelope gis:envelope-of ds
@@ -114,13 +125,25 @@ to test-round-trip-shp
   ]
   let ds2 gis:load-dataset-from-string "shp" parts
   if vector-signature ds != vector-signature ds2 [
-    error "shapefile dataset does not survive a round trip through strings"
+    error "shapefile dataset does not survive a round trip through part strings"
+  ]
+end
+
+to test-load-shp-zip-folder
+  clear-all
+  ;; the fixture zip has the shapefile parts nested inside a folder, plus the
+  ;; metadata junk macOS's Finder adds, mimicking a zip made with the OS UI tools
+  let from-file gis:load-dataset "shared-datasets/cities.shp"
+  gis:set-world-envelope gis:envelope-of from-file
+  let from-string gis:load-dataset-from-string "shp" slurp "shared-datasets/cities-folder-zip.b64"
+  if vector-signature from-file != vector-signature from-string [
+    error "shapefile dataset loaded from a folder-in-zip string does not match the one loaded from files"
   ]
 end
 
 to test-round-trip-shp-prj
   clear-all
-  ;; with a projection set a "prj" entry is included; its WKT has limited decimal
+  ;; with a projection set a ".prj" entry is included; its WKT has limited decimal
   ;; precision, so reloading reprojects with tiny float drift (just as reloading
   ;; a file stored by store-dataset does) and the comparison needs a tolerance
   gis:load-coordinate-system "shared-datasets/cities.prj"
@@ -130,13 +153,18 @@ to test-round-trip-shp-prj
   let pad-x (item 1 env - item 0 env) * 0.01
   let pad-y (item 3 env - item 2 env) * 0.01
   gis:set-world-envelope (list (item 0 env - pad-x) (item 1 env + pad-x) (item 2 env - pad-y) (item 3 env + pad-y))
+  let ds2 gis:load-dataset-from-string "shp" gis:store-dataset-to-string ds "shp"
+  if not roughly-equal? vector-signature ds vector-signature ds2 [
+    error "shapefile dataset does not survive a round trip through a zip string with a prj"
+  ]
+  ;; the same round trip through the list-of-parts form
   let parts gis:store-dataset-to-strings ds "shp"
   if (map first parts) != ["shp" "shx" "dbf" "prj"] [
     error (word "unexpected entries in shapefile string list: " (map first parts))
   ]
-  let ds2 gis:load-dataset-from-string "shp" parts
-  if not roughly-equal? vector-signature ds vector-signature ds2 [
-    error "shapefile dataset does not survive a round trip through strings with a prj"
+  let ds3 gis:load-dataset-from-string "shp" parts
+  if not roughly-equal? vector-signature ds vector-signature ds3 [
+    error "shapefile dataset does not survive a round trip through part strings with a prj"
   ]
 end
 
@@ -144,12 +172,20 @@ to test-errors
   clear-all
   let ds gis:load-dataset "shared-datasets/cities.geojson"
   gis:set-world-envelope gis:envelope-of ds
+  let raster gis:load-dataset "shared-datasets/elevation.asc"
   let failed false
   carefully [ let ignore gis:load-dataset-from-string "bmp" "xyz" ] [ set failed true ]
   if not failed [ error "load-dataset-from-string with an unsupported format should have errored" ]
   set failed false
-  carefully [ let ignore gis:store-dataset-to-string ds "shp" ] [ set failed true ]
-  if not failed [ error "store-dataset-to-string with shp should have errored" ]
+  carefully [ let ignore gis:load-dataset-from-string "shp" "not@base64!" ] [ set failed true ]
+  if not failed [ error "load-dataset-from-string with invalid base64 should have errored" ]
+  set failed false
+  ;; "aGVsbG8=" is valid base64, but not a zip
+  carefully [ let ignore gis:load-dataset-from-string "shp" "aGVsbG8=" ] [ set failed true ]
+  if not failed [ error "load-dataset-from-string with non-zip data should have errored" ]
+  set failed false
+  carefully [ let ignore gis:store-dataset-to-string raster "shp" ] [ set failed true ]
+  if not failed [ error "store-dataset-to-string of a raster as shp should have errored" ]
   set failed false
   carefully [ let ignore gis:store-dataset-to-strings ds "geojson" ] [ set failed true ]
   if not failed [ error "store-dataset-to-strings with geojson should have errored" ]
@@ -162,7 +198,9 @@ end]]></code>
     <button x="20" y="155" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="180" sizeVersion="0">test-round-trip-asc</button>
     <button x="20" y="200" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="180" sizeVersion="0">test-round-trip-shp</button>
     <button x="20" y="245" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="180" sizeVersion="0">test-round-trip-shp-prj</button>
-    <button x="20" y="290" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="180" sizeVersion="0">test-errors</button>
+    <button x="20" y="290" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="180" sizeVersion="0">test-round-trip-shp-parts</button>
+    <button x="20" y="335" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="180" sizeVersion="0">test-load-shp-zip-folder</button>
+    <button x="20" y="380" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="180" sizeVersion="0">test-errors</button>
   </widgets>
   <info>## WHAT IS IT?
 

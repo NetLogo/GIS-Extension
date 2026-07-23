@@ -277,13 +277,21 @@ TestRoundTripAscString
   OPEN> extensions/gis/examples/dataset-strings.nlogox
   O> test-round-trip-asc
 
-TestRoundTripShapefileStrings
+TestRoundTripShapefileString
   OPEN> extensions/gis/examples/dataset-strings.nlogox
   O> test-round-trip-shp
 
-TestRoundTripShapefileStringsPrj
+TestRoundTripShapefileStringPrj
   OPEN> extensions/gis/examples/dataset-strings.nlogox
   O> test-round-trip-shp-prj
+
+TestRoundTripShapefileParts
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-round-trip-shp-parts
+
+TestLoadShapefileZipInFolder
+  OPEN> extensions/gis/examples/dataset-strings.nlogox
+  O> test-load-shp-zip-folder
 
 TestDatasetStringErrors
   OPEN> extensions/gis/examples/dataset-strings.nlogox
