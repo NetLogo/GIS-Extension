@@ -1,7 +1,7 @@
 enablePlugins(org.nlogo.build.NetLogoExtension, org.nlogo.build.ExtensionDocumentationPlugin)
 
 name := "gis"
-version := "1.5.0"
+version := "1.6.0"
 isSnapshot := true
 
 Compile / javaSource := baseDirectory.value / "src" / "org"
