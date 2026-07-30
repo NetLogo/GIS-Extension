@@ -20,7 +20,7 @@ import org.myworldgis.netlogo.VectorDataset;
 import org.myworldgis.netlogo.VectorFeature;
 
 @SuppressWarnings("unchecked")
-public class GeoJsonWriter implements GeoJsonConstants {
+public final class GeoJsonWriter implements GeoJsonConstants {
 
     private RandomAccessFile file;
     private VectorDataset dataset;

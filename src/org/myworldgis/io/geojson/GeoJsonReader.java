@@ -20,7 +20,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class GeoJsonReader implements GeoJsonConstants {
+public final class GeoJsonReader implements GeoJsonConstants {
 
     private static final Map<String, ShapeType> geoJsonStringTypesToShapeTypes;
     static {
